@@ -1,3 +1,20 @@
+/* 
+ * File:   count1bits.hpp
+ * Author: uli
+ *
+ * Created on 16. November 2008, 19:30
+ */
+
+#ifndef _COUNT1BITS_HPP
+#define	_COUNT1BITS_HPP
+
+#include "globals.hpp"
+
+/**
+ * Defines functions and lookup tables for fast checking of the one bits
+ *
+ **/
+
 unsigned one_lookup8[256] =
 {
     0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4, 1, 2, 2, 3, 2, 3, 3, 4, 2,
@@ -13,7 +30,10 @@ unsigned one_lookup8[256] =
     6, 7, 6, 7, 7, 8
 };
 
-#ifndef N16LKUP
+//Disable 16-bit lookup table per default
+#define NO16LKUP
+
+#ifndef NO16LKUP
 unsigned one_lookup16[65536] = {
 0,
 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 2, 3, 3,
@@ -1343,7 +1363,7 @@ unsigned onebits_lookup8(unsigned i)
     return n;
 }
 
-#ifndef N16LKUP
+#ifndef NO16LKUP
 unsigned onebits_lookup16(unsigned i)
 {
     unsigned n;
@@ -1365,3 +1385,7 @@ unsigned onebits_sub(unsigned i)
 
     return n;
 }
+
+
+#endif	/* _COUNT1BITS_HPP */
+

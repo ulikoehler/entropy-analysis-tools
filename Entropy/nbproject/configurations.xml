@@ -7,7 +7,10 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>count1bits.h</itemPath>
+      <itemPath>analyze-bits.hpp</itemPath>
+      <itemPath>analyze-chunks.hpp</itemPath>
+      <itemPath>count1bits.hpp</itemPath>
+      <itemPath>globals.hpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -16,6 +19,8 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>analyze-bits.cpp</itemPath>
+      <itemPath>analyze-chunks.cpp</itemPath>
       <itemPath>entropy.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="tools" displayName="tools" projectFiles="true">
@@ -45,14 +50,30 @@
           <commandLine>-lboost_program_options-gcc43-mt</commandLine>
         </linkerTool>
       </compileType>
-      <item path="benchmarks/count1bitsbenchmark.cpp">
+      <item path="analyze-bits.cpp">
         <itemTool>1</itemTool>
       </item>
-      <item path="count1bits.h">
+      <item path="analyze-bits.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="analyze-chunks.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="analyze-chunks.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="benchmarks/count1bitsbenchmark.cpp">
+        <itemExcluded>true</itemExcluded>
+        <itemTool>1</itemTool>
+      </item>
+      <item path="count1bits.hpp">
         <itemTool>3</itemTool>
       </item>
       <item path="entropy.cpp">
         <itemTool>1</itemTool>
+      </item>
+      <item path="globals.hpp">
+        <itemTool>3</itemTool>
       </item>
       <item path="tools/mk1bitlookuptable.cpp">
         <itemExcluded>true</itemExcluded>
@@ -72,7 +93,7 @@
           <developmentMode>6</developmentMode>
           <stripSymbols>true</stripSymbols>
           <architecture>2</architecture>
-          <commandLine>-fexpensive-optimizations -fomit-frame-pointer -march=core2 -ftree-vectorize -msse2 -msse3 -msse4 -ffunction-sections</commandLine>
+          <commandLine>-fexpensive-optimizations -fomit-frame-pointer -march=core2 -ftree-vectorize -msse2 -msse3 -msse4 -ffunction-sections -ffast-math</commandLine>
           <warningLevel>2</warningLevel>
         </ccCompilerTool>
         <fortranCompilerTool>
@@ -85,79 +106,34 @@
           <commandLine>-lboost_program_options-gcc43-mt</commandLine>
         </linkerTool>
       </compileType>
+      <item path="analyze-bits.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="analyze-bits.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="analyze-chunks.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="analyze-chunks.hpp">
+        <itemTool>3</itemTool>
+      </item>
       <item path="benchmarks/count1bitsbenchmark.cpp">
         <itemExcluded>true</itemExcluded>
         <itemTool>1</itemTool>
       </item>
-      <item path="count1bits.h">
+      <item path="count1bits.hpp">
         <itemTool>3</itemTool>
       </item>
       <item path="entropy.cpp">
         <itemTool>1</itemTool>
       </item>
-      <item path="tools/mk1bitlookuptable.cpp">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
-      </item>
-    </conf>
-    <conf name="Benchmarks" type="1">
-      <toolsSet>
-        <compilerSet>GNU|GNU</compilerSet>
-        <platform>2</platform>
-      </toolsSet>
-      <compileType>
-        <linkerTool>
-          <linkerLibItems>
-          </linkerLibItems>
-        </linkerTool>
-      </compileType>
-      <item path="benchmarks/count1bitsbenchmark.cpp">
-        <itemTool>1</itemTool>
-      </item>
-      <item path="count1bits.h">
+      <item path="globals.hpp">
         <itemTool>3</itemTool>
       </item>
-      <item path="entropy.cpp">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
-      </item>
       <item path="tools/mk1bitlookuptable.cpp">
         <itemExcluded>true</itemExcluded>
         <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <developmentMode>0</developmentMode>
-          <commandLine>-O0</commandLine>
-        </ccCompilerTool>
-      </item>
-    </conf>
-    <conf name="Tools" type="1">
-      <toolsSet>
-        <compilerSet>GNU|GNU</compilerSet>
-        <platform>2</platform>
-      </toolsSet>
-      <compileType>
-        <linkerTool>
-          <linkerLibItems>
-          </linkerLibItems>
-        </linkerTool>
-      </compileType>
-      <item path="benchmarks/count1bitsbenchmark.cpp">
-        <itemTool>1</itemTool>
-      </item>
-      <item path="count1bits.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="entropy.cpp">
-        <itemTool>1</itemTool>
-      </item>
-      <item path="tools/mk1bitlookuptable.cpp">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <developmentMode>6</developmentMode>
-          <stripSymbols>true</stripSymbols>
-          <architecture>2</architecture>
-          <warningLevel>2</warningLevel>
-        </ccCompilerTool>
       </item>
     </conf>
   </confs>
