@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <bitset>
 #include <math.h>
+#include "count1bits.h"
 
 #define val_t ulong
 
@@ -21,8 +22,8 @@ typedef unsigned int uint;
 
 unsigned long long glob0 = 0;
 unsigned long long glob1 = 0;
-unsigned long chunk0 = 0;
-unsigned long chunk1 = 0;
+unsigned long long chunk0 = 0;
+unsigned long long chunk1 = 0;
 
 void analyzeBits(ifstream& f, ofstream& of);
 
@@ -104,7 +105,7 @@ void analyzeBits(ifstream& f, ofstream& of)
 {
     char* b = new char[blocksize];
     ///Main read loop
-    while (!f.eof())
+    for(uint bn = 1;!f.eof();bn++) //bn = block number
     {
         f.read(b, blocksize);
         static int c = f.gcount();
@@ -119,7 +120,7 @@ void analyzeBits(ifstream& f, ofstream& of)
         {
             /**
                 Old algorithm:
-                Faster than checking if: (b[i] & (1<<n)) >=1 for each n: 0 < n < 8: (old algorithm)
+                Faster than checking if: (b[i] & (1<<n)) >=1 for each n: 0 < n < 8:
                     chunk1 += b[i] & 1
                             + ((b[i] & (1<<1))>>1)
                             + ((b[i] & (1<<2))>>2)
@@ -129,9 +130,13 @@ void analyzeBits(ifstream& f, ofstream& of)
                             + ((b[i] & (1<<6))>>6)
                             + ((b[i] & (1<<7))>>7);
                 */
+                chunk1 += one_lookup8[(unsigned char)b[i]]; //Lookup table, 3 to 25 times faster than others
         }
         chunk0 = (blocksize<<3) - chunk1;
+        //Print into stdout
         cout << "Block statistics: 0:" << chunk0 << " 1:" << chunk1 << endl;
+        //Print this block's statistics into statistics file
+        of  << bn << "   " << chunk0 << endl;
         glob0 += chunk0;
         glob1 += chunk1;
         chunk0 = 0;

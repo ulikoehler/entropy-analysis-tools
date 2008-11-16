@@ -13,8 +13,6 @@ unsigned one_lookup8[256] =
     6, 7, 6, 7, 7, 8
 };
 
-#define N16LKUP
-
 #ifndef N16LKUP
 unsigned one_lookup16[65536] = {
 0,
