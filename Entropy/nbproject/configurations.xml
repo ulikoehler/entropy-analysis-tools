@@ -19,8 +19,6 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>analyze-bits.cpp</itemPath>
-      <itemPath>analyze-chunks.cpp</itemPath>
       <itemPath>entropy.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="tools" displayName="tools" projectFiles="true">
@@ -50,14 +48,8 @@
           <commandLine>-lboost_program_options-gcc43-mt</commandLine>
         </linkerTool>
       </compileType>
-      <item path="analyze-bits.cpp">
-        <itemTool>1</itemTool>
-      </item>
       <item path="analyze-bits.hpp">
         <itemTool>3</itemTool>
-      </item>
-      <item path="analyze-chunks.cpp">
-        <itemTool>1</itemTool>
       </item>
       <item path="analyze-chunks.hpp">
         <itemTool>3</itemTool>
@@ -106,14 +98,8 @@
           <commandLine>-lboost_program_options-gcc43-mt</commandLine>
         </linkerTool>
       </compileType>
-      <item path="analyze-bits.cpp">
-        <itemTool>1</itemTool>
-      </item>
       <item path="analyze-bits.hpp">
         <itemTool>3</itemTool>
-      </item>
-      <item path="analyze-chunks.cpp">
-        <itemTool>1</itemTool>
       </item>
       <item path="analyze-chunks.hpp">
         <itemTool>3</itemTool>

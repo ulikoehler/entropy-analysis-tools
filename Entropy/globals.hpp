@@ -21,7 +21,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-
 #define val_t ulong
 
 using namespace std;
@@ -45,8 +44,8 @@ variables_map vm;
  * Local includes
  */
 #include "count1bits.hpp"
-#include "analyze-chunks.hpp"
 #include "analyze-bits.hpp"
+#include "analyze-chunks.hpp"
 
 #endif	/* _GLOBALS_HPP */
 
