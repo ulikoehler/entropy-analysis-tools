@@ -31,7 +31,7 @@ DEFAULTCONF=Debug
 CONF=${DEFAULTCONF}
 
 # All Configurations
-ALLCONFS=Debug Release Benchmarks Tools 
+ALLCONFS=Debug Release 
 
 
 # build

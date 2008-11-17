@@ -21,8 +21,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define val_t ulong
-
 using namespace std;
 using namespace boost::program_options;
 
@@ -33,6 +31,14 @@ unsigned long long glob0 = 0;
 unsigned long long glob1 = 0;
 unsigned long long chunk0 = 0;
 unsigned long long chunk1 = 0;
+
+static char perblock;
+
+/**
+ * Buffer char array, initialized
+ * in main function before analyzator function calls
+ */
+static char* buffer;
 
 int blocksize;
 int chunksize;

@@ -25,8 +25,7 @@ OBJECTDIR=build/Debug/GNU-Linux-x86
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/entropy.o \
-	${OBJECTDIR}/benchmarks/count1bitsbenchmark.o
+	${OBJECTDIR}/entropy.o
 
 # C Compiler Flags
 CFLAGS=
@@ -51,10 +50,6 @@ dist/Debug/GNU-Linux-x86/entropy: ${OBJECTFILES}
 ${OBJECTDIR}/entropy.o: entropy.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	$(COMPILE.cc) -g -o ${OBJECTDIR}/entropy.o entropy.cpp
-
-${OBJECTDIR}/benchmarks/count1bitsbenchmark.o: benchmarks/count1bitsbenchmark.cpp 
-	${MKDIR} -p ${OBJECTDIR}/benchmarks
-	$(COMPILE.cc) -g -o ${OBJECTDIR}/benchmarks/count1bitsbenchmark.o benchmarks/count1bitsbenchmark.cpp
 
 # Subprojects
 .build-subprojects:

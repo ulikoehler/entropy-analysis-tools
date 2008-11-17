@@ -15,11 +15,11 @@
  */
 void analyzeBits (ifstream& f)
 {
-    char* b = new char[blocksize];
+    __attribute__ ((aligned (16)) char* buffer = new char[blocksize];
     ///Main read loop
     while(!f.eof ()) //bn = block number
         {
-            f.read (b, blocksize);
+            f.read (buffer, blocksize);
             static int c = f.gcount ();
             if (c < blocksize)
                 {
@@ -30,7 +30,7 @@ void analyzeBits (ifstream& f)
             //global counters are increased by chunk counters
             for (int i = 0; i < blocksize; i++)
                 {
-                    glob1 += one_lookup8[(unsigned char) b[i]]; //Lookup table, 3 to 25 times faster than others
+                    glob1 += one_lookup8[(unsigned char) buffer[i]]; //Lookup table, 3 to 25 times faster than others
                 }
             glob0 += blocksize - glob1;
         }
@@ -43,11 +43,11 @@ void analyzeBits (ifstream& f)
  */
 void analyzeBitsBlocks (ifstream& f, ofstream& of)
 {
-    char* b = new char[blocksize];
+    char* buffer = new char[blocksize];
     ///Main read loop
     for (uint bn = 1; !f.eof (); bn++) //bn = block number
         {
-            f.read (b, blocksize);
+            f.read (buffer, blocksize);
             static int c = f.gcount ();
             if (c < blocksize)
                 {
@@ -71,7 +71,7 @@ void analyzeBitsBlocks (ifstream& f, ofstream& of)
                                     + ((b[i] & (1<<6))>>6)
                                     + ((b[i] & (1<<7))>>7);
                      */
-                    chunk1 += one_lookup8[(unsigned char) b[i]]; //Lookup table, 3 to 25 times faster than others
+                    chunk1 += one_lookup8[(unsigned char) buffer[i]]; //Lookup table, 3 to 25 times faster than others
                 }
             chunk0 = (blocksize << 3) - chunk1;
             //Print into stdout

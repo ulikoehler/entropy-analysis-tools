@@ -2,7 +2,6 @@
 <configurationDescriptor version="45">
   <logicalFolder name="root" displayName="root" projectFiles="true">
     <logicalFolder name="benchmarks" displayName="benchmarks" projectFiles="true">
-      <itemPath>benchmarks/count1bitsbenchmark.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
@@ -22,7 +21,6 @@
       <itemPath>entropy.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="tools" displayName="tools" projectFiles="true">
-      <itemPath>tools/mk1bitlookuptable.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -54,10 +52,6 @@
       <item path="analyze-chunks.hpp">
         <itemTool>3</itemTool>
       </item>
-      <item path="benchmarks/count1bitsbenchmark.cpp">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
-      </item>
       <item path="count1bits.hpp">
         <itemTool>3</itemTool>
       </item>
@@ -66,10 +60,6 @@
       </item>
       <item path="globals.hpp">
         <itemTool>3</itemTool>
-      </item>
-      <item path="tools/mk1bitlookuptable.cpp">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -85,7 +75,7 @@
           <developmentMode>6</developmentMode>
           <stripSymbols>true</stripSymbols>
           <architecture>2</architecture>
-          <commandLine>-fexpensive-optimizations -fomit-frame-pointer -march=core2 -ftree-vectorize -msse2 -msse3 -msse4 -ffunction-sections -ffast-math</commandLine>
+          <commandLine>-fexpensive-optimizations -fomit-frame-pointer -march=core2 -ftree-vectorize -msse2 -msse3 -msse4 -ffunction-sections -ffast-math -fno-strict-aliasing</commandLine>
           <warningLevel>2</warningLevel>
         </ccCompilerTool>
         <fortranCompilerTool>
@@ -104,10 +94,6 @@
       <item path="analyze-chunks.hpp">
         <itemTool>3</itemTool>
       </item>
-      <item path="benchmarks/count1bitsbenchmark.cpp">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
-      </item>
       <item path="count1bits.hpp">
         <itemTool>3</itemTool>
       </item>
@@ -116,10 +102,6 @@
       </item>
       <item path="globals.hpp">
         <itemTool>3</itemTool>
-      </item>
-      <item path="tools/mk1bitlookuptable.cpp">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
       </item>
     </conf>
   </confs>

@@ -15,7 +15,7 @@ int main(int argc, char** argv)
         ("blocksize,b", value<int>(&blocksize)->default_value(1024), "Set block size")
         ("chunksize,s", value<int>(&chunksize)->default_value(4), "Set chunk size")
         ("decimal,d", "Print statistics keys in decimal (for use with -c)")
-        ("per-block,p", "Analyze per block (makes diagram 3d with -c)")
+        ("per-block,p", "Analyze each block separately")
         ("out,o", value<string>(&outfile)->default_value("stats.dat"), "Set statistics output file (for gnuplot)")
         ("chunks,c", "Analyze chunks of chunksize bits rather than bits. Blocksize % chunksize must be 0")
         ;
@@ -49,15 +49,17 @@ int main(int argc, char** argv)
     //Check if two analysator options are called together //TODO
     //if(vm.count("chunks")
     
-    static char perblocks = vm.count("per-block"); //Behaves like a boolean, also consumes only one byte
+    perblock = vm.count("per-block"); //Behaves like a boolean, also consumes only one byte
 
+    //Initalize the buffer array
+    buffer = new char[blocksize];
     //Call the appropriate analysator function
     if (vm.count("chunks"))
     {
         //Validate chunk size
         if (blocksize % chunksize != 0)
         {
-            cout << "Blocksize % chunksize must be 0 and chunksize  = 2^n!\n";
+            cout << "Blocksize must be a multiple of chunksize!\n";
             return 3;
         }
         analyzeChunks(f,of);
@@ -66,10 +68,13 @@ int main(int argc, char** argv)
     else
     {
         //Count bits; per block
-        if(perblocks){analyzeBitsBlocks(f,of);}
+        if(perblock){analyzeBitsBlocks(f,of);}
         //Count bits (no blocks)
         else{analyzeBits(f);}
     }
+    
+    //Delete the buffer array
+    delete buffer;
 
     f.close();
     of.close();
