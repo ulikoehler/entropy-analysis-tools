@@ -3,10 +3,6 @@
  */
 #include "globals.hpp"
 
-#include <boost/program_options.hpp>
-#include <boost/function.hpp>
-#include <boost/foreach.hpp>
-
 int main(int argc, char** argv)
 {
     static string infile;
@@ -34,7 +30,8 @@ int main(int argc, char** argv)
     //Check if the user requested help
     if (vm.count("help"))
     {
-        cout << p << desc << "\n";
+        desc.print(cout);
+        cout << "\n";
         return 1;
     }
 
@@ -52,7 +49,7 @@ int main(int argc, char** argv)
     //Check if two analysator options are called together //TODO
     //if(vm.count("chunks")
     
-    int per-block = vm.count("per-block");
+    static char perblocks = vm.count("per-block"); //Behaves like a boolean, also consumes only one byte
 
     //Call the appropriate analysator function
     if (vm.count("chunks"))
@@ -69,7 +66,7 @@ int main(int argc, char** argv)
     else
     {
         //Count bits; per block
-        if(per-blocks){analyzeBitsBlocks(f,of);}
+        if(perblocks){analyzeBitsBlocks(f,of);}
         //Count bits (no blocks)
         else{analyzeBits(f);}
     }

@@ -8,7 +8,7 @@ void analyzeBits (ifstream& f)
 {
     char* b = new char[blocksize];
     ///Main read loop
-    for (!f.eof ()) //bn = block number
+    while(!f.eof ()) //bn = block number
         {
             f.read (b, blocksize);
             static int c = f.gcount ();

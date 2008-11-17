@@ -1,12 +1,11 @@
 
 #include "globals.hpp"
 
-static map<val_t,ulong> occ; //Occurrences
+static map<val_t,ulong> occ; // All occurrences
 
 static int cpb;
 static int i,j; //Iterators
 
-map<val_t,ulong> occ; //Occurrences
 val_t n;
 //Increments the map value
 inline void incVal(val_t n)
@@ -111,7 +110,7 @@ void analyzeChunks(ifstream& f, ofstream& of)
     {
         case 1:
             {
-                analyzeBits(f,of);
+                analyzeBitsBlocks(f,of);
                 return;
             }
         case 2:
