@@ -14,7 +14,6 @@
 typedef unsigned long val_t;
 
 static map<val_t, ulong> allOcc; // All occurrences
-static map<val_t, ulong> localOcc;
 static pair<val_t, ulong> p;
 
 static int cpb;
@@ -33,32 +32,28 @@ void writeBinData(ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
             {
                 BOOST_FOREACH (p, occ)
                 {
-                    of << "\"" << bitset < n > (p.first) << separator << p.second << separator << blockNum << "\n";
+                    of << "\"" << bitset < n > (p.first) << "\"" << separator << p.second << separator << blockNum << "\n";
                 }
             }
         else
             {
                 BOOST_FOREACH (p, occ)
                 {
-                    of << "\"" << bitset < n > (p.first) << separator << p.second << "\n";
+                    of << "\"" << bitset < n > (p.first) << "\"" << separator << p.second << "\n";
                 }
             }
 }
 
 /**
- * Prints the statistics from the map into the output stream
- * Arguments:
- *      -std::ostream& of: Output stream to print statistics into
- *      -std::map<val_t,ulong>& occ: Map to get the statistics from
- *      -unsigned long blockNum: Block index (0 if disabled. Range starts with 1) 
+ * Prints the header into the supplied output stream
  */
-inline void
-printStatistics (ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
+inline
+void printHeader(ostream& of, bool perblock)
 {
     /**
      * Write the header
      */
-    if (blockNum)
+    if (perblock)
         {
             if (!vm.count ("disable-header"))
                 {
@@ -73,6 +68,18 @@ printStatistics (ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
                     of << "\"Number\"" << separator << "\"Count\"\n";
                 }
         }
+}
+
+/**
+ * Prints the statistics from the map into the output stream
+ * Arguments:
+ *      -std::ostream& of: Output stream to print statistics into
+ *      -std::map<val_t,ulong>& occ: Map to get the statistics from
+ *      -unsigned long blockNum: Block index (0 if disabled. Range starts with 1) 
+ */
+inline void
+printStatistics (ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
+{
     /**
      * Write the data
      */
@@ -83,7 +90,7 @@ printStatistics (ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
 
                     BOOST_FOREACH (p, occ)
                     {
-                        of << "\"" << p.first << "\"" << separator << p.second << separator << blockNum << "\n";
+                        of << p.first << separator << p.second << separator << blockNum << "\n";
                     }
                 }
             else
@@ -91,7 +98,7 @@ printStatistics (ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
 
                     BOOST_FOREACH (p, occ)
                     {
-                        of << "\"" << p.first << "\"" << separator << p.second << "\n";
+                        of << p.first << separator << p.second << "\n";
                     }
                 }
         }
@@ -137,7 +144,7 @@ printStatistics (ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
 inline void
 incVal (val_t n)
 {
-    //Increase the local counter map value
+    //Increase the global counter map at index n
     if (allOcc.count (n) == 0)
         {
             allOcc[n] = 1;
@@ -145,15 +152,6 @@ incVal (val_t n)
     else
         {
             allOcc[n]++;
-        }
-    //Increase the local counter map value
-    if (localOcc.count (n) == 0)
-        {
-            localOcc[n] = 1;
-        }
-    else
-        {
-            localOcc[n]++;
         }
 }
 
@@ -180,8 +178,6 @@ ch4a (char *b)
 { //Iterates through the block (one byte per iteration)
     for (i = 0; i < blocksize; i++)
         {
-            //Build n
-            //static unsigned char j = ;
             incVal (b[i] & 15); //15  = 00001111
             incVal (b[i] & 0xf0 >> 4); //240 = 11110000
         }
@@ -229,10 +225,10 @@ ch32a (char *b)
 { //Iterates through the block (one byte per iteration)
     for (i = 0; i < blocksize; i += 4)
         {
-            incVal ((uint8_t) b[i]+
-                    ((uint8_t) (b[i + 1]) << 8)+
-                    ((uint8_t) (b[i + 2] << 16))+
-                    ((uint8_t) (b[i + 3] << 24)));
+            incVal ((uint8_t) b[i]
+                    +((uint8_t) (b[i + 1]) << 8)
+                    +((uint8_t) (b[i + 2] << 16))
+                    +((uint8_t) (b[i + 3] << 24)));
         }
 }
 
@@ -256,7 +252,6 @@ chna (char* b)
 inline void
 analyzeChunks (ifstream& f, ofstream& of)
 {
-    char* b = new char[blocksize];
     boost::function<void(char* b) > fa; //function analyze
     //Select the appropriate function
     switch (chunksize)
@@ -295,19 +290,26 @@ analyzeChunks (ifstream& f, ofstream& of)
     /**
      * Write the output csv file header if enabled
      */
-    ///Main read-and-analyze loop
+    printHeader (of, perblock);
+    /**
+     * Main loop: analyzes data and stores results in the map
+     */
     if (perblock)
         {
-            for (ulong blocknum = 1; !f.eof (); blocknum++)
+            /**
+             * allOcc is used as local counter here and cleared after every block
+             */
+            for (ulong blocknum = 1; f.good (); blocknum++)
                 {
-                    f.read (b, blocksize);
+                    f.read (buffer, blocksize);
                     static int c = f.gcount ();
                     if (c < blocksize)
                         {
                             blocksize = c;
                         }
-                    fa (b);
-                    printStatistics (of, localOcc, blocknum);
+                    fa (buffer);
+                    printStatistics (of, allOcc, blocknum);
+                    allOcc.clear();
                 }
 
         }
@@ -315,13 +317,13 @@ analyzeChunks (ifstream& f, ofstream& of)
         {
             while (!f.eof ())
                 {
-                    f.read (b, blocksize);
+                    f.read (buffer, blocksize);
                     static int c = f.gcount ();
                     if (c < blocksize)
                         {
                             blocksize = c;
                         }
-                    fa (b);
+                    fa (buffer);
                 }
             printStatistics (of, allOcc);
         }

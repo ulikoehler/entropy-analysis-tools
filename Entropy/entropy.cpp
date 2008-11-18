@@ -39,7 +39,7 @@ int main(int argc, char** argv)
           options(allowedOptions).positional(p).run(), vm);
     notify(vm);
 
-    //Check if the user requested help
+    //Check if the user has requested help
     if (vm.count("help"))
     {
         cout << allowedOptions << "\n";

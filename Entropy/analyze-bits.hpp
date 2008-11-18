@@ -11,7 +11,6 @@
 
 #include "globals.hpp"
 
-
 /**
  * Counts the 1-bits in one file (does not take care of blocks)
  */
