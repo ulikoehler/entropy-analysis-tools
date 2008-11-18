@@ -45,9 +45,13 @@ void analyzeBits (ifstream& f)
 /**
  * Analyzes bits in blocks and prints them out into the statistics file
  */
-void analyzeBitsBlocks (ifstream& f, ofstream& of)
+void analyzeBitsPerBlock(ifstream& f, ofstream& of)
 {
-    char* buffer = new char[blocksize];
+    /**
+     * Print the header into the output stream
+     */
+    of << "\"Blocknum\"" << separator << "\"Bitcount\"\n";
+    buffer = new char[blocksize];
     ///Main read loop
     for (uint bn = 1; !f.eof (); bn++) //bn = block number
         {
@@ -78,17 +82,15 @@ void analyzeBitsBlocks (ifstream& f, ofstream& of)
                     chunk1 += one_lookup8[(unsigned char) buffer[i]]; //Lookup table, 3 to 25 times faster than others
                 }
             chunk0 = (blocksize << 3) - chunk1; //Blocksize * 8 - chunk 1
-            //Print into stdout
-            cout << "Block statistics: 0:" << chunk0 << " 1:" << chunk1 << endl;
             //Print this block's statistics into statistics file
-            of << bn << "   " << chunk0 << endl;
+            of << bn << separator << chunk1 << "\n";
             glob0 += chunk0;
             glob1 += chunk1;
             chunk0 = 0;
             chunk1 = 0;
         }
     f.close();
-    cout << "Overall statistics: 0:" << glob0 << " 1:" << glob1 << endl;
+    cout << "Written data to statistics file." << endl;
 }
 
 #endif	/* _ANALYZE_BITS_HPP */

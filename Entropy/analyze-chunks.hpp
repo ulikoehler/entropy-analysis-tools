@@ -48,7 +48,7 @@ void writeBinData(ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
  * Prints the header into the supplied output stream
  */
 inline
-void printHeader(ostream& of, bool perblock)
+void printChunksHeader(ostream& of, bool perblock)
 {
     /**
      * Write the header
@@ -57,7 +57,7 @@ void printHeader(ostream& of, bool perblock)
         {
             if (!vm.count ("disable-header"))
                 {
-                    of << "\"Number\"" << separator << "\"Count\"" << separator << "\"Block\"\n";
+                    of << "\"Number\"" << separator << "\"Count\"" << separator << "\"Block\n";
                 }
         }
     else
@@ -90,7 +90,7 @@ printStatistics (ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
 
                     BOOST_FOREACH (p, occ)
                     {
-                        of << p.first << separator << p.second << separator << blockNum << "\n";
+                        of << p.first <<  separator << p.second << separator << blockNum << "\n";
                     }
                 }
             else
@@ -163,11 +163,10 @@ ch2a (char *b)
     for (i = 0; i < blocksize; i++)
         {
             //Build n
-            static unsigned char j = b[i];
-            incVal (j & 0x3); //3   = 00000011
-            incVal (j & 0xc >> 2); //12  = 00001100
-            incVal (j & 0x30 >> 4); //48  = 00110000
-            incVal (j & 0xc0 >> 6); //192 = 11000000
+            incVal ((unsigned char)b[i] & 3); //3   = 00000011
+            incVal (((unsigned char)b[i] & (3 << 2)) >> 2); //12  = 00001100
+            incVal (((unsigned char)b[i] & (3 << 4)) >> 4); //48  = 00110000
+            incVal (((unsigned char)b[i] & (3 << 6)) >> 6); //192 = 11000000
         }
 }
 
@@ -258,7 +257,7 @@ analyzeChunks (ifstream& f, ofstream& of)
         {
         case 1:
             {
-                analyzeBitsBlocks (f, of);
+                analyzeBitsPerBlock (f, of);
                 return;
             }
         case 2:
@@ -290,7 +289,7 @@ analyzeChunks (ifstream& f, ofstream& of)
     /**
      * Write the output csv file header if enabled
      */
-    printHeader (of, perblock);
+    printChunksHeader (of, perblock);
     /**
      * Main loop: analyzes data and stores results in the map
      */

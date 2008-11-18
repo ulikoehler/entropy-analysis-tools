@@ -17,8 +17,8 @@ int main(int argc, char** argv)
         ;
     options_description analysisOptions("Analysis options");
     analysisOptions.add_options ()
-        ("chunks,c", "Analyze chunks of chunksize bits rather than bits. Blocksize % chunksize must be 0")
-        ("blocksize,b", value<int>(&blocksize)->default_value(1024), "Set block size (must be a multiple of chunksize)")
+        ("chunks,c", "Analyze chunks of chunksize bits rather than bits. Must be a multiple of chunksize.")
+        ("blocksize,b", value<int>(&blocksize)->default_value(1024), "Set block size (must be a multiple of chunksize).")
         ("chunksize,s", value<int>(&chunksize)->default_value(4), "Set chunk size")
         ("per-block,p", "Analyze each block separately")
         ;
@@ -79,7 +79,7 @@ int main(int argc, char** argv)
     else
     {
         //Count bits; per block
-        if(perblock){analyzeBitsBlocks(f,of);}
+        if(perblock){analyzeBitsPerBlock(f,of);}
         //Count bits (no blocks)
         else{analyzeBits(f);}
     }
