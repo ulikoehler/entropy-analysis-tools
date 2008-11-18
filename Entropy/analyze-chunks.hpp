@@ -5,7 +5,6 @@
  * Created on 16. November 2008, 18:29
  */
 
-
 #ifndef _ANALYZE_CHUNKS_HPP
 #define	_ANALYZE_CHUNKS_HPP
 
@@ -16,28 +15,85 @@ typedef unsigned long val_t;
 
 static map<val_t, ulong> allOcc; // All occurrences
 static map<val_t, ulong> localOcc;
+static pair<val_t, ulong> p;
 
 static int cpb;
 static int i, j; //Iterators
+
+/**
+ * Writes the data from the supplied map to the supplied output stream
+ * (See printStatistics for parameter description)
+ * Called inside printStatistics to reduce code mass.
+ * Template: template paramter for std::bitset
+ */
+template<int n>
+void writeBinData(ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
+{
+    if (blockNum)
+            {
+                BOOST_FOREACH (p, occ)
+                {
+                    of << "\"" << bitset < n > (p.first) << separator << p.second << separator << blockNum << "\n";
+                }
+            }
+        else
+            {
+                BOOST_FOREACH (p, occ)
+                {
+                    of << "\"" << bitset < n > (p.first) << separator << p.second << "\n";
+                }
+            }
+}
 
 /**
  * Prints the statistics from the map into the output stream
  * Arguments:
  *      -std::ostream& of: Output stream to print statistics into
  *      -std::map<val_t,ulong>& occ: Map to get the statistics from
- *      -unsigned long blockNum: Block index (0 if disabled. Begins with 1)
+ *      -unsigned long blockNum: Block index (0 if disabled. Range starts with 1) 
  */
 inline void
 printStatistics (ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
 {
-    static pair<val_t, ulong> p;
-    if (vm.count ("decimal"))
+    /**
+     * Write the header
+     */
+    if (blockNum)
+        {
+            if (!vm.count ("disable-header"))
+                {
+                    of << "\"Number\"" << separator << "\"Count\"" << separator << "\"Block\"\n";
+                }
+        }
+    else
         {
 
-            BOOST_FOREACH (p, occ)
-            {
-                of << p.first << "  " << p.second << endl;
-            }
+            if (!vm.count ("disable-header"))
+                {
+                    of << "\"Number\"" << separator << "\"Count\"\n";
+                }
+        }
+    /**
+     * Write the data
+     */
+    if (vm.count ("decimal"))
+        {
+            if (blockNum)
+                {
+
+                    BOOST_FOREACH (p, occ)
+                    {
+                        of << "\"" << p.first << "\"" << separator << p.second << separator << blockNum << "\n";
+                    }
+                }
+            else
+                {
+
+                    BOOST_FOREACH (p, occ)
+                    {
+                        of << "\"" << p.first << "\"" << separator << p.second << "\n";
+                    }
+                }
         }
     else
         {
@@ -45,116 +101,32 @@ printStatistics (ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
                 {
                 case 2:
                     {
-                        if (blockNum)
-                            {
-                                 BOOST_FOREACH (p, occ)
-                                {
-                                    of << bitset < 2 > (p.first) << "  " << p.second << "  " << blockNum << endl;
-                                }
-                            }
-                        else
-                            {
-                                BOOST_FOREACH (p, occ)
-                                {
-                                    of << bitset < 2 > (p.first) << "  " << p.second << endl;
-                                }
-                            }
+                        writeBinData<2>(of, occ, blockNum);
                         break;
                     }
                 case 4:
                     {
-                        if (blockNum)
-                            {
-
-                                BOOST_FOREACH (p, occ)
-                                {
-                                    of << bitset < 4 > (p.first) << "  " << p.second << "  " << blockNum << endl;
-                                }
-                            }
-                        else
-                            {
-
-                                BOOST_FOREACH (p, occ)
-                                {
-                                    of << bitset < 4 > (p.first) << "  " << p.second << endl;
-                                }
-                            }
+                        writeBinData<4>(of, occ, blockNum);
                         break;
                     }
                 case 8:
                     {
-                        if (blockNum)
-                            {
-                                BOOST_FOREACH (p, occ)
-                                {
-                                    of << bitset < 8 > (p.first) << "  " << p.second << "  " << blockNum << endl;
-                                }
-
-                            }
-                        else
-                            {
-                                BOOST_FOREACH (p, occ)
-                                {
-                                    of << bitset < 8 > (p.first) << "  " << p.second << endl;
-                                }
-                            }
+                        writeBinData<8>(of, occ, blockNum);
                         break;
                     }
                 case 16:
                     {
-                        if (blockNum)
-                            {
-
-                                BOOST_FOREACH (p, occ)
-                                {
-                                    of << bitset < 16 > (p.first) << "  " << p.second << "  " << blockNum << endl;
-                                }
-                            }
-                        else
-                            {
-                                BOOST_FOREACH (p, occ)
-                                {
-                                    of << bitset < 16 > (p.first) << "  " << p.second << endl;
-                                }
-                            }
+                        writeBinData<16>(of, occ, blockNum);
                         break;
                     }
                 case 32:
                     {
-                        if (blockNum)
-                            {
-
-                                BOOST_FOREACH (p, occ)
-                                {
-                                    of << bitset < 32 > (p.first) << "  " << p.second << "  " << blockNum << endl;
-                                }
-                            }
-                        else
-                            {
-                                BOOST_FOREACH (p, occ)
-                                {
-                                    of << bitset < 32 > (p.first) << "  " << p.second << endl;
-                                }
-                            }
+                        writeBinData<32>(of, occ, blockNum);
                         break;
                     }
                 default:
                     {
-                        if (blockNum)
-                            {
-
-                                BOOST_FOREACH (p, occ)
-                                {
-                                    of << bitset < 32 > (p.first) << "  " << p.second << "  " << blockNum << endl;
-                                }
-                            }
-                        else
-                            {
-                                BOOST_FOREACH (p, occ)
-                                {
-                                    of << bitset < 32 > (p.first) << "  " << p.second << endl;
-                                }
-                            }
+                        writeBinData<64>(of, occ, blockNum);
                         break;
                     }
                 }
@@ -265,6 +237,7 @@ ch32a (char *b)
 }
 
 //Analyzes block for chunksize n = 2^m > 8
+
 inline void
 chna (char* b)
 {
@@ -319,10 +292,13 @@ analyzeChunks (ifstream& f, ofstream& of)
                 break;
             }
         }
+    /**
+     * Write the output csv file header if enabled
+     */
     ///Main read-and-analyze loop
-    if(perblock)
+    if (perblock)
         {
-            for(ulong blocknum = 1;!f.eof ();blocknum++)
+            for (ulong blocknum = 1; !f.eof (); blocknum++)
                 {
                     f.read (b, blocksize);
                     static int c = f.gcount ();
@@ -331,9 +307,9 @@ analyzeChunks (ifstream& f, ofstream& of)
                             blocksize = c;
                         }
                     fa (b);
-                    printStatistics (of, localOcc,blocknum);
+                    printStatistics (of, localOcc, blocknum);
                 }
-            
+
         }
     else
         {

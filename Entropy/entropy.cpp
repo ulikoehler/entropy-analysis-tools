@@ -8,37 +8,48 @@ int main(int argc, char** argv)
     static string infile;
     static string outfile;
     // Declare the supported options.
-    options_description desc("Allowed options");
-    desc.add_options()
+    options_description allowedOptions("Allowed options");
+    options_description genericOptions("Generic options");
+    genericOptions.add_options()
         ("help,h", "Show help")
         ("input,i", value<string>(&infile), "The input file")
-        ("blocksize,b", value<int>(&blocksize)->default_value(1024), "Set block size")
-        ("chunksize,s", value<int>(&chunksize)->default_value(4), "Set chunk size")
-        ("decimal,d", "Print statistics keys in decimal (for use with -c)")
-        ("per-block,p", "Analyze each block separately")
-        ("out,o", value<string>(&outfile)->default_value("stats.dat"), "Set statistics output file (for gnuplot)")
-        ("chunks,c", "Analyze chunks of chunksize bits rather than bits. Blocksize % chunksize must be 0")
+        ("out,o", value<string>(&outfile)->default_value("stats.dat"), "Set statistics output file")
         ;
+    options_description analysisOptions("Analysis options");
+    analysisOptions.add_options ()
+        ("chunks,c", "Analyze chunks of chunksize bits rather than bits. Blocksize % chunksize must be 0")
+        ("blocksize,b", value<int>(&blocksize)->default_value(1024), "Set block size (must be a multiple of chunksize)")
+        ("chunksize,s", value<int>(&chunksize)->default_value(4), "Set chunk size")
+        ("per-block,p", "Analyze each block separately")
+        ;
+    options_description outputFormatOptions("Output format options");
+    outputFormatOptions.add_options()
+        ("decimal,d", "Print statistics keys in decimal (for use with -c)")
+        ("separator", value<string>(&separator)->default_value(","),"Set the CSV field separator")
+        //("disable-header,dh", "Disable")
+        ;
+    
+    allowedOptions.add(genericOptions).add(analysisOptions).add(outputFormatOptions);
+            
     positional_options_description p;
     p.add("input", -1);
 
 
     store(command_line_parser(argc, argv).
-          options(desc).positional(p).run(), vm);
+          options(allowedOptions).positional(p).run(), vm);
     notify(vm);
 
     //Check if the user requested help
     if (vm.count("help"))
     {
-        desc.print(cout);
-        cout << "\n";
+        cout << allowedOptions << "\n";
         return 1;
     }
 
     //Check if the use has specified input
     if (!vm.count("input"))
     {
-        cout << "No input file specified!\n" << desc << "\n";
+        cout << "No input file specified!\n" << allowedOptions << "\n";
         return 2;
     }
 

@@ -9,13 +9,15 @@
 #ifndef _ANALYZE_BITS_HPP
 #define	_ANALYZE_BITS_HPP
 
+#include "globals.hpp"
+
 
 /**
  * Counts the 1-bits in one file (does not take care of blocks)
  */
 void analyzeBits (ifstream& f)
 {
-    __attribute__ ((aligned (16)) char* buffer = new char[blocksize];
+    buffer = new char[blocksize];
     ///Main read loop
     while(!f.eof ()) //bn = block number
         {
@@ -25,14 +27,17 @@ void analyzeBits (ifstream& f)
                 {
                     blocksize = c;
                 }
-            ///Chunk loop (iterates blocksize times)
-            //Chunk0 is (blocksize << 3) - chunk1; <<3 multiplies by 8 (8 bits per byte)
-            //global counters are increased by chunk counters
+            /** Chunk loop (iterates blocksize times)
+              * Chunk0 is (blocksize << 3) - chunk1; <<3 multiplies by 8 (8 bits per byte)
+              * global counters are increased by chunk counters
+              */
             for (int i = 0; i < blocksize; i++)
                 {
-                    glob1 += one_lookup8[(unsigned char) buffer[i]]; //Lookup table, 3 to 25 times faster than others
+                    chunk1 += one_lookup8[(unsigned char) buffer[i]]; //Lookup table, 3 to 25 times faster than others
                 }
-            glob0 += blocksize - glob1;
+            glob1 += chunk1;
+            glob0 += (blocksize << 3) - chunk1; //Blocksize * 8 - glob1
+            chunk1 = 0; //Zero chunk1 for next loop
         }
     f.close ();
     cout << "Overall statistics: 0:" << glob0 << " 1:" << glob1 << endl;
@@ -73,7 +78,7 @@ void analyzeBitsBlocks (ifstream& f, ofstream& of)
                      */
                     chunk1 += one_lookup8[(unsigned char) buffer[i]]; //Lookup table, 3 to 25 times faster than others
                 }
-            chunk0 = (blocksize << 3) - chunk1;
+            chunk0 = (blocksize << 3) - chunk1; //Blocksize * 8 - chunk 1
             //Print into stdout
             cout << "Block statistics: 0:" << chunk0 << " 1:" << chunk1 << endl;
             //Print this block's statistics into statistics file

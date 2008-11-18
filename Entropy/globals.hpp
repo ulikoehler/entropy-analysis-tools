@@ -8,6 +8,8 @@
 #ifndef _GLOBALS_HPP
 #define	_GLOBALS_HPP
 
+#define SSE __attribute__((aligned (16)))
+
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -27,6 +29,11 @@ using namespace boost::program_options;
 typedef unsigned long ulong;
 typedef unsigned int uint;
 
+/**
+ * Zeroing these variables at procedure start is only neccessary
+ * in nested function calls because they are used only once
+ * per program call
+ */
 unsigned long long glob0 = 0;
 unsigned long long glob1 = 0;
 unsigned long long chunk0 = 0;
@@ -34,11 +41,13 @@ unsigned long long chunk1 = 0;
 
 static char perblock;
 
+static string separator = ","; //For CSV output
+
 /**
  * Buffer char array, initialized
  * in main function before analyzator function calls
  */
-static char* buffer;
+static char* buffer SSE;
 
 int blocksize;
 int chunksize;
