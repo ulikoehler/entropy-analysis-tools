@@ -26,29 +26,33 @@ static int i, j; //Iterators
  * Template: template paramter for std::bitset
  */
 template<int n>
-void writeBinData(ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
+void
+writeBinData (ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
 {
     if (blockNum)
+        {
+
+            BOOST_FOREACH (p, occ)
             {
-                BOOST_FOREACH (p, occ)
-                {
-                    of << "\"" << bitset < n > (p.first) << "\"" << separator << p.second << separator << blockNum << "\n";
-                }
+                of << "\"" << bitset < n > (p.first) << "\"" << separator << p.second << separator << blockNum << "\n";
             }
-        else
+        }
+    else
+        {
+
+            BOOST_FOREACH (p, occ)
             {
-                BOOST_FOREACH (p, occ)
-                {
-                    of << "\"" << bitset < n > (p.first) << "\"" << separator << p.second << "\n";
-                }
+                of << "\"" << bitset < n > (p.first) << "\"" << separator << p.second << "\n";
             }
+        }
 }
 
 /**
  * Prints the header into the supplied output stream
  */
 inline
-void printChunksHeader(ostream& of, bool perblock)
+void
+printChunksHeader (ostream& of, bool perblock)
 {
     /**
      * Write the header
@@ -90,7 +94,7 @@ printStatistics (ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
 
                     BOOST_FOREACH (p, occ)
                     {
-                        of << p.first <<  separator << p.second << separator << blockNum << "\n";
+                        of << p.first << separator << p.second << separator << blockNum << "\n";
                     }
                 }
             else
@@ -108,32 +112,32 @@ printStatistics (ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
                 {
                 case 2:
                     {
-                        writeBinData<2>(of, occ, blockNum);
+                        writeBinData < 2 > (of, occ, blockNum);
                         break;
                     }
                 case 4:
                     {
-                        writeBinData<4>(of, occ, blockNum);
+                        writeBinData < 4 > (of, occ, blockNum);
                         break;
                     }
                 case 8:
                     {
-                        writeBinData<8>(of, occ, blockNum);
+                        writeBinData < 8 > (of, occ, blockNum);
                         break;
                     }
                 case 16:
                     {
-                        writeBinData<16>(of, occ, blockNum);
+                        writeBinData < 16 > (of, occ, blockNum);
                         break;
                     }
                 case 32:
                     {
-                        writeBinData<32>(of, occ, blockNum);
+                        writeBinData < 32 > (of, occ, blockNum);
                         break;
                     }
                 default:
                     {
-                        writeBinData<64>(of, occ, blockNum);
+                        writeBinData < 64 > (of, occ, blockNum);
                         break;
                     }
                 }
@@ -163,10 +167,10 @@ ch2a (char *b)
     for (i = 0; i < blocksize; i++)
         {
             //Build n
-            incVal ((unsigned char)b[i] & 3); //3   = 00000011
-            incVal (((unsigned char)b[i] & (3 << 2)) >> 2); //12  = 00001100
-            incVal (((unsigned char)b[i] & (3 << 4)) >> 4); //48  = 00110000
-            incVal (((unsigned char)b[i] & (3 << 6)) >> 6); //192 = 11000000
+            incVal ((unsigned char) b[i] & 3); //3   = 00000011
+            incVal (((unsigned char) b[i] & (3 << 2)) >> 2); //12  = 00001100
+            incVal (((unsigned char) b[i] & (3 << 4)) >> 4); //48  = 00110000
+            incVal (((unsigned char) b[i] & (3 << 6)) >> 6); //192 = 11000000
         }
 }
 
@@ -249,7 +253,7 @@ chna (char* b)
 }
 
 inline void
-analyzeChunks (ifstream& f, ofstream& of)
+analyzeChunks (istream& f, ostream& of)
 {
     boost::function<void(char* b) > fa; //function analyze
     //Select the appropriate function
@@ -308,7 +312,7 @@ analyzeChunks (ifstream& f, ofstream& of)
                         }
                     fa (buffer);
                     printStatistics (of, allOcc, blocknum);
-                    allOcc.clear();
+                    allOcc.clear ();
                 }
 
         }

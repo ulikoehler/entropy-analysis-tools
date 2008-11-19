@@ -28,6 +28,7 @@ using namespace boost::program_options;
 
 typedef unsigned long ulong;
 typedef unsigned int uint;
+typedef unsigned short ushort;
 
 /**
  * Zeroing these variables at procedure start is only neccessary
@@ -52,6 +53,8 @@ static char* buffer SSE;
 int blocksize;
 int chunksize;
 
+unsigned short base;
+
 //Program options
 variables_map vm;
 
@@ -61,6 +64,9 @@ variables_map vm;
 #include "count1bits.hpp"
 #include "analyze-bits.hpp"
 #include "analyze-chunks.hpp"
+//Actions
+#include "actions.hpp"
+
 
 #endif	/* _GLOBALS_HPP */
 

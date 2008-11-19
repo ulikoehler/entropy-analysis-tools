@@ -14,11 +14,12 @@
 /**
  * Counts the 1-bits in one file (does not take care of blocks)
  */
-void analyzeBits (ifstream& f)
+void
+analyzeBits (ifstream& f)
 {
     buffer = new char[blocksize];
     ///Main read loop
-    while(!f.eof ()) //bn = block number
+    while (!f.eof ()) //bn = block number
         {
             f.read (buffer, blocksize);
             static int c = f.gcount ();
@@ -27,9 +28,9 @@ void analyzeBits (ifstream& f)
                     blocksize = c;
                 }
             /** Chunk loop (iterates blocksize times)
-              * Chunk0 is (blocksize << 3) - chunk1; <<3 multiplies by 8 (8 bits per byte)
-              * global counters are increased by chunk counters
-              */
+             * Chunk0 is (blocksize << 3) - chunk1; <<3 multiplies by 8 (8 bits per byte)
+             * global counters are increased by chunk counters
+             */
             for (int i = 0; i < blocksize; i++)
                 {
                     chunk1 += one_lookup8[(unsigned char) buffer[i]]; //Lookup table, 3 to 25 times faster than others
@@ -45,7 +46,8 @@ void analyzeBits (ifstream& f)
 /**
  * Analyzes bits in blocks and prints them out into the statistics file
  */
-void analyzeBitsPerBlock(ifstream& f, ofstream& of)
+void
+analyzeBitsPerBlock (istream& f, ostream& of)
 {
     /**
      * Print the header into the output stream
@@ -89,7 +91,6 @@ void analyzeBitsPerBlock(ifstream& f, ofstream& of)
             chunk0 = 0;
             chunk1 = 0;
         }
-    f.close();
     cout << "Written data to statistics file." << endl;
 }
 

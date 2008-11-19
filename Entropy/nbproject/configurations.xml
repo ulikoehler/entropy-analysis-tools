@@ -6,6 +6,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>actions.hpp</itemPath>
       <itemPath>analyze-bits.hpp</itemPath>
       <itemPath>analyze-chunks.hpp</itemPath>
       <itemPath>count1bits.hpp</itemPath>
@@ -46,6 +47,9 @@
           <commandLine>-lboost_program_options-gcc43-mt</commandLine>
         </linkerTool>
       </compileType>
+      <item path="actions.hpp">
+        <itemTool>3</itemTool>
+      </item>
       <item path="analyze-bits.hpp">
         <itemTool>3</itemTool>
       </item>
@@ -88,6 +92,9 @@
           <commandLine>-lboost_program_options-gcc43-mt</commandLine>
         </linkerTool>
       </compileType>
+      <item path="actions.hpp">
+        <itemTool>3</itemTool>
+      </item>
       <item path="analyze-bits.hpp">
         <itemTool>3</itemTool>
       </item>
