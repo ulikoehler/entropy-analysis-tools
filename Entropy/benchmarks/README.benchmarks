@@ -1,0 +1,3 @@
+This directory contains some benchmarks.
+Compile a benchmark file by typing make <filename>,
+for example make funcptr.cpp
