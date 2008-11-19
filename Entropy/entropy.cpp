@@ -35,11 +35,11 @@ main (int argc, char** argv)
             ("separator", value<string > (&separator)->default_value (","), "Set the CSV field separator")
             ;
 
-    allowedOptions.add (genericOptions).add (binAnalysisOptions).add (numericAnalysisOptions).add (outputFormatOptions);
+    allowedOptions.add (genericOptions).add(binAnalysisOptions).add (numericAnalysisOptions).add (outputFormatOptions);
 
     positional_options_description p;
     p.add ("action", 1);
-    p.add ("input", 1);
+    //p.add ("input", 1);
 
 
     store (command_line_parser (argc, argv).
@@ -76,7 +76,7 @@ main (int argc, char** argv)
         {
             ret = analyzeBinaryFile (f, of);
         }
-    if (action == "analyze-numeric")
+    else if (action == "analyze-numeric")
         {
             ret = analyzeNumericFile (f, of);
         }

@@ -10,6 +10,7 @@
       <itemPath>analyze-bits.hpp</itemPath>
       <itemPath>analyze-chunks.hpp</itemPath>
       <itemPath>count1bits.hpp</itemPath>
+      <itemPath>entropy-algorithms.hpp</itemPath>
       <itemPath>globals.hpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -59,6 +60,9 @@
       <item path="count1bits.hpp">
         <itemTool>3</itemTool>
       </item>
+      <item path="entropy-algorithms.hpp">
+        <itemTool>3</itemTool>
+      </item>
       <item path="entropy.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -102,6 +106,49 @@
         <itemTool>3</itemTool>
       </item>
       <item path="count1bits.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="entropy-algorithms.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="entropy.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="globals.hpp">
+        <itemTool>3</itemTool>
+      </item>
+    </conf>
+    <conf name="Fast" type="1">
+      <toolsSet>
+        <compilerSet>GNU|GNU</compilerSet>
+        <platform>2</platform>
+      </toolsSet>
+      <compileType>
+        <ccCompilerTool>
+          <developmentMode>0</developmentMode>
+          <stripSymbols>true</stripSymbols>
+          <architecture>2</architecture>
+        </ccCompilerTool>
+        <linkerTool>
+          <output>dist/Release/GNU-Linux-x86/entropy</output>
+          <linkerLibItems>
+          </linkerLibItems>
+          <commandLine>-lboost_program_options-gcc43-mt</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="actions.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="analyze-bits.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="analyze-chunks.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="count1bits.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="entropy-algorithms.hpp">
         <itemTool>3</itemTool>
       </item>
       <item path="entropy.cpp">

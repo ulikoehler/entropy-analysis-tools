@@ -26,9 +26,13 @@
 using namespace std;
 using namespace boost::program_options;
 
+//Typedefs
 typedef unsigned long ulong;
 typedef unsigned int uint;
 typedef unsigned short ushort;
+//typedef long double ld;
+
+typedef unsigned long val_t; //For use in analyze-chunks.hpp
 
 /**
  * Zeroing these variables at procedure start is only neccessary
@@ -61,6 +65,8 @@ variables_map vm;
 /**
  * Local includes
  */
+//Algorithms
+#include "entropy-algorithms.hpp"
 #include "count1bits.hpp"
 #include "analyze-bits.hpp"
 #include "analyze-chunks.hpp"

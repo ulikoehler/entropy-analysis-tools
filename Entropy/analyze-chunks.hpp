@@ -10,9 +10,6 @@
 
 #include "globals.hpp"
 
-//Locally used typedefs
-typedef unsigned long val_t;
-
 static map<val_t, ulong> allOcc; // All occurrences
 static pair<val_t, ulong> p;
 
@@ -255,6 +252,7 @@ chna (char* b)
 inline void
 analyzeChunks (istream& f, ostream& of)
 {
+    static ulong filesize = 0; //Blocksize is added to this each iteration
     boost::function<void(char* b) > fa; //function analyze
     //Select the appropriate function
     switch (chunksize)
@@ -311,7 +309,7 @@ analyzeChunks (istream& f, ostream& of)
                             blocksize = c;
                         }
                     fa (buffer);
-                    printStatistics (of, allOcc, blocknum);
+                    printStatistics (of, allOcc, blocknum); //Write this block's data to the output file
                     allOcc.clear ();
                 }
 
@@ -327,15 +325,24 @@ analyzeChunks (istream& f, ostream& of)
                             blocksize = c;
                         }
                     fa (buffer);
+                    filesize += blocksize; //Count the filesize;
                 }
+            /**
+             * Write the acquired data to the output file
+             * Iterates over all elements
+             * and write the data to the output file
+             */
             printStatistics (of, allOcc);
+            /**
+             * Calculate the Shannon entropy and print it into stdout
+             */
+            cout << "Shannon Entropy: " << shannonEntropy(allOcc, filesize) << endl;
         }
     /**
-     * Write the acquired data to the output file
-     * Iterates over all elements
-     * and write the data to the output file
+     * Print a success message
      */
-    cout << "Written data to statistics file." << endl;
+    cout << "Written data to statistics file.\n" << endl;
+    
 }
 
 #endif	/* _ANALYZE_CHUNKS_HPP */
