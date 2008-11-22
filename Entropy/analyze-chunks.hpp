@@ -10,7 +10,15 @@
 
 #include "globals.hpp"
 
+/**
+ * All occurrences map:
+ * Maps a binary string ("chunk") represented as a number
+ * to the count of occurrences of this number
+ * With -p:
+ *      Cleared after each block
+ */
 static map<val_t, ulong> allOcc; // All occurrences
+
 static pair<val_t,ulong> p;
 
 static int cpb;
@@ -55,6 +63,7 @@ pld (long double val)
 
 /**
  * Prints the header into the supplied output stream
+ * (for 3-column output)
  */
 inline
 void
@@ -88,7 +97,7 @@ printChunksHeader (ostream& of, bool perblock)
  *      -unsigned long blockNum: Block index (0 if disabled. Range starts with 1) 
  */
 inline void
-printStatistics (ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
+print3ColumnStatistics (ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
 {
     /**
      * Write the data
@@ -350,12 +359,12 @@ analyzeChunks (istream& f, ostream& of)
                             /**
                              * For other functions using blocksize:
                              * Set it to the maximum size usable without errors
-                             */
+                             */ 
                             blocksize = c;
                         }
                     fa (buffer);
                     entropies.insert (pair<ulong, long double>(blocknum, shannonEntropy (allOcc, blocksize)));
-                    allOcc.clear ();
+                    allOcc.clear();
                 }
             printEntropyStatistics (of, entropies);
         }
@@ -377,7 +386,7 @@ analyzeChunks (istream& f, ostream& of)
                             blocksize = c;
                         }
                     fa (buffer);
-                    printStatistics (of, allOcc, blocknum); //Write this block's data to the output file
+                    print3ColumnStatistics (of, allOcc, blocknum); //Write this block's data to the output file
                     allOcc.clear ();
                 }
 
@@ -407,7 +416,7 @@ analyzeChunks (istream& f, ostream& of)
              * Iterates over all elements
              * and write the data to the output file
              */
-            printStatistics (of, allOcc);
+            print3ColumnStatistics (of, allOcc);
             /**
              * Calculate the Shannon entropy of the entire file and print it into stdout
              */

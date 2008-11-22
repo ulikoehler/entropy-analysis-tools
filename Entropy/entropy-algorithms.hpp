@@ -18,11 +18,13 @@
  * Calculates entropy of a given filled map using Shannon's algorithm
  * Is called after analyzing chunks without -p ioption (entropy -c)
  */
-inline long double shannonEntropy(map<val_t,ulong>& occ,ulong filesize)
+inline long double shannonEntropy(map<val_t,ulong>& occ, ulong filesize)
 {
-    static long double entropy = 0.0L; //Return value
+    static long double entropy; //Return value
     static std::pair<val_t,ulong> p; //Used in BOOST_FOREACH
     static long double prob; //The probability of a single char to occur (used as buffer)
+    //Initialize variables
+    entropy = 0.0E0l;
     /**
      * Main loop: Calculates the Shannon Entropy
      */

@@ -7,6 +7,6 @@ pie(x=d$Count,
 labels=d$Number,
 angle=45,
 col=heat.colors(length(d$Number)),
-main="Binary file analysis results") 
+main="Binary file analysis results")
 dev.off()
 q()

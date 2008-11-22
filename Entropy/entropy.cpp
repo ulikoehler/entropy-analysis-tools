@@ -24,8 +24,8 @@ main (int argc, char** argv)
             ("blocksize,b", value<int>(&blocksize)->default_value (1024), "Set block size (must be a multiple of chunksize).")
             ("chunksize,s", value<int>(&chunksize)->default_value (4), "Set chunk size")
             ("per-block,p", "Analyze each block separately")
-            ("entropy,e", "Calculate Shannon's entropy for each block separately (implies -c and -p)")
-            ("fill,f",value<int>(&fillByte)->default_value(0),"The fill byte (as integer) if filesize is not multiple of chunksize")
+            ("entropy,e", "Calculate Shannon's entropy for each block separately (Has to be called with -c and -p)")
+            ("fill,f", value<int>(&fillByte)->default_value (0), "The fill byte (as integer) if filesize is not multiple of chunksize")
             ;
     options_description outputFormatOptions ("Output format options");
     outputFormatOptions.add_options ()
@@ -33,7 +33,7 @@ main (int argc, char** argv)
             ("r-compatible,r", "Produce ordered output (with -p -c, compatible with all R scripts)")
             ("separator", value<string > (&separator)->default_value (","), "Set the CSV field separator")
             ;
-    allowedOptions.add (genericOptions).add(analysisOptions).add(outputFormatOptions);
+    allowedOptions.add (genericOptions).add (analysisOptions).add (outputFormatOptions);
 
     positional_options_description p;
     p.add ("input", 1);
@@ -61,9 +61,9 @@ main (int argc, char** argv)
     ofstream of (outfile.c_str (), fstream::out);
 
     int ret = 0; //Return value
-    
+
     ret = analyzeBinaryFile (f, of);
-    
+
     f.close ();
     of.close ();
     return ret;
