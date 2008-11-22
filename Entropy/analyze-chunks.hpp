@@ -140,8 +140,22 @@ printStatistics (ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
                 }
         }
 }
-//Increments the map value
 
+inline void printEntropyStatistics(ostream& of, map<ulong, long double>& entropies)
+{
+    static pair<ulong, long double> ep; //ep = entropy pair
+    BOOST_FOREACH (ep, entropies)
+                    {
+                        /**
+                         * p.first = blockNum; p.second = shannonEntropy(blockNum)
+                         */
+                        of << p.first << separator << p.second << "\n";
+                    }
+}
+
+/**
+ * Increments the map value associated with the specified key
+ */
 inline void
 incVal (val_t n)
 {
@@ -156,8 +170,9 @@ incVal (val_t n)
         }
 }
 
-//Analyzes block for chunksize = 2
-
+/**
+ * Analyzes block for chunksize = 2
+ */
 void
 ch2a (char *b)
 { //Iterates through the block (one byte per iteration)
@@ -232,8 +247,9 @@ ch32a (char *b)
         }
 }
 
-//Analyzes block for chunksize n = 2^m > 8
-
+/**
+ * Analyzes block for chunksize n = 2^m > 8
+ */
 inline void
 chna (char* b)
 {
@@ -249,6 +265,9 @@ chna (char* b)
         }
 }
 
+/**
+ * Main chunk analyzator function
+ */
 inline void
 analyzeChunks (istream& f, ostream& of)
 {
@@ -289,16 +308,42 @@ analyzeChunks (istream& f, ostream& of)
             }
         }
     /**
-     * Write the output csv file header if enabled
-     */
-    printChunksHeader (of, perblock);
-    /**
      * Main loop: analyzes data and stores results in the map
      */
-    if (perblock)
+    if(vm.count("entropy"))
         {
             /**
-             * allOcc is used as local counter here and cleared after every block
+             * Write the CSV header
+             */
+            of << "\"Blocknum\"" << separator << "\"Entropy\"\n";
+            /**
+             * The same as the next (perblock), but calculates Shannon entropy for each block
+             * allOcc is misused here and cleared every block round
+             * The Shannon entropy associated with the block number is stored in the entropies local map
+             */
+            map<ulong, long double> entropies;
+            for (ulong blocknum = 1; f.good (); blocknum++)
+                {
+                    f.read (buffer, blocksize);
+                    static int c = f.gcount ();
+                    if (c < blocksize)
+                        {
+                            blocksize = c;
+                        }
+                    fa (buffer);
+                    entropies[blocknum] = shannonEntropy (allOcc,blocksize);
+                    allOcc.clear ();
+                }
+            printEntropyStatistics (of, entropies);
+        }
+    else if (perblock)
+        {
+            /**
+             * Write the CSV header
+             */
+            printChunksHeader (of, perblock);
+            /**
+             * allOcc is misused here and cleared every block round
              */
             for (ulong blocknum = 1; f.good (); blocknum++)
                 {
@@ -316,6 +361,13 @@ analyzeChunks (istream& f, ostream& of)
         }
     else
         {
+            /**
+             * Write the CSV header
+             */
+            printChunksHeader (of, perblock);
+            /**
+             * This block analyzes the chunks in the entire file.
+             */
             while (!f.eof ())
                 {
                     f.read (buffer, blocksize);

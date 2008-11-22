@@ -19,11 +19,18 @@
 #include <boost/program_options.hpp>
 #include <boost/function.hpp>
 #include <boost/foreach.hpp>
+#include <boost/multi_index_container.hpp>
+#include <boost/multi_index/ordered_index.hpp>
+#include <boost/multi_index/identity.hpp>
+#include <boost/multi_index/member.hpp>
+
+
 
 #include <stdlib.h>
 #include <math.h>
 
 using namespace std;
+using namespace boost;
 using namespace boost::program_options;
 
 //Typedefs
@@ -44,7 +51,12 @@ unsigned long long glob1 = 0;
 unsigned long long chunk0 = 0;
 unsigned long long chunk1 = 0;
 
+/**
+ * Command line options
+ */
+//Bools (here used as chars
 static char perblock;
+static char rCompatible;
 
 static string separator = ","; //For CSV output
 
