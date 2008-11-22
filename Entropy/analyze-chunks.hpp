@@ -11,7 +11,7 @@
 #include "globals.hpp"
 
 static map<val_t, ulong> allOcc; // All occurrences
-static pair<val_t, ulong> p;
+static pair<val_t,ulong> p;
 
 static int cpb;
 static int i, j; //Iterators
@@ -42,6 +42,15 @@ writeBinData (ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
                 of << "\"" << bitset < n > (p.first) << "\"" << separator << p.second << "\n";
             }
         }
+}
+
+/**
+ * Prints a long double value (into stdout)
+ */
+inline void
+pld (long double val)
+{
+    printf ("%Lf\n", val);
 }
 
 /**
@@ -141,16 +150,18 @@ printStatistics (ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
         }
 }
 
-inline void printEntropyStatistics(ostream& of, map<ulong, long double>& entropies)
+inline void
+printEntropyStatistics (ostream& of, map<ulong, long double>& entropies)
 {
     static pair<ulong, long double> ep; //ep = entropy pair
+
     BOOST_FOREACH (ep, entropies)
-                    {
-                        /**
-                         * p.first = blockNum; p.second = shannonEntropy(blockNum)
-                         */
-                        of << p.first << separator << p.second << "\n";
-                    }
+    {
+        /**
+         * p.first = blockNum; p.second = shannonEntropy(blockNum)
+         */
+        of << ep.first << separator << ep.second << "\n";
+    }
 }
 
 /**
@@ -310,7 +321,7 @@ analyzeChunks (istream& f, ostream& of)
     /**
      * Main loop: analyzes data and stores results in the map
      */
-    if(vm.count("entropy"))
+    if (vm.count ("entropy"))
         {
             /**
              * Write the CSV header
@@ -321,7 +332,7 @@ analyzeChunks (istream& f, ostream& of)
              * allOcc is misused here and cleared every block round
              * The Shannon entropy associated with the block number is stored in the entropies local map
              */
-            map<ulong, long double> entropies;
+            static map<ulong, long double> entropies;
             for (ulong blocknum = 1; f.good (); blocknum++)
                 {
                     f.read (buffer, blocksize);
@@ -331,7 +342,7 @@ analyzeChunks (istream& f, ostream& of)
                             blocksize = c;
                         }
                     fa (buffer);
-                    entropies[blocknum] = shannonEntropy (allOcc,blocksize);
+                    entropies.insert (pair<ulong, long double>(blocknum, shannonEntropy (allOcc, blocksize)));
                     allOcc.clear ();
                 }
             printEntropyStatistics (of, entropies);
@@ -386,15 +397,17 @@ analyzeChunks (istream& f, ostream& of)
              */
             printStatistics (of, allOcc);
             /**
-             * Calculate the Shannon entropy and print it into stdout
+             * Calculate the Shannon entropy of the entire file and print it into stdout
              */
-            cout << "Shannon Entropy: " << shannonEntropy(allOcc, filesize) << endl;
+            cout << "Shannon Entropy: ";
+            pld (shannonEntropy (allOcc, filesize));
+            cout << endl;
         }
     /**
      * Print a success message
      */
     cout << "Written data to statistics file.\n" << endl;
-    
+
 }
 
 #endif	/* _ANALYZE_CHUNKS_HPP */
