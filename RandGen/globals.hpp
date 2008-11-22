@@ -31,5 +31,10 @@ using namespace boost::program_options;
 typedef unsigned long ulong;
 typedef unsigned long long ull;
 
+/**
+ * Local includes
+ */
+#include "generators.hpp"
+
 #endif	/* _GLOBALS_HPP */
 

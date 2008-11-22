@@ -1,5 +1,5 @@
 #
-# Gererated Makefile - do not edit!
+# Generated Makefile - do not edit!
 #
 # Edit the Makefile in the project folder instead (../Makefile). Each target
 # has a -pre and a -post target defined where you can add customized code.
@@ -17,11 +17,14 @@ CCC=g++
 CXX=g++
 FC=gfortran
 
+# Macros
+PLATFORM=GNU-Linux-x86
+
 # Include project Makefile
 include Makefile
 
 # Object Directory
-OBJECTDIR=build/Debug/GNU-Linux-x86
+OBJECTDIR=build/Debug/${PLATFORM}
 
 # Object Files
 OBJECTFILES= \
@@ -41,11 +44,12 @@ FFLAGS=
 LDLIBSOPTIONS=
 
 # Build Targets
-.build-conf: ${BUILD_SUBPROJECTS} dist/Debug/GNU-Linux-x86/randgen
+.build-conf: ${BUILD_SUBPROJECTS}
+	${MAKE}  -f nbproject/Makefile-Debug.mk dist/Debug/${PLATFORM}/randgen
 
-dist/Debug/GNU-Linux-x86/randgen: ${OBJECTFILES}
-	${MKDIR} -p dist/Debug/GNU-Linux-x86
-	${LINK.cc} -lboost_program_options-gcc43-mt -o dist/Debug/GNU-Linux-x86/randgen ${OBJECTFILES} ${LDLIBSOPTIONS} 
+dist/Debug/${PLATFORM}/randgen: ${OBJECTFILES}
+	${MKDIR} -p dist/Debug/${PLATFORM}
+	${LINK.cc} -lboost_program_options-gcc43-mt -o dist/Debug/${PLATFORM}/randgen ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
 ${OBJECTDIR}/randgen.o: randgen.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -57,7 +61,7 @@ ${OBJECTDIR}/randgen.o: randgen.cpp
 # Clean Targets
 .clean-conf:
 	${RM} -r build/Debug
-	${RM} dist/Debug/GNU-Linux-x86/randgen
+	${RM} dist/Debug/${PLATFORM}/randgen
 
 # Subprojects
 .clean-subprojects:

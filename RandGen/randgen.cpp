@@ -96,7 +96,7 @@ main (int argc, char** argv)
                     #pragma omp parallel for
                     for (count; count > 0; count--)
                         {
-                            f << reinterpret_cast<char[];
+                            f.write((char*)&lc(),sizeof);
                         }
                 }
             else
