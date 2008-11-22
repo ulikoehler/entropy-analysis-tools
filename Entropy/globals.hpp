@@ -24,13 +24,16 @@
 #include <boost/accumulators/statistics/mean.hpp>
 #include <boost/accumulators/statistics/max.hpp>
 #include <boost/accumulators/statistics/min.hpp>
+#include <boost/accumulators/statistics/variance.hpp>
 #include <boost/accumulators/statistics/count.hpp>
+#include <boost/accumulators/statistics/skewness.hpp>
 
 #include <stdlib.h>
 #include <math.h>
 
 using namespace std;
 using namespace boost;
+using namespace boost::accumulators;
 using namespace boost::program_options;
 
 //Typedefs
@@ -83,9 +86,6 @@ variables_map vm;
 #include "count1bits.hpp"
 #include "analyze-bits.hpp"
 #include "analyze-chunks.hpp"
-//Actions
-#include "actions.hpp"
-
 
 #endif	/* _GLOBALS_HPP */
 

@@ -1,5 +1,5 @@
 #
-# Gererated Makefile - do not edit!
+# Generated Makefile - do not edit!
 #
 # Edit the Makefile in the project folder instead (../Makefile). Each target
 # has a -pre and a -post target defined where you can add customized code.
@@ -17,11 +17,14 @@ CCC=g++
 CXX=g++
 FC=gfortran
 
+# Macros
+PLATFORM=GNU-Linux-x86
+
 # Include project Makefile
 include Makefile
 
 # Object Directory
-OBJECTDIR=build/Fast/GNU-Linux-x86
+OBJECTDIR=build/Fast/${PLATFORM}
 
 # Object Files
 OBJECTFILES= \
@@ -41,7 +44,8 @@ FFLAGS=
 LDLIBSOPTIONS=
 
 # Build Targets
-.build-conf: ${BUILD_SUBPROJECTS} dist/Release/GNU-Linux-x86/entropy
+.build-conf: ${BUILD_SUBPROJECTS}
+	${MAKE}  -f nbproject/Makefile-Fast.mk dist/Release/GNU-Linux-x86/entropy
 
 dist/Release/GNU-Linux-x86/entropy: ${OBJECTFILES}
 	${MKDIR} -p dist/Release/GNU-Linux-x86

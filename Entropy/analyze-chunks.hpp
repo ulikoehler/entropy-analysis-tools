@@ -328,6 +328,20 @@ analyzeChunks (istream& f, ostream& of)
             }
         }
     /**
+     * Declare the accumulator set used to perform a statistical analysis on the data
+     * The standard deviation is calculated directly from the variance (sqrt(variance))
+     */
+    accumulator_set<long double, features<//Standard algebra
+                                        tag::min,
+                                        tag::max,
+                                        tag::sum,
+                                        //Statistics
+                                        tag::variance,
+                                        tag::mean,
+                                        //Probability theory (of random variable
+                                        tag::skewness
+                                             > > acc;
+    /**
      * Main loop: analyzes data and stores results in the map
      */
     if (vm.count ("entropy"))
@@ -363,10 +377,24 @@ analyzeChunks (istream& f, ostream& of)
                             blocksize = c;
                         }
                     fa (buffer);
-                    entropies.insert (pair<ulong, long double>(blocknum, shannonEntropy (allOcc, blocksize)));
+                    static long double entropy = shannonEntropy (allOcc, blocksize);
+                    acc(entropy);
+                    entropies.insert (pair<ulong, long double>(blocknum, entropy));
                     allOcc.clear();
                 }
+            /**
+             * Write the statistics into the statistics file
+             */
             printEntropyStatistics (of, entropies);
+            /**
+             * Print out the indicators (gathered from acc)
+             */
+            cout << "Statistical indicators:\n";
+            cout << "Min: " << extract::min(acc) << "\n";
+            cout << "Max: " << extract::max(acc) << "\n";
+            cout << "Mean: " << extract::mean(acc) << "\n";
+            cout << "Variance: " << extract::variance(acc) << "\n";
+            cout << "Skewness: " << extract::skewness(acc) << "\n";
         }
     else if (perblock)
         {
