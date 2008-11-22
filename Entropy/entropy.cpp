@@ -25,6 +25,7 @@ main (int argc, char** argv)
             ("chunksize,s", value<int>(&chunksize)->default_value (4), "Set chunk size")
             ("per-block,p", "Analyze each block separately")
             ("entropy,e", "Calculate Shannon's entropy for each block separately (implies -c and -p)")
+            ("fill,f",value<int>(&fillByte)->default_value(0),"The fill byte (as integer) if filesize is not multiple of chunksize")
             ;
     options_description outputFormatOptions ("Output format options");
     outputFormatOptions.add_options ()

@@ -24,8 +24,6 @@
 #include <boost/multi_index/identity.hpp>
 #include <boost/multi_index/member.hpp>
 
-
-
 #include <stdlib.h>
 #include <math.h>
 
@@ -68,6 +66,7 @@ static char* buffer SSE;
 
 int blocksize;
 int chunksize;
+int fillByte; 
 
 unsigned short base;
 

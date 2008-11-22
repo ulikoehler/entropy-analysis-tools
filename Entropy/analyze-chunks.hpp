@@ -339,6 +339,18 @@ analyzeChunks (istream& f, ostream& of)
                     static int c = f.gcount ();
                     if (c < blocksize)
                         {
+                            /**
+                             * Fill the rest of the buffer with the filling character
+                             * (here blocksize is the length of the buffer array)
+                             */
+                            for(int i = c;i < blocksize;i++)
+                                {
+                                    buffer[i] = fillByte;
+                                }
+                            /**
+                             * For other functions using blocksize:
+                             * Set it to the maximum size usable without errors
+                             */
                             blocksize = c;
                         }
                     fa (buffer);
