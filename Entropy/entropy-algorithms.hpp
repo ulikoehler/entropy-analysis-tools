@@ -24,7 +24,7 @@ inline long double shannonEntropy(map<val_t,ulong>& occ, ulong filesize)
     static std::pair<val_t,ulong> p; //Used in BOOST_FOREACH
     static long double prob; //The probability of a single char to occur (used as buffer)
     //Initialize variables
-    entropy = 0.0E0l;
+    entropy = 0.0E0l; //Null out entropy
     /**
      * Main loop: Calculates the Shannon Entropy
      */

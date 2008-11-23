@@ -16,6 +16,9 @@
 #include <map>
 #include <bitset>
 
+/**
+ * Boosting entropy
+ */
 #include <boost/program_options.hpp>
 #include <boost/function.hpp>
 #include <boost/foreach.hpp>
@@ -24,12 +27,23 @@
 #include <boost/accumulators/statistics/mean.hpp>
 #include <boost/accumulators/statistics/max.hpp>
 #include <boost/accumulators/statistics/min.hpp>
+#include <boost/accumulators/statistics/sum.hpp>
 #include <boost/accumulators/statistics/variance.hpp>
 #include <boost/accumulators/statistics/count.hpp>
 #include <boost/accumulators/statistics/skewness.hpp>
 
+#include <boost/accumulators/statistics/weighted_mean.hpp>
+#include <boost/accumulators/statistics/weighted_moment.hpp>
+#include <boost/accumulators/statistics/weighted_mean.hpp>
+#include <boost/accumulators/statistics/weighted_variance.hpp>
+#include <boost/accumulators/statistics/weighted_skewness.hpp>
+#include "boost/format.hpp"
+
+
 #include <stdlib.h>
 #include <math.h>
+
+#define ldFormatString "%.15Lf" //Format String für
 
 using namespace std;
 using namespace boost;
@@ -59,7 +73,6 @@ unsigned long long chunk1 = 0;
  */
 //Bools (here used as chars
 static char perblock;
-static char rCompatible;
 
 static string separator = ","; //For CSV output
 
@@ -69,9 +82,9 @@ static string separator = ","; //For CSV output
  */
 static char* buffer SSE;
 
-int blocksize;
-int chunksize;
-int fillByte; 
+static int blocksize;
+static int chunksize;
+static int fillByte;
 
 unsigned short base;
 

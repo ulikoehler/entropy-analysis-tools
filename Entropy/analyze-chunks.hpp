@@ -11,6 +11,10 @@
 #include "globals.hpp"
 
 /**
+ * Macros
+ */
+
+/**
  * All occurrences map:
  * Maps a binary string ("chunk") represented as a number
  * to the count of occurrences of this number
@@ -19,7 +23,7 @@
  */
 static map<val_t, ulong> allOcc; // All occurrences
 
-static pair<val_t,ulong> p;
+static pair<val_t, ulong> p;
 
 static int cpb;
 static int i, j; //Iterators
@@ -53,15 +57,6 @@ writeBinData (ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
 }
 
 /**
- * Prints a long double value (into stdout)
- */
-inline void
-pld (long double val)
-{
-    printf ("%Lf\n", val);
-}
-
-/**
  * Prints the header into the supplied output stream
  * (for 3-column output)
  */
@@ -91,7 +86,7 @@ printChunksHeader (ostream& of, bool perblock)
 
 /**
  * Prints the statistics from the map into the output stream
- * Arguments:
+ * Arguments: 
  *      -std::ostream& of: Output stream to print statistics into
  *      -std::map<val_t,ulong>& occ: Map to get the statistics from
  *      -unsigned long blockNum: Block index (0 if disabled. Range starts with 1) 
@@ -229,8 +224,6 @@ ch8a (char *b)
         }
 }
 
-///TODO: Does not work if filesize % blocksize != 0
-
 inline void
 ch16a (char *b)
 { //Iterates through the block (one byte per iteration)
@@ -328,19 +321,47 @@ analyzeChunks (istream& f, ostream& of)
             }
         }
     /**
-     * Declare the accumulator set used to perform a statistical analysis on the data
+     * Declare the accumulator sets used to perform a statistical analysis on the data
      * The standard deviation is calculated directly from the variance (sqrt(variance))
+     * standardAcc = unweighted
+     * entropyAcc = weighted by entropy
+     * entropyRecipAcc = weighted by entropy reciprocal
      */
-    accumulator_set<long double, features<//Standard algebra
-                                        tag::min,
-                                        tag::max,
-                                        tag::sum,
-                                        //Statistics
-                                        tag::variance,
-                                        tag::mean,
-                                        //Probability theory (of random variable
-                                        tag::skewness
-                                             > > acc;
+    static accumulator_set<long double, features<
+            //Standard algebra
+            tag::min,
+            tag::max,
+            tag::sum,
+            tag::mean,
+            //Statistics
+            tag::variance,
+            tag::moment < 2 >,
+            tag::moment < 3 >,
+            tag::skewness
+            >, void > standardAcc;
+
+    static accumulator_set<long double, features<
+            //Standard algebra
+            tag::weighted_sum,
+            //Statistics
+            tag::weighted_mean,
+            tag::weighted_moment < 2 >,
+            tag::weighted_moment < 3 >,
+            tag::weighted_variance,
+            tag::weighted_skewness
+            >, long double> entropyAcc;
+
+    static accumulator_set<long double, features<
+            //Standard algebra
+            tag::weighted_sum,
+            //Statistics
+            tag::weighted_mean,
+            tag::weighted_moment < 2 >,
+            tag::weighted_moment < 3 >,
+            tag::weighted_variance,
+            tag::weighted_skewness
+            >, long double> entropyRecipAcc;
+
     /**
      * Main loop: analyzes data and stores results in the map
      */
@@ -366,21 +387,20 @@ analyzeChunks (istream& f, ostream& of)
                              * Fill the rest of the buffer with the filling character
                              * (here blocksize is the length of the buffer array)
                              */
-                            for(int i = c;i < blocksize;i++)
+                            for (int i = c; i < blocksize; i++)
                                 {
                                     buffer[i] = fillByte;
                                 }
                             /**
                              * For other functions using blocksize:
                              * Set it to the maximum size usable without errors
-                             */ 
+                             */
                             blocksize = c;
                         }
                     fa (buffer);
-                    static long double entropy = shannonEntropy (allOcc, blocksize);
-                    acc(entropy);
+                    static long double entropy = shannonEntropy (allOcc, blocksize); //Buffered
                     entropies.insert (pair<ulong, long double>(blocknum, entropy));
-                    allOcc.clear();
+                    allOcc.clear ();
                 }
             /**
              * Write the statistics into the statistics file
@@ -388,13 +408,17 @@ analyzeChunks (istream& f, ostream& of)
             printEntropyStatistics (of, entropies);
             /**
              * Print out the indicators (gathered from acc)
+             * format = boost::format
              */
             cout << "Statistical indicators:\n";
-            cout << "Min: " << extract::min(acc) << "\n";
-            cout << "Max: " << extract::max(acc) << "\n";
-            cout << "Mean: " << extract::mean(acc) << "\n";
-            cout << "Variance: " << extract::variance(acc) << "\n";
-            cout << "Skewness: " << extract::skewness(acc) << "\n";
+            cout << "   Min: " << format (ldFormatString) % extract::min (standardAcc) << "\n";
+            cout << "   Max: " << format (ldFormatString) % extract::max (standardAcc) << "\n";
+            cout << "   Mean: " << format (ldFormatString) % extract::mean (standardAcc) << "\n";
+            cout << "   Sum: " << format (ldFormatString) % extract::sum (standardAcc) << "\n";
+            cout << "   Momentum (2): " << format (ldFormatString) % extract::moment < 2 > (standardAcc) << "\n";
+            cout << "   Momentum (3): " << format (ldFormatString) % extract::moment < 3 > (standardAcc) << "\n";
+            cout << "   Variance: " << format (ldFormatString) % extract::variance (standardAcc) << "\n";
+            cout << "   Skewness: " << format (ldFormatString) % extract::skewness (standardAcc) << "\n";
         }
     else if (perblock)
         {
@@ -405,6 +429,7 @@ analyzeChunks (istream& f, ostream& of)
             /**
              * allOcc is misused here and cleared every block round
              */
+            static map<ulong, long double> entropies;
             for (ulong blocknum = 1; f.good (); blocknum++)
                 {
                     f.read (buffer, blocksize);
@@ -415,9 +440,41 @@ analyzeChunks (istream& f, ostream& of)
                         }
                     fa (buffer);
                     print3ColumnStatistics (of, allOcc, blocknum); //Write this block's data to the output file
+                    //Update statistical accumulators
+                    double entropy = shannonEntropy (allOcc, blocksize); //Buffered
+                    BOOST_FOREACH(p,allOcc)
+                    {
+                        standardAcc(p.second);
+                        entropyAcc(p.second, weight = entropy);
+                        entropyRecipAcc(p.second, weight = (1/entropy));
+                    }
+                    //Clear the map
                     allOcc.clear ();
                 }
-
+            /**
+             * Print out the statistical indiciators
+             */
+            cout << "Statistical indicators (unweighted:\n";
+            cout << "   Min: " << format (ldFormatString) % extract::min (standardAcc) << "\n";
+            cout << "   Max: " << format (ldFormatString) % extract::max (standardAcc) << "\n";
+            cout << "   Mean: " << format (ldFormatString) % extract::mean (standardAcc) << "\n";
+            cout << "   Sum: " << format (ldFormatString) % extract::sum (standardAcc) << "\n";
+            cout << "   Momentum (2): " << format (ldFormatString) % extract::moment < 2 > (standardAcc) << "\n";
+            cout << "   Momentum (3): " << format (ldFormatString) % extract::moment < 3 > (standardAcc) << "\n";
+            cout << "   Variance: " << format (ldFormatString) % extract::variance (standardAcc) << "\n";
+            cout << "   Skewness: " << format (ldFormatString) % extract::skewness (standardAcc) << "\n";
+            cout << "Statistical indicators (weighted by entropy):\n";
+            cout << "   Mean: " << format (ldFormatString) % extract::mean (entropyAcc) << "\n";
+            cout << "   Momentum (2): " << format (ldFormatString) % extract::moment < 2 > (entropyAcc) << "\n";
+            cout << "   Momentum (3): " << format (ldFormatString) % extract::moment < 3 > (entropyAcc) << "\n";
+            cout << "   Variance: " << format (ldFormatString) % extract::variance (entropyAcc) << "\n";
+            cout << "   Skewness: " << format (ldFormatString) % extract::skewness (entropyAcc) << "\n";
+            cout << "Statistical indicators (weighted by entropy reciprocal):\n";
+            cout << "   Mean: " << format (ldFormatString) % extract::mean (entropyRecipAcc) << "\n";
+            cout << "   Momentum (2): " << format (ldFormatString) % extract::moment < 2 > (entropyRecipAcc) << "\n";
+            cout << "   Momentum (3): " << format (ldFormatString) % extract::moment < 3 > (entropyRecipAcc) << "\n";
+            cout << "   Variance: " << format (ldFormatString) % extract::variance (entropyRecipAcc) << "\n";
+            cout << "   Skewness: " << format (ldFormatString) % extract::skewness (entropyRecipAcc) << "\n";
         }
     else
         {
@@ -448,9 +505,7 @@ analyzeChunks (istream& f, ostream& of)
             /**
              * Calculate the Shannon entropy of the entire file and print it into stdout
              */
-            cout << "Shannon Entropy: ";
-            pld (shannonEntropy (allOcc, filesize));
-            cout << endl;
+            cout << "Shannon Entropy: " << format (ldFormatString) % shannonEntropy (allOcc, filesize) << endl;
         }
     /**
      * Print a success message
@@ -460,4 +515,3 @@ analyzeChunks (istream& f, ostream& of)
 }
 
 #endif	/* _ANALYZE_CHUNKS_HPP */
-
