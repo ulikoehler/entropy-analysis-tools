@@ -31,7 +31,7 @@ main (int argc, char** argv)
     options_description outputFormatOptions ("Output format options");
     outputFormatOptions.add_options ()
             ("decimal,d", "Print statistics keys in decimal (for use with -c)")
-            ("precision,p",value<int>(&precision)->default_value(15), "Precision (for floating point output in statistical indicators)")
+            ("precision",value<int>(&precision)->default_value(15), "Precision (for floating point output in statistical indicators)")
             ("r-compatible,r", "Produce ordered output (with -p -c, compatible with all R scripts)")
             ("separator", value<string > (&separator)->default_value (","), "Set the CSV field separator")
             ;
@@ -58,7 +58,8 @@ main (int argc, char** argv)
             return 2;
         }
 
-    //Set the i
+    //Build the format strings
+    ldFormatString = "%." + lexical_cast<string>(precision) + "Lf";
 
     ///Open the streams
     ifstream f (infile.c_str (), fstream::binary | fstream::in);

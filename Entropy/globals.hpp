@@ -22,6 +22,7 @@
 #include <boost/program_options.hpp>
 #include <boost/function.hpp>
 #include <boost/foreach.hpp>
+#include <boost/lexical_cast.hpp>
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/mean.hpp>
@@ -42,8 +43,6 @@
 
 #include <stdlib.h>
 #include <math.h>
-
-#define ldFormatString "%.15Lf" //Format String für
 
 using namespace std;
 using namespace boost;
@@ -75,6 +74,7 @@ unsigned long long chunk1 = 0;
 static char perblock;
 
 static string separator = ","; //For CSV output
+static string ldFormatString; //long double format string
 
 /**
  * Buffer char array, initialized

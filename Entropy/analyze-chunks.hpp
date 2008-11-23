@@ -329,6 +329,7 @@ analyzeChunks (istream& f, ostream& of)
      */
     static accumulator_set<long double, features<
             //Standard algebra
+            tag::count,
             tag::min,
             tag::max,
             tag::sum,
@@ -342,6 +343,7 @@ analyzeChunks (istream& f, ostream& of)
 
     static accumulator_set<long double, features<
             //Standard algebra
+            tag::count,
             tag::weighted_sum,
             //Statistics
             tag::weighted_mean,
@@ -353,6 +355,7 @@ analyzeChunks (istream& f, ostream& of)
 
     static accumulator_set<long double, features<
             //Standard algebra
+            tag::count,
             tag::weighted_sum,
             //Statistics
             tag::weighted_mean,
@@ -410,14 +413,17 @@ analyzeChunks (istream& f, ostream& of)
              * Print out the indicators (gathered from acc)
              * format = boost::format
              */
+            static long double variance = extract::variance (standardAcc);
             cout << "Statistical indicators:\n";
+            cout << "   Count: " << extract::count (standardAcc) << "\n";
             cout << "   Min: " << format (ldFormatString) % extract::min (standardAcc) << "\n";
             cout << "   Max: " << format (ldFormatString) % extract::max (standardAcc) << "\n";
             cout << "   Mean: " << format (ldFormatString) % extract::mean (standardAcc) << "\n";
             cout << "   Sum: " << format (ldFormatString) % extract::sum (standardAcc) << "\n";
             cout << "   Momentum (2): " << format (ldFormatString) % extract::moment < 2 > (standardAcc) << "\n";
             cout << "   Momentum (3): " << format (ldFormatString) % extract::moment < 3 > (standardAcc) << "\n";
-            cout << "   Variance: " << format (ldFormatString) % extract::variance (standardAcc) << "\n";
+            cout << "   Variance: " << format (ldFormatString) % variance << "\n";
+            cout << "   Standard deviation: " << format (ldFormatString) % sqrt(variance) << "\n";
             cout << "   Skewness: " << format (ldFormatString) % extract::skewness (standardAcc) << "\n";
         }
     else if (perblock)
@@ -441,12 +447,13 @@ analyzeChunks (istream& f, ostream& of)
                     fa (buffer);
                     print3ColumnStatistics (of, allOcc, blocknum); //Write this block's data to the output file
                     //Update statistical accumulators
-                    double entropy = shannonEntropy (allOcc, blocksize); //Buffered
-                    BOOST_FOREACH(p,allOcc)
+                    static long double entropy = shannonEntropy (allOcc, blocksize); //Buffered
+
+                    BOOST_FOREACH (p, allOcc)
                     {
-                        standardAcc(p.second);
-                        entropyAcc(p.second, weight = entropy);
-                        entropyRecipAcc(p.second, weight = (1/entropy));
+                        standardAcc (p.second);
+                        entropyAcc (p.second, weight = entropy);
+                        entropyRecipAcc (p.second, weight = (1 / entropy));
                     }
                     //Clear the map
                     allOcc.clear ();
@@ -454,27 +461,38 @@ analyzeChunks (istream& f, ostream& of)
             /**
              * Print out the statistical indiciators
              */
+            static long double variance = extract::variance (standardAcc); //Used in variance and std deviation
             cout << "Statistical indicators (unweighted:\n";
+            cout << "   Count: " << extract::count (standardAcc) << "\n";
             cout << "   Min: " << format (ldFormatString) % extract::min (standardAcc) << "\n";
             cout << "   Max: " << format (ldFormatString) % extract::max (standardAcc) << "\n";
             cout << "   Mean: " << format (ldFormatString) % extract::mean (standardAcc) << "\n";
             cout << "   Sum: " << format (ldFormatString) % extract::sum (standardAcc) << "\n";
             cout << "   Momentum (2): " << format (ldFormatString) % extract::moment < 2 > (standardAcc) << "\n";
             cout << "   Momentum (3): " << format (ldFormatString) % extract::moment < 3 > (standardAcc) << "\n";
-            cout << "   Variance: " << format (ldFormatString) % extract::variance (standardAcc) << "\n";
+            cout << "   Variance: " << format (ldFormatString) % variance << "\n";
+            cout << "   Standard deviation: " << format (ldFormatString) % sqrt(variance) << "\n";
             cout << "   Skewness: " << format (ldFormatString) % extract::skewness (standardAcc) << "\n";
+
+            variance = extract::weighted_variance (entropyAcc);
             cout << "Statistical indicators (weighted by entropy):\n";
-            cout << "   Mean: " << format (ldFormatString) % extract::mean (entropyAcc) << "\n";
-            cout << "   Momentum (2): " << format (ldFormatString) % extract::moment < 2 > (entropyAcc) << "\n";
-            cout << "   Momentum (3): " << format (ldFormatString) % extract::moment < 3 > (entropyAcc) << "\n";
-            cout << "   Variance: " << format (ldFormatString) % extract::variance (entropyAcc) << "\n";
-            cout << "   Skewness: " << format (ldFormatString) % extract::skewness (entropyAcc) << "\n";
+            cout << "   Sum: " << format (ldFormatString) % extract::weighted_sum (entropyAcc) << "\n";
+            cout << "   Mean: " << format (ldFormatString) % extract::weighted_mean (entropyAcc) << "\n";
+            cout << "   Momentum (2): " << format (ldFormatString) % extract::weighted_moment < 2 > (entropyAcc) << "\n";
+            cout << "   Momentum (3): " << format (ldFormatString) % extract::weighted_moment < 3 > (entropyAcc) << "\n";
+            cout << "   Variance: " << format (ldFormatString) % variance << "\n";
+            cout << "   Standard deviation: " << format (ldFormatString) % sqrt(variance) << "\n";
+            cout << "   Skewness: " << format (ldFormatString) % extract::weighted_skewness (entropyAcc) << "\n";
+            
+            variance = extract::weighted_variance (entropyRecipAcc);
             cout << "Statistical indicators (weighted by entropy reciprocal):\n";
-            cout << "   Mean: " << format (ldFormatString) % extract::mean (entropyRecipAcc) << "\n";
-            cout << "   Momentum (2): " << format (ldFormatString) % extract::moment < 2 > (entropyRecipAcc) << "\n";
-            cout << "   Momentum (3): " << format (ldFormatString) % extract::moment < 3 > (entropyRecipAcc) << "\n";
-            cout << "   Variance: " << format (ldFormatString) % extract::variance (entropyRecipAcc) << "\n";
-            cout << "   Skewness: " << format (ldFormatString) % extract::skewness (entropyRecipAcc) << "\n";
+            cout << "   Sum: " << format (ldFormatString) % extract::weighted_sum (entropyRecipAcc) << "\n";
+            cout << "   Mean: " << format (ldFormatString) % extract::weighted_mean (entropyRecipAcc) << "\n";
+            cout << "   Momentum (2): " << format (ldFormatString) % extract::weighted_moment < 2 > (entropyRecipAcc) << "\n";
+            cout << "   Momentum (3): " << format (ldFormatString) % extract::weighted_moment < 3 > (entropyRecipAcc) << "\n";
+            cout << "   Variance: " << format (ldFormatString) % variance << "\n";
+            cout << "   Standard deviation: " << format (ldFormatString) % sqrt(variance) << "\n";
+            cout << "   Skewness: " << format (ldFormatString) % extract::weighted_skewness (entropyRecipAcc) << "\n";
         }
     else
         {
