@@ -18,6 +18,7 @@ void
 analyzeBits (ifstream& f)
 {
     buffer = new char[blocksize];
+    static ulong filesize;
     ///Main read loop
     while (!f.eof ()) //bn = block number
         {
@@ -27,6 +28,7 @@ analyzeBits (ifstream& f)
                 {
                     blocksize = c;
                 }
+            filesize += blocksize;
             /** Chunk loop (iterates blocksize times)
              * Chunk0 is (blocksize << 3) - chunk1; <<3 multiplies by 8 (8 bits per byte)
              * global counters are increased by chunk counters
@@ -41,6 +43,7 @@ analyzeBits (ifstream& f)
         }
     f.close ();
     cout << "Overall statistics: 0:" << glob0 << " 1:" << glob1 << endl;
+    cout << "Shannon entropy: " << shannonEntropy(glob0, glob1, filesize) << "\n";
 }
 
 /**

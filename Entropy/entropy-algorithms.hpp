@@ -15,6 +15,23 @@
 #include <cmath>
 
 /**
+ * Calculates entropy of two given values
+ * (used in analyze-bits.hpp with 0 and 1 values)
+ */
+inline long double shannonEntropy(ulong zeroes, ulong ones, ulong filesize)
+{
+    static long double entropy; //Return value
+    static long double prob; //The probability of a single char to occur (used as buffer)
+    //Calculate entropy (must be negated before returning)
+    prob = zeroes/filesize;
+    entropy = (long double)prob*log2(prob);
+    prob = ones/filesize;
+    entropy += (long double)ones*log2(ones);
+
+    return (long double)-entropy;
+}
+
+/**
  * Calculates entropy of a given filled map using Shannon's algorithm
  * Is called after analyzing chunks without -p ioption (entropy -c)
  */
@@ -26,7 +43,7 @@ inline long double shannonEntropy(map<val_t,ulong>& occ, ulong filesize)
     //Initialize variables
     entropy = 0.0E0l; //Null out entropy
     /**
-     * Main loop: Calculates the Shannon Entropy
+     * Main loop: Calculates the entropy (must be negated before returning)
      */
     BOOST_FOREACH(p, occ)
     {

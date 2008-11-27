@@ -50,9 +50,11 @@ using namespace boost::accumulators;
 using namespace boost::program_options;
 
 //Typedefs
+
 typedef unsigned long ulong;
 typedef unsigned int uint;
 typedef unsigned short ushort;
+typedef unsigned long long ull;
 //typedef long double ld;
 
 typedef unsigned long val_t; //For use in analyze-chunks.hpp
