@@ -21,152 +21,8 @@
  * With -p:
  *      Cleared after each block
  */
-static map<val_t, ulong> allOcc; // All occurrences
 
-static pair<val_t, ulong> p;
-
-static int cpb;
-static int i, j; //Iterators
-
-/**
- * Writes the data from the supplied map to the supplied output stream
- * (See printStatistics for parameter description)
- * Called inside printStatistics to reduce code mass.
- * Template: template paramter for std::bitset
- */
-template<int n>
-void
-writeBinData (ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
-{
-    if (blockNum)
-        {
-
-            BOOST_FOREACH (p, occ)
-            {
-                of << "\"" << bitset < n > (p.first) << "\"" << separator << p.second << separator << blockNum << "\n";
-            }
-        }
-    else
-        {
-
-            BOOST_FOREACH (p, occ)
-            {
-                of << "\"" << bitset < n > (p.first) << "\"" << separator << p.second << "\n";
-            }
-        }
-}
-
-/**
- * Prints the header into the supplied output stream
- * (for 3-column output)
- */
-inline
-void
-printChunksHeader (ostream& of, bool perblock)
-{
-    /**
-     * Write the header
-     */
-    if (perblock)
-        {
-            if (!vm.count ("disable-header"))
-                {
-                    of << "\"Number\"" << separator << "\"Count\"" << separator << "\"Block\n";
-                }
-        }
-    else
-        {
-
-            if (!vm.count ("disable-header"))
-                {
-                    of << "\"Number\"" << separator << "\"Count\"\n";
-                }
-        }
-}
-
-/**
- * Prints the statistics from the map into the output stream
- * Arguments: 
- *      -std::ostream& of: Output stream to print statistics into
- *      -std::map<val_t,ulong>& occ: Map to get the statistics from
- *      -unsigned long blockNum: Block index (0 if disabled. Range starts with 1) 
- */
-inline void
-print3ColumnStatistics (ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
-{
-    /**
-     * Write the data
-     */
-    if (vm.count ("decimal"))
-        {
-            if (blockNum)
-                {
-
-                    BOOST_FOREACH (p, occ)
-                    {
-                        of << p.first << separator << p.second << separator << blockNum << "\n";
-                    }
-                }
-            else
-                {
-
-                    BOOST_FOREACH (p, occ)
-                    {
-                        of << p.first << separator << p.second << "\n";
-                    }
-                }
-        }
-    else
-        {
-            switch (chunksize)
-                {
-                case 2:
-                    {
-                        writeBinData < 2 > (of, occ, blockNum);
-                        break;
-                    }
-                case 4:
-                    {
-                        writeBinData < 4 > (of, occ, blockNum);
-                        break;
-                    }
-                case 8:
-                    {
-                        writeBinData < 8 > (of, occ, blockNum);
-                        break;
-                    }
-                case 16:
-                    {
-                        writeBinData < 16 > (of, occ, blockNum);
-                        break;
-                    }
-                case 32:
-                    {
-                        writeBinData < 32 > (of, occ, blockNum);
-                        break;
-                    }
-                default:
-                    {
-                        writeBinData < 64 > (of, occ, blockNum);
-                        break;
-                    }
-                }
-        }
-}
-
-inline void
-printEntropyStatistics (ostream& of, map<ulong, long double>& entropies)
-{
-    static pair<ulong, long double> ep; //ep = entropy pair
-
-    BOOST_FOREACH (ep, entropies)
-    {
-        /**
-         * p.first = blockNum; p.second = shannonEntropy(blockNum)
-         */
-        of << ep.first << separator << format(ldFormatString) % ep.second << "\n";
-    }
-}
+static uint cpb; //chunks per block
 
 /**
  * Increments the map value associated with the specified key
@@ -267,7 +123,7 @@ inline void
 chna (char* b)
 {
     static val_t n;
-    cpb = div (blocksize, chunksize).quot; //chunks per block
+    cpb = (long)blocksize/chunksize; //chunks per block
     //Iterates through the block
     for (i = 0; i < cpb; i++)
         {
@@ -283,49 +139,15 @@ chna (char* b)
  */
 inline void
 analyzeChunks (istream& f, ostream& of)
-{
-    static ulong filesize = 0; //Blocksize is added to this each iteration
-    boost::function<void(char* b) > fa; //function analyze
-    //Select the appropriate function
-    switch (chunksize)
-        {
-        case 1:
-            {
-                analyzeBitsPerBlock (f, of);
-                return;
-            }
-        case 2:
-            {
-                fa = ch2a;
-                break;
-            }
-        case 4:
-            {
-                fa = ch4a;
-                break;
-            }
-        case 8:
-            {
-                fa = ch8a;
-                break;
-            }
-        case 16:
-            {
-                fa = ch16a;
-                break;
-            }
-        default:
-            {
-                fa = chna;
-                break;
-            }
-        }
-    /**
+{    /**
      * Declare the accumulator sets used to perform a statistical analysis on the data
      * The standard deviation is calculated directly from the variance (sqrt(variance))
      * standardAcc = unweighted
      * entropyAcc = weighted by entropy
      * entropyRecipAcc = weighted by entropy reciprocal
+     *
+     * These are used only once per program call so there is no need to reset
+     * In analyze-bits.hpp the sets are used with ulong as data type.
      */
     static accumulator_set<long double, features<
             //Standard algebra
@@ -378,6 +200,43 @@ analyzeChunks (istream& f, ostream& of)
             tag::weighted_variance,
             tag::weighted_skewness
             >, long double> entropyRecipWeightedAcc;
+    static ulong filesize = 0; //Blocksize is added to this each iteration
+    boost::function<void(char* b) > fa; //function analyze
+    //Select the appropriate function
+    switch (chunksize)
+        {
+        case 1:
+            {
+                analyzeBitsPerBlock (f, of);
+                return;
+            }
+        case 2:
+            {
+                fa = ch2a;
+                break;
+            }
+        case 4:
+            {
+                fa = ch4a;
+                break;
+            }
+        case 8:
+            {
+                fa = ch8a;
+                break;
+            }
+        case 16:
+            {
+                fa = ch16a;
+                break;
+            }
+        default:
+            {
+                fa = chna;
+                break;
+            }
+        }
+    //Accumulator sets are declared in globals.hpp
 
     /**
      * Main loop: analyzes data and stores results in the map
@@ -397,14 +256,16 @@ analyzeChunks (istream& f, ostream& of)
             for (ulong blocknum = 1; f.good (); blocknum++)
                 {
                     f.read (buffer, blocksize);
-                    static int c = f.gcount ();
+                    c = f.gcount ();
                     if (c < blocksize)
                         {
+                          if(c == 0){return;}
                             /**
                              * Fill the rest of the buffer with the filling character
                              * (here blocksize is the length of the buffer array)
                              */
-                            for (int i = c; i < blocksize; i++)
+                            //TODO apply for all analyzator functions
+                            for (i = c; i < blocksize; i++)
                                 {
                                     buffer[i] = fillByte;
                                 }
@@ -415,7 +276,8 @@ analyzeChunks (istream& f, ostream& of)
                             blocksize = c;
                         }
                     fa (buffer);
-                    static long double entropy = shannonEntropy (allOcc, blocksize); //Buffered
+                    static long double entropy = 0;
+                    entropy = shannonEntropy (allOcc, blocksize); //Buffered
                     entropies.insert(pair<ulong, long double>(blocknum, entropy));
                     entropyAcc(entropy);
                     allOcc.clear ();
@@ -425,7 +287,8 @@ analyzeChunks (istream& f, ostream& of)
              */
             printEntropyStatistics (of, entropies);
 
-            static long double variance = extract::variance (entropyAcc);
+            static long double variance = 0;
+            variance = extract::variance (entropyAcc);
             cout << "Statistical indicators:\n";
             cout << "   Count: " << extract::count (entropyAcc) << "\n";
             cout << "   Min: " << extract::min (entropyAcc) << "\n";
@@ -450,9 +313,10 @@ analyzeChunks (istream& f, ostream& of)
             for (ulong blocknum = 1; f.good (); blocknum++)
                 {
                     f.read (buffer, blocksize);
-                    static int c = f.gcount ();
+                    c = f.gcount ();
                     if (c < blocksize)
                         {
+                            if(c == 0){return;}
                             blocksize = c;
                         }
                     fa (buffer);
@@ -472,7 +336,8 @@ analyzeChunks (istream& f, ostream& of)
             /**
              * Print out the statistical indiciators
              */
-            static long double variance = extract::variance (entropyWeightedAcc); //Used in variance and std deviation
+            static long double variance = 0;
+            variance = extract::variance (entropyAcc); //Used in variance and std deviation
             cout << "Entropy indicators:\n";
             cout << "   Count: " << extract::count (entropyAcc) << "\n";
             cout << "   Min: " << extract::min (entropyAcc) << "\n";
@@ -482,9 +347,9 @@ analyzeChunks (istream& f, ostream& of)
             cout << "   Momentum (2): " << format (ldFormatString) % extract::moment < 2 > (entropyAcc) << "\n";
             cout << "   Momentum (3): " << format (ldFormatString) % extract::moment < 3 > (entropyAcc) << "\n";
             cout << "   Variance: " << format (ldFormatString) % variance << "\n";
-            cout << "   Standard deviation: " << format (ldFormatString) % sqrt(variance) << "\n";
+            cout << "   Standard deviation: " << format (ldFormatString) % sqrt (variance) << "\n";
             cout << "   Skewness: " << format (ldFormatString) % extract::skewness (entropyAcc) << "\n";
-            
+
             variance = extract::variance (standardAcc); //Used in variance and std deviation
             cout << "Statistical indicators (unweighted):\n";
             cout << "   Count: " << extract::count (standardAcc) << "\n";
@@ -495,7 +360,7 @@ analyzeChunks (istream& f, ostream& of)
             cout << "   Momentum (2): " << format (ldFormatString) % extract::moment < 2 > (standardAcc) << "\n";
             cout << "   Momentum (3): " << format (ldFormatString) % extract::moment < 3 > (standardAcc) << "\n";
             cout << "   Variance: " << format (ldFormatString) % variance << "\n";
-            cout << "   Standard deviation: " << format (ldFormatString) % sqrt(variance) << "\n";
+            cout << "   Standard deviation: " << format (ldFormatString) % sqrt (variance) << "\n";
             cout << "   Skewness: " << format (ldFormatString) % extract::skewness (standardAcc) << "\n";
 
             variance = extract::weighted_variance (entropyWeightedAcc);
@@ -505,9 +370,9 @@ analyzeChunks (istream& f, ostream& of)
             cout << "   Momentum (2): " << format (ldFormatString) % extract::weighted_moment < 2 > (entropyWeightedAcc) << "\n";
             cout << "   Momentum (3): " << format (ldFormatString) % extract::weighted_moment < 3 > (entropyWeightedAcc) << "\n";
             cout << "   Variance: " << format (ldFormatString) % variance << "\n";
-            cout << "   Standard deviation: " << format (ldFormatString) % sqrt(variance) << "\n";
+            cout << "   Standard deviation: " << format (ldFormatString) % sqrt (variance) << "\n";
             cout << "   Skewness: " << format (ldFormatString) % extract::weighted_skewness (entropyWeightedAcc) << "\n";
-            
+
             variance = extract::weighted_variance (entropyRecipWeightedAcc);
             cout << "Statistical indicators (weighted by entropy reciprocal):\n";
             cout << "   Sum: " << format (ldFormatString) % extract::weighted_sum (entropyRecipWeightedAcc) << "\n";
@@ -515,7 +380,7 @@ analyzeChunks (istream& f, ostream& of)
             cout << "   Momentum (2): " << format (ldFormatString) % extract::weighted_moment < 2 > (entropyRecipWeightedAcc) << "\n";
             cout << "   Momentum (3): " << format (ldFormatString) % extract::weighted_moment < 3 > (entropyRecipWeightedAcc) << "\n";
             cout << "   Variance: " << format (ldFormatString) % variance << "\n";
-            cout << "   Standard deviation: " << format (ldFormatString) % sqrt(variance) << "\n";
+            cout << "   Standard deviation: " << format (ldFormatString) % sqrt (variance) << "\n";
             cout << "   Skewness: " << format (ldFormatString) % extract::weighted_skewness (entropyRecipWeightedAcc) << "\n";
         }
     else
@@ -530,9 +395,10 @@ analyzeChunks (istream& f, ostream& of)
             while (!f.eof ())
                 {
                     f.read (buffer, blocksize);
-                    static int c = f.gcount ();
+                    c = f.gcount ();
                     if (c < blocksize)
                         {
+                            if(c == 0){return;}
                             blocksize = c;
                         }
                     fa (buffer);

@@ -6,7 +6,7 @@ svg("2d-graph.svg")
 plot(x=d[,1],
 y=d[,2],
 type="l",
-col=heat.colors(length(d$Blocknum)),
+col=heat.colors(length(d[,1])),
 main="Binary file analysis results")
 dev.off()
 q()

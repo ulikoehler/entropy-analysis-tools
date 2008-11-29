@@ -24,11 +24,11 @@ main (int argc, char** argv)
     options_description analysisOptions ("Analysis options:");
     analysisOptions.add_options ()
             ("chunks,c", "Analyze chunks of chunksize bits rather than bits. Must be a multiple of chunksize.")
-            ("blocksize,b", value<int>(&blocksize)->default_value (1024), "Set block size (must be a multiple of chunksize).")
-            ("chunksize,s", value<int>(&chunksize)->default_value (4), "Set chunk size")
+            ("blocksize,b", value<uint>(&blocksize)->default_value (1024), "Set block size (must be a multiple of chunksize).")
+            ("chunksize,s", value<uint>(&chunksize)->default_value (4), "Set chunk size")
             ("per-block,p", "Analyze each block separately")
             ("entropy,e", "Calculate Shannon's entropy for each block separately (Has to be called with -c and -p)")
-            ("fill,f", value<int>(&fillByte)->default_value (0), "The fill byte (as integer) if filesize is not multiple of chunksize")
+            ("fill,f", value<uint>(&fillByte)->default_value (0), "The fill byte (as integer) if filesize is not multiple of chunksize")
             ;
     options_description outputFormatOptions ("Output format options");
     outputFormatOptions.add_options ()
@@ -76,7 +76,7 @@ main (int argc, char** argv)
     return ret;
 }
 
-int
+inline int
 analyzeBinaryFile (ifstream& f, ofstream& of)
 {
     perblock = vm.count ("per-block"); //Behaves like a boolean, also consumes only one byte

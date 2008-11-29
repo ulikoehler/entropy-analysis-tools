@@ -8,8 +8,17 @@
 #ifndef _GLOBALS_HPP
 #define	_GLOBALS_HPP
 
-#define SSE __attribute__((aligned (16)))
+/**
+ * Append to each array declaration
+ * --> fast vectorizing
+ */
+#define SSE __attribute__((aligned (16))) //
 
+/**
+ * C/C++ Standard library
+ */
+#include <stdlib.h>
+#include <math.h>
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -40,10 +49,6 @@
 #include <boost/accumulators/statistics/weighted_skewness.hpp>
 #include "boost/format.hpp"
 
-
-#include <stdlib.h>
-#include <math.h>
-
 using namespace std;
 using namespace boost;
 using namespace boost::accumulators;
@@ -60,16 +65,6 @@ typedef unsigned long long ull;
 typedef unsigned long val_t; //For use in analyze-chunks.hpp
 
 /**
- * Zeroing these variables at procedure start is only neccessary
- * in nested function calls because they are used only once
- * per program call
- */
-unsigned long long glob0 = 0;
-unsigned long long glob1 = 0;
-unsigned long long chunk0 = 0;
-unsigned long long chunk1 = 0;
-
-/**
  * Command line options
  */
 //Bools (here used as chars
@@ -79,16 +74,21 @@ static string separator = ","; //For CSV output
 static string ldFormatString; //long double format string
 
 /**
- * Buffer char array, initialized
- * in main function before analyzator function calls
+ * Buffers and globally used variables
  */
+//Buffer char array, initialized
+//in main function before analyzator function calls
 static char* buffer SSE;
 
-static int blocksize;
-static int chunksize;
-static int fillByte;
+static uint blocksize;
+static uint chunksize;
+static uint fillByte;
 
-unsigned short base;
+static uint i,j,c; //Ugly but saving memory and time in nested loops
+
+//STL containers
+static map<val_t, ulong> allOcc; // All occurrences
+static pair<val_t, ulong> p;
 
 //Program options
 variables_map vm;
@@ -96,7 +96,9 @@ variables_map vm;
 /**
  * Local includes
  */
+
 //Algorithms
+#include "output.hpp"
 #include "entropy-algorithms.hpp"
 #include "count1bits.hpp"
 #include "analyze-bits.hpp"
