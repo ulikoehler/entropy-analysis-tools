@@ -87,6 +87,13 @@ static uint fillByte;
 static uint i,j,c; //Ugly but saving memory and time in nested loops
 
 //STL containers
+/*
+ * All occurrences map:
+ * Maps a binary string ("chunk") represented as a number
+ * to the count of occurrences of this number
+ * With -p:
+ *      Cleared after each block
+ */
 static map<val_t, ulong> allOcc; // All occurrences
 static pair<val_t, ulong> p;
 
