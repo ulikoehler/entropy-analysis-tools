@@ -18,23 +18,29 @@ using namespace boost::program_options;
 
 static fstream fin;
 static fstream fout;
-static string buffer;
 
 variables_map vm;
 
 template<class T>
-inline void convToBin(T n)
+inline void convToBin()
 {
-    fout.write(reinterpret_cast<char*>(&n), sizeof(T));
-}
-
-template<class T>
-inline void convert()
-{
+    static string buffer;
     while(fin.good())
         {
             fin >> buffer;
-            convToBin<T>(lexical_cast<T>(buffer));
+            static T n = lexical_cast<T>(buffer);
+            fout.write(reinterpret_cast<char*>(&n), sizeof(T));
+        }
+}
+
+template<class T>
+inline void convToNum()
+{
+    char buffer[sizeof(T)];
+    while(fin.good())
+        {
+            fin.read(buffer, sizeof(T));
+            fout << *(reinterpret_cast<T*>(&buffer)) << "\n";
         }
 }
 
@@ -47,10 +53,14 @@ main (int argc, char** argv)
     options_description allowedOptions ("Allowed options");
     allowedOptions.add_options ()
             ("help,h", "Show this help message")
-            ("n", "Convert to numbers")
-            ("b", "Convert to binary")
+            ("numbers,n", "Convert to numbers")
+            ("binary,b", "Convert to binary")
             ("int","Use integers")
+            ("uint","Use unsigned int")
             ("long","Use long")
+            ("llong","Use long long")
+            ("ullong","Use unsigned long long")
+            ("float", "Use float")
             ("double", "Use double")
             ("in,i", value<string>(&infile), "Input file")
             ("out,o",value<string>(&outfile), "Output file")
@@ -64,8 +74,6 @@ main (int argc, char** argv)
            options (allowedOptions).positional (p).run (), vm);
     notify (vm);
 
-    fin.open(infile.c_str(), fstream::in);
-    fout.open(outfile.c_str(), fstream::out | fstream::binary);
 
     //Check if the user has requested help
     if (vm.count ("help"))
@@ -87,18 +95,80 @@ main (int argc, char** argv)
             cout << "No output file specified!\n" << allowedOptions << "\n";
             return 2;
         }
-    
-    if(vm.count("int"))
+
+    if(vm.count("numbers"))
         {
-            convert<int>();
+            fin.open(infile.c_str(), fstream::in | fstream::binary);
+            fout.open(outfile.c_str(), fstream::out);
+            if(vm.count("int"))
+                {
+                    convToNum<int>();
+                }
+            else if(vm.count("uint"))
+                {
+                    convToNum<unsigned int>();
+                }
+            else if (vm.count ("long"))
+                {
+                    convToNum<long>();
+                }
+            else if (vm.count ("ulong"))
+                {
+                    convToNum<unsigned long>();
+                }
+            else if (vm.count ("llong"))
+                {
+                    convToNum<long long>();
+                }
+            else if (vm.count ("ullong"))
+                {
+                    convToNum<unsigned long long>();
+                }
+            else if (vm.count ("float"))
+                {
+                    convToBin<float>();
+                }
+            else if (vm.count ("double"))
+                {
+                    convToBin<double>();
+                }
         }
-    else if(vm.count("long"))
+    else //vm.count("-b")
         {
-            convert<long>();
-        }
-    else if(vm.count("double"))
-        {
-            convert<double>();
+            fin.open(infile.c_str(), fstream::in);
+            fout.open(outfile.c_str(), fstream::out | fstream::binary);
+            if(vm.count("int"))
+                {
+                    convToBin<int>();
+                }
+            else if(vm.count("uint"))
+                {
+                    convToBin<unsigned int>();
+                }
+            else if (vm.count ("long"))
+                {
+                    convToBin<long>();
+                }
+            else if (vm.count ("ulong"))
+                {
+                    convToBin<unsigned long>();
+                }
+            else if (vm.count ("llong"))
+                {
+                    convToBin<long long>();
+                }
+            else if (vm.count ("ullong"))
+                {
+                    convToBin<unsigned long long>();
+                }
+            else if (vm.count ("float"))
+                {
+                    convToBin<float>();
+                }
+            else if (vm.count ("double"))
+                {
+                    convToBin<double>();
+                }
         }
 
     fin.close();
