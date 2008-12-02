@@ -19,8 +19,10 @@
 #include <boost/program_options.hpp>
 #include <boost/function.hpp>
 #include <boost/random.hpp>
+#include <boost/foreach.hpp>
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <math.h>
 #include <time.h>
 
@@ -30,6 +32,13 @@ using namespace boost::program_options;
 
 typedef unsigned long ulong;
 typedef unsigned long long ull;
+typedef unsigned short ushort;
+
+typedef unsigned long long int_t;
+typedef unsigned long smallint_t;
+typedef unsigned long long amount_t;
+typedef unsigned long seed_t;
+typedef long double real_t;
 
 /**
  * Local includes

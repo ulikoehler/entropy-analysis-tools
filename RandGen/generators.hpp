@@ -22,24 +22,35 @@ void GenRandBoost();
 
 
 /**
- * Static global variables used by the generator and
+ * Static global variables used by the generator functions and
  * set by the main function (command line arguments)
  */
-static ull& amount; //Number of random numbers to generate
-static ofstream& fout;
-static string& distParam1;
-static string& distParam2;
-static short distributionSelectionParam;
-static short algorithmSelectionParam;
+static amount_t amount; //Number of random numbers to generate
+static ofstream fout;
+static string distParam1;
+static string distParam2;
+static string lowerLimit;
+static string upperLimit;
+static ushort distributionNum;
+static ushort algorithmNum;
 
-enum RNG_ALGO
+/**
+ * Generates a seed
+ */
+template<class T>
+T genSeed()
 {
-    MT19937, //Mersenne Twister 19937
-    LC_MINSTD, //Linear Congruential
-    ECUYER1988, //L'Ecuyer, Additive combine
-    HELLEKALEK1995, //Hellekalek 1995, Inverse Congruential
-    KREUTZER1986, //Kreutzer 1986, 
-};
+    #ifdef __linux__
+    static T seed;
+    FILE* f = fopen("/dev/urandom", "rb");
+    fread(&seed, sizeof(T), 1, f);
+    fclose(f);
+    return seed;
+    #else
+    return (T)gettimeofday();
+    #endif
+}
+
 
 /**
  * Generates random numbers using the boost algorithms
@@ -47,44 +58,43 @@ enum RNG_ALGO
 void GenRandBoost()
 {
     ///Cache required parameters
-    ulong ulSeed = lexical_cast<ulong>(seedParam);
-    int algorithmSelection = algorithmSelectionParam;
+    static uint32_t uint32Seed = genSeed<uint32_t>();
 
     ///Switch distribution
-    switch(algorithmSelection)
+    switch(algorithmNum)
         {
             case 0: ///MT 19937
                 {
-                    mt19937 mersenne(ulSeed);
+                    mt19937 mersenne(uint32Seed);
                     ProcessBoostAlgorithm<mt19937>(&mersenne);
                     break;
                 }
             case 1: ///Linear congruential
                 {
-                    minstd_rand minstdrand(ulSeed);
+                    minstd_rand minstdrand(uint32Seed);
                     ProcessBoostAlgorithm<minstd_rand>(&minstdrand);
                 }
             case 2: ///Additive combine
                 {
-                    ecuyer1988 addComb(ulSeed);
+                    ecuyer1988 addComb(uint32Seed, genSeed<int32_t>());
                     ProcessBoostAlgorithm<ecuyer1988>(&addComb);
                     break;
                 }
             case 3: ///Inverse congruential
                 {
-                    hellekalek1995 invCongr(ulSeed);
+                    hellekalek1995 invCongr(uint32Seed);
                     ProcessBoostAlgorithm<hellekalek1995>(&invCongr);
                     break;
                 }
             case 4: ///Shuffle output
                 {
-                    kreutzer1986 shOut(ulSeed);
+                    kreutzer1986 shOut(uint32Seed);
                     ProcessBoostAlgorithm<kreutzer1986>(&shOut);
                     break;
                 }
             case 5: ///Lagged Fibonacci 607
                 {
-                    lagged_fibonacci607 lf607(ulseed);
+                    lagged_fibonacci607 lf607(uint32Seed);
                     ProcessBoostAlgorithm<lagged_fibonacci607>(&lf607);
                     break;
                 }
@@ -95,55 +105,48 @@ void GenRandBoost()
 template<class Algorithm>
 void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algorithm
 {
-    ///Cache parameters
-    ctr_t amount = lexical_cast<ctr_t>(amountParam);
-    int distributionSelection = distributionSelectionParam;
-    string filename = filenameParam;
-
-    ///Open fstream
-    fstream f(filename.c_str(), fstream::out);
-    switch(distributionSelection)
+    switch(distributionNum)
         {
             case 0: ///Uniform small int
                 {
                     ///Boost Random stuff
-                    uniform_smallint<smallint_t> smallInt(lexical_cast<smallint_t>(llParam), lexical_cast<smallint_t>(ulParam));
+                    uniform_smallint<smallint_t> smallInt(lexical_cast<smallint_t>(lowerLimit), lexical_cast<smallint_t>(upperLimit));
                     variate_generator<Algorithm&, uniform_smallint<smallint_t> > generator(*algorithm, smallInt);
-                    for(ctr_t i = 0;i < amount;i++)
+                    for(;amount > 0;amount--)
                         {
-                            f << generator() << endl;
+                            fout << generator() << endl;
                         }
                     break;
                 }
             case 1: ///Uniform integer
                 {
-                    uniform_int<int_t> uniInt(lexical_cast<int_t>(llParam), lexical_cast<int_t>(ulParam));
+                    uniform_int<int_t> uniInt(lexical_cast<int_t>(lowerLimit), lexical_cast<int_t>(upperLimit));
                     variate_generator<Algorithm&, uniform_int<int_t> > generator(*algorithm, uniInt);
-                    for(ctr_t i = 0;i < amount;i++)
+                    for(;amount > 0;amount--)
                         {
-                            f << generator() << endl;
+                            fout << generator() << endl;
                         }
                     break;
                 }
             case 2: ///Uniform real
                 {
-                    uniform_real<real_t> uniReal(lexical_cast<real_t>(llParam), lexical_cast<real_t>(ulParam));
+                    uniform_real<real_t> uniReal(lexical_cast<real_t>(lowerLimit), lexical_cast<real_t>(upperLimit));
                     variate_generator<Algorithm&, uniform_real<real_t> > generator(*algorithm, uniReal);
-                    for(ctr_t i = 0;i < amount;i++)
+                    for(;amount > 0;amount--)
                         {
-                            f << generator() << endl;
+                            fout << generator() << endl;
                         }
                     break;
                 }
             case 3: ///Triangle
                 {
-                    triangle_distribution<real_t> triangle(lexical_cast<int_t>(ulParam),
-                                                            lexical_cast<int_t>(ulParam),
+                    triangle_distribution<real_t> triangle(lexical_cast<int_t>(upperLimit),
+                                                            lexical_cast<int_t>(upperLimit),
                                                             lexical_cast<int_t>(distParam1));
                     variate_generator<Algorithm&, triangle_distribution<real_t> > generator(*algorithm, triangle);
-                    for(ctr_t i = 0;i < amount;i++)
+                    for(;amount > 0;amount--)
                         {
-                            f << generator() << endl;
+                            fout << generator() << endl;
                         }
                     break;
                 }
@@ -151,9 +154,9 @@ void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algori
                 {
                     bernoulli_distribution<real_t> bernoulliDist(lexical_cast<real_t>(distParam1)); ///p
                     variate_generator<Algorithm&, bernoulli_distribution<real_t> > generator(*algorithm, bernoulliDist);
-                    for(ctr_t i = 0;i < amount;i++)
+                    for(;amount > 0;amount--)
                         {
-                            f << generator() << endl;
+                            fout << generator() << endl;
                         }
                     break;
                 }
@@ -162,9 +165,9 @@ void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algori
                     cauchy_distribution<real_t> cauchyDist(lexical_cast<real_t>(distParam1),
                                                             lexical_cast<real_t>(distParam2));
                     variate_generator<Algorithm&, cauchy_distribution<real_t> > generator(*algorithm, cauchyDist); ///median, sigma
-                    for(ctr_t i = 0;i < amount;i++)
+                    for(;amount > 0;amount--)
                         {
-                            f << generator() << endl;
+                            fout << generator() << endl;
                         }
                     break;
                 }
@@ -172,29 +175,35 @@ void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algori
                 {
                     exponential_distribution<real_t> expDist(lexical_cast<real_t>(distParam1)); ///lambda
                     variate_generator<Algorithm&, exponential_distribution<real_t> > generator(*algorithm, expDist);
-                    for(ctr_t i = 0;i < amount;i++)
+                    for(;amount > 0;amount--)
                         {
-                            f << generator() << endl;
+                            fout << generator() << endl;
                         }
                     break;
                 }
             case 7: ///Geometric
                 {
-                    geometric_distribution<int_t,real_t> geometricDist(lexical_cast<real_t>(distParam1)); ///p
+                    /**
+                     * Parameters: p
+                     */
+                    geometric_distribution<int_t,real_t> geometricDist(lexical_cast<real_t>(distParam1));
                     variate_generator<Algorithm&, geometric_distribution<int_t,real_t> > generator(*algorithm, geometricDist);
-                    for(ctr_t i = 0;i < amount;i++)
+                    for(;amount > 0;amount--)
                         {
-                            f << generator() << endl;
+                            fout << generator() << endl;
                         }
                     break;
                 }
             case 8: ///Normal
                 {
-                    normal_distribution<int_t> smallInt(lexical_cast<int_t>(distParam1), lexical_cast<int_t>(distParam2));///mu, sigma
-                    variate_generator<Algorithm&, normal_distribution<int_t> > generator(*algorithm, smallInt);
-                    for(ctr_t i = 0;i < amount;i++)
+                    /**
+                     * Parameters: mu, sigma
+                     */
+                    normal_distribution<real_t> smallInt(lexical_cast<real_t>(distParam1), lexical_cast<real_t>(distParam2));
+                    variate_generator<Algorithm&, normal_distribution<real_t> > generator(*algorithm, smallInt);
+                    for(;amount > 0;amount--)
                         {
-                            f << generator() << endl;
+                            fout << generator() << endl;
                         }
                     break;
                 }
@@ -203,9 +212,9 @@ void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algori
                     lognormal_distribution<real_t> lognormalDist(lexical_cast<real_t>(distParam1),
                                                                  lexical_cast<real_t>(distParam2)); ///mean, sigma
                     variate_generator<Algorithm&, lognormal_distribution<real_t> > generator(*algorithm, lognormalDist);
-                    for(ctr_t i = 0;i < amount;i++)
+                    for(;amount > 0;amount--)
                         {
-                            f << generator() << endl;
+                            fout << generator() << endl;
                         }
                     break;
                 }
@@ -213,11 +222,11 @@ void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algori
                 {
                     uniform_on_sphere<real_t> uniOnSphere(lexical_cast<real_t>(distParam1)); ///dim
                     variate_generator<Algorithm&, uniform_on_sphere<real_t> > generator(*algorithm, uniOnSphere);
-                    for(ctr_t i = 0;i < amount;i++)
+                    for(;amount > 0;amount--)
                         {
-                            foreach(real_t r, generator())
+                            BOOST_FOREACH(real_t r, generator())
                             {
-                                f << r << endl;
+                                fout << r << endl;
                             }
                         }
                     break;
