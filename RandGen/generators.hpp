@@ -29,6 +29,7 @@ static amount_t amount; //Number of random numbers to generate
 static ofstream fout;
 static string distParam1;
 static string distParam2;
+static string distParam3;
 static string lowerLimit;
 static string upperLimit;
 static ushort distributionNum;
@@ -140,9 +141,9 @@ void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algori
                 }
             case 3: ///Triangle
                 {
-                    triangle_distribution<real_t> triangle(lexical_cast<int_t>(upperLimit),
-                                                            lexical_cast<int_t>(upperLimit),
-                                                            lexical_cast<int_t>(distParam1));
+                    triangle_distribution<real_t> triangle(lexical_cast<real_t>(distParam1),
+                                                            lexical_cast<real_t>(distParam2),
+                                                            lexical_cast<real_t>(distParam3));
                     variate_generator<Algorithm&, triangle_distribution<real_t> > generator(*algorithm, triangle);
                     for(;amount > 0;amount--)
                         {
@@ -152,7 +153,10 @@ void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algori
                 }
             case 4: ///Bernoulli
                 {
-                    bernoulli_distribution<real_t> bernoulliDist(lexical_cast<real_t>(distParam1)); ///p
+                    /**
+                     * Parameter: p
+                     */
+                    bernoulli_distribution<real_t> bernoulliDist(lexical_cast<real_t>(distParam1));
                     variate_generator<Algorithm&, bernoulli_distribution<real_t> > generator(*algorithm, bernoulliDist);
                     for(;amount > 0;amount--)
                         {
@@ -162,9 +166,12 @@ void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algori
                 }
             case 5: ///Cauchy
                 {
+                    /**
+                     * Parameters: median, sigma
+                     */
                     cauchy_distribution<real_t> cauchyDist(lexical_cast<real_t>(distParam1),
                                                             lexical_cast<real_t>(distParam2));
-                    variate_generator<Algorithm&, cauchy_distribution<real_t> > generator(*algorithm, cauchyDist); ///median, sigma
+                    variate_generator<Algorithm&, cauchy_distribution<real_t> > generator(*algorithm, cauchyDist);
                     for(;amount > 0;amount--)
                         {
                             fout << generator() << endl;
@@ -173,7 +180,10 @@ void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algori
                 }
             case 6: ///Exponential
                 {
-                    exponential_distribution<real_t> expDist(lexical_cast<real_t>(distParam1)); ///lambda
+                    /**
+                     * Parameter: lambda
+                     */
+                    exponential_distribution<real_t> expDist(lexical_cast<real_t>(distParam1));
                     variate_generator<Algorithm&, exponential_distribution<real_t> > generator(*algorithm, expDist);
                     for(;amount > 0;amount--)
                         {
@@ -184,7 +194,8 @@ void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algori
             case 7: ///Geometric
                 {
                     /**
-                     * Parameters: p
+                     * Parameter: p
+                     * PDF: p(i) := (1-p) * p^i-1)
                      */
                     geometric_distribution<int_t,real_t> geometricDist(lexical_cast<real_t>(distParam1));
                     variate_generator<Algorithm&, geometric_distribution<int_t,real_t> > generator(*algorithm, geometricDist);
@@ -209,8 +220,11 @@ void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algori
                 }
             case 9: ///Lognormal
                 {
+                    /**
+                     * Parameters: mean, sigma
+                     */
                     lognormal_distribution<real_t> lognormalDist(lexical_cast<real_t>(distParam1),
-                                                                 lexical_cast<real_t>(distParam2)); ///mean, sigma
+                                                                 lexical_cast<real_t>(distParam2));
                     variate_generator<Algorithm&, lognormal_distribution<real_t> > generator(*algorithm, lognormalDist);
                     for(;amount > 0;amount--)
                         {

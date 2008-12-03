@@ -12,37 +12,52 @@ main (int argc, char** argv)
 {
     static string outfile;
     static string separator;
-    static string amountString;
     // Declare the supported options.
     options_description allowedOptions ("Allowed options");
     allowedOptions.add_options ()
             ("help,h", "Show help")
             ;
-    options_description generatorsChooseOptions ("Generators: (Choose only one)");
-    generatorsChooseOptions.add_options ()
+    options_description generatorChoices ("Generators: (Choose exactly one)");
+    generatorChoices.add_options ()
             ("lc", "Linear congruential (minstd_rand)")
+            ("mt19937", "Mersenne Twister 19937")
+            ("ecuyer1988", "Ecuyer 1988 (Additive Combine)")
+            ("hellekalek1995", "Hellekalek 1995 (Inverse Congruential)")
+            ("kreutzer1986", "Kreutzer 1986 (Inverse Congruential)")
             ("lf607", "Lagged fibonacci 607")
-            ("mt19937", "Mersenne Twister 19937")            
+            ;
+    options_description distributionChoices ("Distributions: (Choose exactly one)");
+    distributionChoices.add_options ()
+            ("unismallint", "Uniform small integer distribution (requires limit parameters)")
+            ("uniint", "Uniform integer distribution (requires limit parameters)")
+            ("unireal", "Uniform real distribution (requires limit parameters)")
+            ("triangle", "Triangle distribution (requires 3 distribution parameters [a,b,c])")
+            ("bernoulli", "Bernoulli distribution (requires 1 distribution parameter [p])")
+            ("cauchy", "Cauchy distribution (requires 2 distribution parameters [median,sigma])")
+            ("exponential", "Exponential distribution (requires 1 distribution parameter [lambda])")
+            ("geometric", "Geometric distribution (requires 1 distribution parameter [p])")
+            ("normal", "Normal distribution (requires 2 distribution parameters [mu,sigma])")
+            ("lognormal", "Logarithmic normal distribution (requires 2 distribution parameters [mean,sigma])")
+            ("unionsphere", "Uniform on sphere distribution (requires 1 distribution parameter [dimension])")
             ;
     options_description generatorOptions ("Generator options");
     generatorOptions.add_options ()
-            ("out,o", value<string > (&outfile)->default_value ("randnum.txt"), "Set statistics output file")
+            ("out,o", value<string > (&outfile)->default_value ("stdout"), "Set statistics output file (or stdout)")
             ("lower,l", value<string>(&lowerLimit)->default_value("0"), "Lower generator limit")
             ("upper,u", value<string>(&upperLimit)->default_value (lexical_cast<string>(std::numeric_limits<long>::max ())), "Upper generator limit")
             ("number,n", value<amount_t> (&amount)->default_value (100000), "Number of numbers to generator")
-            ("p1", value<string>(&distParam1)->default_value("1"), "Parameter 1")
-            ("p2", value<string>(&distParam2)->default_value("1"), "Parameter 2")
+            ("p1", value<string>(&distParam1)->default_value("1"), "First distribution parameter")
+            ("p2", value<string>(&distParam2)->default_value("1"), "Second distribution parameter")
+            ("p3", value<string>(&distParam3)->default_value("1"), "Third distribution parameter")
             ;
     options_description outputFormatOptions ("Output options");
     outputFormatOptions.add_options ()
             ("separator,s", value<string > (&separator)->default_value (","), "Set the CSV field separator")
             ;
 
+    static variables_map vm;
 
-
-    variables_map vm;
-
-    allowedOptions.add (generatorsChooseOptions).add (generatorOptions).add (outputFormatOptions);
+    allowedOptions.add (generatorChoices).add (generatorOptions).add(distributionChoices).add (outputFormatOptions);
 
     positional_options_description p;
     p.add ("out", -1);
@@ -62,23 +77,101 @@ main (int argc, char** argv)
      * Main section
      */
 
-    //Open the output stream
-    fout.open(outfile.c_str (), ios::out);
-
-    if (vm.count ("lc"))
+    //Open the output stream (or declare to be cout if specified)
+    if (outfile == "stdout")
         {
-
-        }
-    else if (vm.count ("lf607"))
-        {
-            
-        }
-    else if(vm.count("mt19937"))
-        {
-            
+            fout == cout;
         }
 
-    fout.close ();
+    /**
+     * Set the RNG algorithm ID number depending on the user selection
+     */
+    if(vm.count("mt19937"))
+        {
+            algorithmNum = 0;
+        }
+    else if(vm.count("lc"))
+        {
+            algorithmNum = 1;
+        }
+    else if(vm.count("ecuyer1988"))
+        {
+            algorithmNum = 2;
+        }
+    else if(vm.count("hellekalek1995"))
+        {
+            algorithmNum = 3;
+        }
+    else if(vm.count("kreutzer1986"))
+        {
+            algorithmNum = 4;
+        }
+    else if(vm.count("lf607"))
+        {
+            algorithmNum = 5;
+        }
+    else //No RNG algorithm selected
+        {
+            cout << "Select a generator algorithm!\n" << allowedOptions << "\n";
+        }
+
+    /**
+     * Set the distribution ID number depending on the user selection
+     */
+    if(vm.count("unismallint"))
+        {
+            distributionNum = 0;
+        }
+    else if(vm.count("uniint"))
+        {
+            algorithmNum = 1;
+        }
+    else if(vm.count("unireal"))
+        {
+            algorithmNum = 2;
+        }
+    else if(vm.count("triangle"))
+        {
+            algorithmNum = 3;
+        }
+    else if(vm.count("bernoulli"))
+        {
+            algorithmNum = 4;
+        }
+    else if(vm.count("cauchy"))
+        {
+            algorithmNum = 5;
+        }
+    else if(vm.count("exponential"))
+        {
+            algorithmNum = 6;
+        }
+    else if(vm.count("geometric"))
+        {
+            algorithmNum = 7;
+        }
+    else if(vm.count("normal"))
+        {
+            algorithmNum = 8;
+        }
+    else if(vm.count("lognormal"))
+        {
+            algorithmNum = 9;
+        }
+    else if(vm.count("unionsphere"))
+        {
+            algorithmNum = 10;
+        }
+    else //No distribution selected
+        {
+            cout << "Select a distribution!\n" << allowedOptions << "\n";
+        }
+
+
+    //Call the RNG function (no arguments depends on global variable state
+    GenRandBoost();
+
+    if (!(outfile == "stdout")) {fout.close ();}
     return (EXIT_SUCCESS);
 }
 
