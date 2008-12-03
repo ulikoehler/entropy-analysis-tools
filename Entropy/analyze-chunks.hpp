@@ -150,13 +150,6 @@ printEntropyStatistics (ostream& of, map<ulong, long double>& entropies)
     }
 }
 
-/**
- * All occurrences map:
- * Maps a binary string ("chunk") represented as a number
- * to the count of occurrences of this number
- * With -p:
- *      Cleared after each block
- */
 
 static uint cpb; //chunks per block
 
@@ -400,15 +393,10 @@ analyzeChunks (istream& f, ostream& of)
                              * Fill the rest of the buffer with the filling character
                              * (here blocksize is the length of the buffer array)
                              */
-                            //TODO apply for all analyzator functions
                             for (i = c; i < blocksize; i++)
                                 {
                                     buffer[i] = fillByte;
                                 }
-                            /**
-                             * For other functions using blocksize:
-                             * Set it to the maximum size usable without errors
-                             */
                             blocksize = c;
                         }
                     fa (buffer);
@@ -453,6 +441,14 @@ analyzeChunks (istream& f, ostream& of)
                     if (c < blocksize)
                         {
                             if(c == 0){return;}
+                            /**
+                             * Fill the rest of the buffer with the filling character
+                             * (here blocksize is the length of the buffer array)
+                             */
+                            for (i = c; i < blocksize; i++)
+                                {
+                                    buffer[i] = fillByte;
+                                }
                             blocksize = c;
                         }
                     fa (buffer);
@@ -535,6 +531,14 @@ analyzeChunks (istream& f, ostream& of)
                     if (c < blocksize)
                         {
                             if(c == 0){return;}
+                            /**
+                             * Fill the rest of the buffer with the filling character
+                             * (here blocksize is the length of the buffer array)
+                             */
+                            for (i = c; i < blocksize; i++)
+                                {
+                                    buffer[i] = fillByte;
+                                }
                             blocksize = c;
                         }
                     fa (buffer);

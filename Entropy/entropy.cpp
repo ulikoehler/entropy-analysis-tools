@@ -53,7 +53,7 @@ main (int argc, char** argv)
             return 1;
         }
 
-    //Check if the use has specified input
+    //Check if the user has specified input
     if (!vm.count ("input"))
         {
             cout << "No input file specified!\n" << allowedOptions << "\n";
