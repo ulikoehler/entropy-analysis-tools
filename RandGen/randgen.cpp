@@ -10,7 +10,7 @@
 int
 main (int argc, char** argv)
 {
-    static string outfile;
+    static string outfile = "stdout";
     static string separator;
     // Declare the supported options.
     options_description allowedOptions ("Allowed options");
@@ -51,7 +51,7 @@ main (int argc, char** argv)
             ;
     options_description outputFormatOptions ("Output options");
     outputFormatOptions.add_options ()
-            ("out,o", value<string > (&outfile)->default_value ("stdout"), "Set statistics output file (or stdout)")
+            ("out,o", value<string > (&outfile), "Set statistics output file (or stdout)")
             ("separator,s", value<string > (&separator)->default_value (","), "Set the CSV field separator")
             ;
 
@@ -74,13 +74,21 @@ main (int argc, char** argv)
         }
 
     /**
-     * Main section
+     *******************************
+     ********Main section***********
+     *******************************
      */
-    ofstream fout_inst;//(outfile.c_str(), fstream::out); //Fout instance (referenced in global fout)
+
+    /**
+     * If we should not print the generated random numbers on stdout,
+     * open the file output stream
+     */
+    ofstream* fout_ptr; //fout instance, referenced in global context, is closed when exiting
     if (outfile != "stdout")
         {
-            fout_inst = open(outfile.c_str(), fstream::out);
-            fout == fout_inst;
+            ofstream fout_inst(outfile.c_str());
+            fout_ptr = &fout_inst; //Is closed when exiting
+            out = &fout_inst; //Global context
         }
 
     /**
@@ -173,7 +181,7 @@ main (int argc, char** argv)
 
     if (!(outfile == "stdout"))
         {
-            fout_inst.close ();
+            fout_ptr->close ();
         }
     return (EXIT_SUCCESS);
 }

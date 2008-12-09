@@ -26,8 +26,8 @@ void GenRandBoost();
  * set by the main function (command line arguments)
  */
 static amount_t amount = 100000; //Number of random numbers to generate
-static ostream& fout = cout;
-static string distParam1 = "1";
+static ostream* out = &cout;
+static string distParam1 = "1 ";
 static string distParam2 = "1";
 static string distParam3 = "1";
 static string lowerLimit = 0;
@@ -115,7 +115,7 @@ void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algori
                     variate_generator<Algorithm&, uniform_smallint<smallint_t> > generator(*algorithm, smallInt);
                     for(;amount > 0;amount--)
                         {
-                            fout << generator() << endl;
+                            *out << generator() << endl;
                         }
                     break;
                 }
@@ -125,7 +125,7 @@ void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algori
                     variate_generator<Algorithm&, uniform_int<int_t> > generator(*algorithm, uniInt);
                     for(;amount > 0;amount--)
                         {
-                            fout << generator() << endl;
+                            *out << generator() << endl;
                         }
                     break;
                 }
@@ -135,7 +135,7 @@ void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algori
                     variate_generator<Algorithm&, uniform_real<real_t> > generator(*algorithm, uniReal);
                     for(;amount > 0;amount--)
                         {
-                            fout << generator() << endl;
+                            *out << generator() << endl;
                         }
                     break;
                 }
@@ -147,7 +147,7 @@ void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algori
                     variate_generator<Algorithm&, triangle_distribution<real_t> > generator(*algorithm, triangle);
                     for(;amount > 0;amount--)
                         {
-                            fout << generator() << endl;
+                            *out << generator() << endl;
                         }
                     break;
                 }
@@ -160,7 +160,7 @@ void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algori
                     variate_generator<Algorithm&, bernoulli_distribution<real_t> > generator(*algorithm, bernoulliDist);
                     for(;amount > 0;amount--)
                         {
-                            fout << generator() << endl;
+                            *out << generator() << endl;
                         }
                     break;
                 }
@@ -174,7 +174,7 @@ void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algori
                     variate_generator<Algorithm&, cauchy_distribution<real_t> > generator(*algorithm, cauchyDist);
                     for(;amount > 0;amount--)
                         {
-                            fout << generator() << endl;
+                            *out << generator() << endl;
                         }
                     break;
                 }
@@ -187,7 +187,7 @@ void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algori
                     variate_generator<Algorithm&, exponential_distribution<real_t> > generator(*algorithm, expDist);
                     for(;amount > 0;amount--)
                         {
-                            fout << generator() << endl;
+                            *out << generator() << endl;
                         }
                     break;
                 }
@@ -201,7 +201,7 @@ void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algori
                     variate_generator<Algorithm&, geometric_distribution<int_t,real_t> > generator(*algorithm, geometricDist);
                     for(;amount > 0;amount--)
                         {
-                            fout << generator() << endl;
+                            *out << generator() << endl;
                         }
                     break;
                 }
@@ -214,7 +214,7 @@ void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algori
                     variate_generator<Algorithm&, normal_distribution<real_t> > generator(*algorithm, smallInt);
                     for(;amount > 0;amount--)
                         {
-                            fout << generator() << endl;
+                            *out << generator() << endl;
                         }
                     break;
                 }
@@ -228,7 +228,7 @@ void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algori
                     variate_generator<Algorithm&, lognormal_distribution<real_t> > generator(*algorithm, lognormalDist);
                     for(;amount > 0;amount--)
                         {
-                            fout << generator() << endl;
+                            *out << generator() << endl;
                         }
                     break;
                 }
@@ -240,7 +240,7 @@ void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algori
                         {
                             BOOST_FOREACH(real_t r, generator())
                             {
-                                fout << r << endl;
+                                *out << r << endl;
                             }
                         }
                     break;
