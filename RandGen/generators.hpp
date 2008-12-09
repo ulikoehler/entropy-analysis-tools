@@ -25,15 +25,15 @@ void GenRandBoost();
  * Static global variables used by the generator functions and
  * set by the main function (command line arguments)
  */
-static amount_t amount; //Number of random numbers to generate
-static ofstream fout;
-static string distParam1;
-static string distParam2;
-static string distParam3;
-static string lowerLimit;
-static string upperLimit;
-static ushort distributionNum;
-static ushort algorithmNum;
+static amount_t amount = 100000; //Number of random numbers to generate
+static ostream& fout = cout;
+static string distParam1 = "1";
+static string distParam2 = "1";
+static string distParam3 = "1";
+static string lowerLimit = 0;
+static string upperLimit = lexical_cast<string>(std::numeric_limits<long>::max());
+static ushort distributionNum = 0;
+static ushort algorithmNum = 0;
 
 /**
  * Generates a seed
@@ -58,7 +58,7 @@ T genSeed()
  */
 void GenRandBoost()
 {
-    ///Cache required parameters
+    ///Generate the seed
     static uint32_t uint32Seed = genSeed<uint32_t>();
 
     ///Switch distribution

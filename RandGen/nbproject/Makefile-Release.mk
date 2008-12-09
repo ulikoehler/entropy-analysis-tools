@@ -34,8 +34,8 @@ OBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=
-CXXFLAGS=
+CCFLAGS=-m64 -O3 -fexpensive-optimizations -fomit-frame-pointer -march=core2 -ftree-vectorize -msse2 -msse3 -msse4 -ffunction-sections -ffast-math -fno-strict-aliasing
+CXXFLAGS=-m64 -O3 -fexpensive-optimizations -fomit-frame-pointer -march=core2 -ftree-vectorize -msse2 -msse3 -msse4 -ffunction-sections -ffast-math -fno-strict-aliasing
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -53,7 +53,7 @@ dist/Release/${PLATFORM}/randgen: ${OBJECTFILES}
 
 ${OBJECTDIR}/randgen.o: randgen.cpp 
 	${MKDIR} -p ${OBJECTDIR}
-	$(COMPILE.cc) -O2 -o ${OBJECTDIR}/randgen.o randgen.cpp
+	$(COMPILE.cc) -O3 -s -o ${OBJECTDIR}/randgen.o randgen.cpp
 
 # Subprojects
 .build-subprojects:

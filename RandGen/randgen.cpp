@@ -26,7 +26,7 @@ main (int argc, char** argv)
             ("kreutzer1986", "Kreutzer 1986 (Inverse Congruential)")
             ("lf607", "Lagged fibonacci 607")
             ;
-    options_description distributionChoices ("Distributions: (Choose exactly one)");
+    options_description distributionChoices ("Distributions (Choose exactly one)");
     distributionChoices.add_options ()
             ("unismallint", "Uniform small integer distribution (requires limit parameters)")
             ("uniint", "Uniform integer distribution (requires limit parameters)")
@@ -42,16 +42,16 @@ main (int argc, char** argv)
             ;
     options_description generatorOptions ("Generator options");
     generatorOptions.add_options ()
-            ("out,o", value<string > (&outfile)->default_value ("stdout"), "Set statistics output file (or stdout)")
-            ("lower,l", value<string>(&lowerLimit)->default_value("0"), "Lower generator limit")
-            ("upper,u", value<string>(&upperLimit)->default_value (lexical_cast<string>(std::numeric_limits<long>::max ())), "Upper generator limit")
-            ("number,n", value<amount_t> (&amount)->default_value (100000), "Number of numbers to generator")
-            ("p1", value<string>(&distParam1)->default_value("1"), "First distribution parameter")
-            ("p2", value<string>(&distParam2)->default_value("1"), "Second distribution parameter")
-            ("p3", value<string>(&distParam3)->default_value("1"), "Third distribution parameter")
+            ("lower,l", value<string>(&lowerLimit), "Lower generator limit")
+            ("upper,u", value<string>(&upperLimit), "Upper generator limit")
+            ("number,n", value<amount_t> (&amount), "Number of numbers to generator")
+            ("p1", value<string>(&distParam1), "First distribution parameter")
+            ("p2", value<string>(&distParam2), "Second distribution parameter")
+            ("p3", value<string>(&distParam3), "Third distribution parameter")
             ;
     options_description outputFormatOptions ("Output options");
     outputFormatOptions.add_options ()
+            ("out,o", value<string > (&outfile)->default_value ("stdout"), "Set statistics output file (or stdout)")
             ("separator,s", value<string > (&separator)->default_value (","), "Set the CSV field separator")
             ;
 
@@ -60,7 +60,7 @@ main (int argc, char** argv)
     allowedOptions.add (generatorChoices).add (generatorOptions).add(distributionChoices).add (outputFormatOptions);
 
     positional_options_description p;
-    p.add ("out", -1);
+    p.add ("number", 1);
 
     store (command_line_parser (argc, argv).
            options (allowedOptions).positional (p).run (), vm);
@@ -76,11 +76,11 @@ main (int argc, char** argv)
     /**
      * Main section
      */
-
-    //Open the output stream (or declare to be cout if specified)
-    if (outfile == "stdout")
+    ofstream fout_inst;//(outfile.c_str(), fstream::out); //Fout instance (referenced in global fout)
+    if (outfile != "stdout")
         {
-            fout == cout;
+            fout_inst = open(outfile.c_str(), fstream::out);
+            fout == fout_inst;
         }
 
     /**
@@ -171,7 +171,10 @@ main (int argc, char** argv)
     //Call the RNG function (no arguments depends on global variable state
     GenRandBoost();
 
-    if (!(outfile == "stdout")) {fout.close ();}
+    if (!(outfile == "stdout"))
+        {
+            fout_inst.close ();
+        }
     return (EXIT_SUCCESS);
 }
 
