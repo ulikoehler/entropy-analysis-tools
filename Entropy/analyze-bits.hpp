@@ -40,7 +40,7 @@ analyzeBits (ifstream& f)
              */
             for (i = 0; i < blocksize; i++)
                 {
-                    chunk1 += one_lookup8[(unsigned char) buffer[i]]; //Lookup table, 3 to 25 times faster than others
+                    chunk1 += one_lookup8[(unsigned char) buffer[i]]; //Lookup table, 3 to 25 times faster than other alrorithms
                 }
             glob1 += chunk1;
             glob0 += (blocksize << 3) - chunk1; //Blocksize * 8 - glob1

@@ -12,7 +12,7 @@
  * Append to each array declaration
  * --> fast vectorizing
  */
-#define SSE __attribute__((aligned (16))) //
+#define SSE __attribute__((aligned (16)))
 
 /**
  * C/C++ Standard library
@@ -105,7 +105,6 @@ variables_map vm;
  */
 
 //Algorithms
-#include "output.hpp"
 #include "entropy-algorithms.hpp"
 #include "count1bits.hpp"
 #include "analyze-bits.hpp"

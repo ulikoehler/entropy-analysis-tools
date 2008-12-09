@@ -102,7 +102,7 @@ analyzeBinaryFile (ifstream& f, ofstream& of)
                 {
                     analyzeBitsPerBlock (f, of);
                 }
-                //Count bits (no blocks)
+            //Count bits (no blocks)
             else
                 {
                     analyzeBits (f);
