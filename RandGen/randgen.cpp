@@ -11,7 +11,7 @@ int
 main (int argc, char** argv)
 {
     static string outfile = "stdout";
-    static string separator;
+    static string separator = ",";
     // Declare the supported options.
     options_description allowedOptions ("Allowed options");
     allowedOptions.add_options ()
@@ -42,22 +42,22 @@ main (int argc, char** argv)
             ;
     options_description generatorOptions ("Generator options");
     generatorOptions.add_options ()
-            ("lower,l", value<string>(&lowerLimit), "Lower generator limit")
-            ("upper,u", value<string>(&upperLimit), "Upper generator limit")
-            ("number,n", value<amount_t> (&amount), "Number of numbers to generator")
-            ("p1", value<string>(&distParam1), "First distribution parameter")
-            ("p2", value<string>(&distParam2), "Second distribution parameter")
-            ("p3", value<string>(&distParam3), "Third distribution parameter")
+            ("lower,l", value<string > (&lowerLimit)->default_value ("0"), "Lower generator limit")
+            ("upper,u", value<string > (&upperLimit)->default_value ("1000000"), "Upper generator limit")
+            ("number,n", value<amount_t > (&amount)->default_value(10000), "Number of numbers to generator")
+            ("p1", value<string > (&distParam1)->default_value ("1"), "First distribution parameter")
+            ("p2", value<string > (&distParam2)->default_value ("1"), "Second distribution parameter")
+            ("p3", value<string > (&distParam3)->default_value ("1"), "Third distribution parameter")
             ;
     options_description outputFormatOptions ("Output options");
     outputFormatOptions.add_options ()
-            ("out,o", value<string > (&outfile), "Set statistics output file (or stdout)")
+            ("out,o", value<string > (&outfile)->default_value ("stdout"), "Set statistics output file (or stdout)")
             ("separator,s", value<string > (&separator)->default_value (","), "Set the CSV field separator")
             ;
 
     static variables_map vm;
 
-    allowedOptions.add (generatorChoices).add (generatorOptions).add(distributionChoices).add (outputFormatOptions);
+    allowedOptions.add (generatorChoices).add (generatorOptions).add (distributionChoices).add (outputFormatOptions);
 
     positional_options_description p;
     p.add ("number", 1);
@@ -86,7 +86,7 @@ main (int argc, char** argv)
     ofstream* fout_ptr; //fout instance, referenced in global context, is closed when exiting
     if (outfile != "stdout")
         {
-            ofstream fout_inst(outfile.c_str());
+            ofstream fout_inst (outfile.c_str ());
             fout_ptr = &fout_inst; //Is closed when exiting
             out = &fout_inst; //Global context
         }
@@ -94,90 +94,93 @@ main (int argc, char** argv)
     /**
      * Set the RNG algorithm ID number depending on the user selection
      */
-    if(vm.count("mt19937"))
+    if (vm.count ("mt19937"))
         {
             algorithmNum = 0;
         }
-    else if(vm.count("lc"))
+    else if (vm.count ("lc"))
         {
             algorithmNum = 1;
         }
-    else if(vm.count("ecuyer1988"))
+    else if (vm.count ("ecuyer1988"))
         {
             algorithmNum = 2;
         }
-    else if(vm.count("hellekalek1995"))
+    else if (vm.count ("hellekalek1995"))
         {
             algorithmNum = 3;
         }
-    else if(vm.count("kreutzer1986"))
+    else if (vm.count ("kreutzer1986"))
         {
             algorithmNum = 4;
         }
-    else if(vm.count("lf607"))
+    else if (vm.count ("lf607"))
         {
             algorithmNum = 5;
         }
     else //No RNG algorithm selected
         {
             cout << "Select a generator algorithm!\n" << allowedOptions << "\n";
+            return 1;
         }
 
     /**
      * Set the distribution ID number depending on the user selection
      */
-    if(vm.count("unismallint"))
+
+    if (vm.count ("unismallint"))
         {
             distributionNum = 0;
         }
-    else if(vm.count("uniint"))
+    else if (vm.count ("uniint"))
         {
             algorithmNum = 1;
         }
-    else if(vm.count("unireal"))
+    else if (vm.count ("unireal"))
         {
             algorithmNum = 2;
         }
-    else if(vm.count("triangle"))
+    else if (vm.count ("triangle"))
         {
             algorithmNum = 3;
         }
-    else if(vm.count("bernoulli"))
+    else if (vm.count ("bernoulli"))
         {
             algorithmNum = 4;
         }
-    else if(vm.count("cauchy"))
+    else if (vm.count ("cauchy"))
         {
             algorithmNum = 5;
         }
-    else if(vm.count("exponential"))
+    else if (vm.count ("exponential"))
         {
             algorithmNum = 6;
         }
-    else if(vm.count("geometric"))
+    else if (vm.count ("geometric"))
         {
             algorithmNum = 7;
         }
-    else if(vm.count("normal"))
+    else if (vm.count ("normal"))
         {
             algorithmNum = 8;
         }
-    else if(vm.count("lognormal"))
+    else if (vm.count ("lognormal"))
         {
             algorithmNum = 9;
         }
-    else if(vm.count("unionsphere"))
+    else if (vm.count ("unionsphere"))
         {
             algorithmNum = 10;
         }
     else //No distribution selected
         {
             cout << "Select a distribution!\n" << allowedOptions << "\n";
+            return 1;
         }
 
 
     //Call the RNG function (no arguments depends on global variable state
-    GenRandBoost();
+    GenRandBoost ();
 
     if (!(outfile == "stdout"))
         {

@@ -25,18 +25,18 @@ void GenRandBoost();
  * Static global variables used by the generator functions and
  * set by the main function (command line arguments)
  */
-static amount_t amount = 100000; //Number of random numbers to generate
+static amount_t amount; //Number of random numbers to generate
 static ostream* out = &cout;
-static string distParam1 = "1 ";
+static string distParam1 = "1";
 static string distParam2 = "1";
 static string distParam3 = "1";
-static string lowerLimit = 0;
-static string upperLimit = lexical_cast<string>(std::numeric_limits<long>::max());
-static ushort distributionNum = 0;
-static ushort algorithmNum = 0;
+static string lowerLimit = "0";
+static string upperLimit = "1000000";
+static ushort distributionNum = 0; //Uniform smallint
+static ushort algorithmNum = 0; //MT19937
 
 /**
- * Generates a seed
+ * Generates a seeds
  */
 template<class T>
 T genSeed()
@@ -104,7 +104,7 @@ void GenRandBoost()
 }
 
 template<class Algorithm>
-void ProcessBoostAlgorithm(Algorithm *algorithm) ///Process type of boost algorithm
+void ProcessBoostAlgorithm(Algorithm * algorithm) ///Process type of boost algorithm
 {
     switch(distributionNum)
         {

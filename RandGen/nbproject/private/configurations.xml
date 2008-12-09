@@ -24,7 +24,7 @@
         <array_repeat_threshold>10</array_repeat_threshold>
       </gdbdebugger>
       <runprofile version="5">
-        <args></args>
+        <args>--mt19937 -n 1000 -o stdout</args>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <console-type>0</console-type>
