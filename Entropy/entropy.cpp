@@ -24,17 +24,17 @@ main (int argc, char** argv)
     options_description analysisOptions ("Analysis options:");
     analysisOptions.add_options ()
             ("chunks,c", "Analyze chunks of chunksize bits rather than bits. Must be a multiple of chunksize.")
-            ("blocksize,b", value<uint>(&blocksize)->default_value (1024), "Set block size (must be a multiple of chunksize).")
-            ("chunksize,s", value<uint>(&chunksize)->default_value (4), "Set chunk size")
+            ("blocksize,b", value<uint > (&blocksize)->default_value (1024), "Set block size (must be a multiple of chunksize).")
+            ("chunksize,s", value<uint > (&chunksize)->default_value (4), "Set chunk size")
             ("per-block,p", "Analyze each block separately")
             ("entropy,e", "Calculate Shannon's entropy for each block separately (Has to be called with -c and -p)")
-            ("focus,f",value<uint>(&focus) ,"Just look at chunks equal to the supplied number")
-            ("fill", value<uint>(&fillByte)->default_value (0), "The fill byte (as integer) if filesize is not multiple of chunksize")
+            ("focus,f", value<uint > (&focus), "Just look at chunks equal to the supplied number")
+            ("fill", value<uint > (&fillByte)->default_value (0), "The fill byte (as integer) if filesize is not multiple of chunksize")
             ;
     options_description outputFormatOptions ("Output format options");
     outputFormatOptions.add_options ()
             ("decimal,d", "Print statistics keys in decimal (for use with -c)")
-            ("precision",value<int>(&precision)->default_value(15), "Precision (for floating point output in statistical indicators)")
+            ("precision", value<int>(&precision)->default_value (15), "Precision (for floating point output in statistical indicators)")
             ("r-compatible,r", "Produce ordered output (with -p -c, compatible with all R scripts)")
             ("separator", value<string > (&separator)->default_value (","), "Set the CSV field separator")
             ;
@@ -62,7 +62,7 @@ main (int argc, char** argv)
         }
 
     //Build the format strings
-    ldFormatString = "%." + lexical_cast<string>(precision) + "Lf";
+    ldFormatString = "%." + lexical_cast<string > (precision) + "Lf";
 
     ///Open the streams
     ifstream f (infile.c_str (), fstream::binary | fstream::in);
@@ -93,7 +93,14 @@ analyzeBinaryFile (ifstream& f, ofstream& of)
                     cout << "Blocksize must be a multiple of chunksize!\n";
                     return 3;
                 }
-            analyzeChunks (f, of);
+            if (vm.count ("focus"))
+                {
+                    analyzeChunksFocus (f, of);
+                }
+            else
+                {
+                    analyzeChunks (f, of);
+                }
         }
         //Count bits
     else
@@ -103,7 +110,7 @@ analyzeBinaryFile (ifstream& f, ofstream& of)
                 {
                     analyzeBitsPerBlock (f, of);
                 }
-            //Count bits (no blocks)
+                //Count bits (no blocks)
             else
                 {
                     analyzeBits (f);

@@ -32,7 +32,7 @@ chta (char* arg)
  * ignoring all other values
  */
 inline void
-analyzeChunksFocus (istream& f, ostream& of, int focus)
+analyzeChunksFocus (istream& f, ostream& of)
 {
     boost::function<ulong(char*) > fa; //function analyze
     //Select the appropriate function
