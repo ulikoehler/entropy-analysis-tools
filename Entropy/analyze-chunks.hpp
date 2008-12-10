@@ -329,7 +329,7 @@ analyzeChunks (istream& f, ostream& of)
             tag::weighted_variance,
             tag::weighted_skewness
             >, long double> entropyRecipWeightedAcc;
-    static ulong filesize = 0; //Blocksize is added to this each iteration
+    static ulong filesize = 0; //Blocksize is added to this counter each iteration
     boost::function<void(char* b) > fa; //function analyze
     //Select the appropriate function
     switch (chunksize)
@@ -359,14 +359,17 @@ analyzeChunks (istream& f, ostream& of)
                 fa = ch16a;
                 break;
             }
+        case 32:
+            {
+                fa = ch32a;
+                break;
+            }
         default:
             {
                 fa = chna;
                 break;
             }
         }
-    //Accumulator sets are declared in globals.hpp
-
     /**
      * Main loop: analyzes data and stores results in the map
      */
