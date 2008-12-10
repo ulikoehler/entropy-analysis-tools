@@ -122,6 +122,11 @@ print3ColumnStatistics (ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
                         writeBinData < 16 > (of, occ, blockNum);
                         break;
                     }
+                case 24:
+                    {
+                        writeBinData < 24 > (of, occ, blockNum);
+                        break;
+                    }
                 case 32:
                     {
                         writeBinData < 32 > (of, occ, blockNum);
@@ -357,6 +362,11 @@ analyzeChunks (istream& f, ostream& of)
         case 16:
             {
                 fa = ch16a;
+                break;
+            }
+        case 24:
+            {
+                fa = ch24a;
                 break;
             }
         case 32:
