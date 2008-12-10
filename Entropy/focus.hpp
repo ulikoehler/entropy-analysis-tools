@@ -20,9 +20,12 @@ ulong
 chta (char* arg)
 {
     ulong ctr = 0;
-    for (i = 0; i < blocksize; i += sizeof(T))
+    for (i = 0; i < blocksize; i += sizeof (T))
         {
-            if ((*(reinterpret_cast<T*> (arg))) == focus) {ctr++;}
+            if ((*(reinterpret_cast<T*> (arg))) == focus)
+                {
+                    ctr++;
+                }
         }
     return ctr;
 }
@@ -34,7 +37,7 @@ chta (char* arg)
 inline void
 analyzeChunksFocus (istream& f, ostream& of)
 {
-    boost::function<ulong(char*) > fa; //function analyze
+    boost::function < ulong (char*) > fa; //function analyze
     //Select the appropriate function
     switch (chunksize)
         {
@@ -56,7 +59,7 @@ analyzeChunksFocus (istream& f, ostream& of)
         default: //Not possible
             {
                 cout << "Invalid chunk size for focus analysis!" << endl;
-                exit(121);
+                exit (121);
                 break;
             }
         }
@@ -81,10 +84,21 @@ analyzeChunksFocus (istream& f, ostream& of)
                         }
                     blocksize = c;
                 }
-            allOcc[blocknum] = fa(buffer);
+            allOcc[blocknum] = fa (buffer);
             fa (buffer);
+
+            /**
+             * Write the data to the statistics file
+             */
+
+            BOOST_FOREACH (p, allOcc)
+            {
+                standardAcc (p.second);
+                entropyWeightedAcc (p.second, weight = entropy);
+                entropyRecipWeightedAcc (p.second, weight = (1 / entropy));
+            }
         }
 
 }
-    #endif	/* _FOCUS_HPP */
+#endif	/* _FOCUS_HPP */
 
