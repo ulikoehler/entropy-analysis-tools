@@ -253,7 +253,7 @@ ch32a (char *b)
 /**
  * Analyzes block for chunksize n = 2^m > 8
  */
-inline void
+inline void //TODO test and review sourcecode, maybe doesn't work
 chna (char* b)
 {
     static val_t n;

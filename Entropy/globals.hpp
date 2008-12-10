@@ -28,6 +28,7 @@
 /**
  * Boosting entropy
  */
+#include <boost/cstdint.hpp>
 #include <boost/program_options.hpp>
 #include <boost/function.hpp>
 #include <boost/foreach.hpp>
@@ -83,6 +84,7 @@ static char* buffer SSE;
 static uint blocksize;
 static uint chunksize;
 static uint fillByte;
+static uint focus;
 
 static uint i,j,c; //Ugly but saving memory and time in nested loops
 
@@ -109,6 +111,7 @@ variables_map vm;
 #include "count1bits.hpp"
 #include "analyze-bits.hpp"
 #include "analyze-chunks.hpp"
+#include "focus.hpp"
 
 #endif	/* _GLOBALS_HPP */
 

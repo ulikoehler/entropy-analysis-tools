@@ -10,6 +10,7 @@
       <itemPath>analyze-chunks.hpp</itemPath>
       <itemPath>count1bits.hpp</itemPath>
       <itemPath>entropy-algorithms.hpp</itemPath>
+      <itemPath>focus.hpp</itemPath>
       <itemPath>globals.hpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -62,6 +63,9 @@
       <item path="entropy.cpp">
         <itemTool>1</itemTool>
       </item>
+      <item path="focus.hpp">
+        <itemTool>3</itemTool>
+      </item>
       <item path="globals.hpp">
         <itemTool>3</itemTool>
       </item>
@@ -108,6 +112,9 @@
       <item path="entropy.cpp">
         <itemTool>1</itemTool>
       </item>
+      <item path="focus.hpp">
+        <itemTool>3</itemTool>
+      </item>
       <item path="globals.hpp">
         <itemTool>3</itemTool>
       </item>
@@ -145,6 +152,9 @@
       </item>
       <item path="entropy.cpp">
         <itemTool>1</itemTool>
+      </item>
+      <item path="focus.hpp">
+        <itemTool>3</itemTool>
       </item>
       <item path="globals.hpp">
         <itemTool>3</itemTool>
