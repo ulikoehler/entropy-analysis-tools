@@ -54,6 +54,22 @@ print3ColumnOccurrenceStatistics (ostream& of, ulong blockNum)
 }
 
 inline string_t
+readLine(ifstream& fin)
+{
+    static string_t ret;
+    static char c;
+    while(fin.good())
+        {
+            //Read a character from the stream
+            fin.get(c);
+            //Break if it is the separator
+            if(c == '\n'){break;}
+            ret += c; //The separator is not added to the return string
+        }
+    return ret;
+}
+
+inline string_t
 readSentence(ifstream& fin)
 {
     static string_t ret;
@@ -86,7 +102,7 @@ main (int argc, char** argv)
             ("out,o", value<string > (&outfile)->default_value ("stats.dat"), "Set statistics output file")
             ("separator", value<string> (&separator)->default_value (","), "CSV field separator")
             ("sentence-separator", value<char> (&sentenceSeparator)->default_value ('.'), "CSV field separator")
-            ("overall,o", "Don't split (default)")
+            ("entire,e", "Don't split, statistics over entire file (default)")
             ("lines,l", "Split by lines")
             ("sentences,s", "Split by sentences")
             ("words,w", "Split by words")
@@ -106,7 +122,7 @@ main (int argc, char** argv)
             cout << allowedOptions << "\n";
             return 1;
         }
-    //Check if the user has specified input
+    //Check if the user has specified a input filename
     if (!vm.count ("input"))
         {
             cout << "No input file specified!\n" << allowedOptions << "\n";
@@ -120,7 +136,28 @@ main (int argc, char** argv)
     static ofstream fout(outfile.c_str ());
     static string_t buffer;
 
-    if (vm.count ("sentences"))
+    if (vm.count ("lines"))
+        {
+            for (static ulong bn = 0;fin.good ();bn++)
+                {
+                    //Read a sentence
+                    buffer = readLine (fin);
+
+                    BOOST_FOREACH (char_t c, buffer)
+                    {
+                        if (occ[c] == 0)
+                            {
+                                occ[c] = 0;
+                            }
+                        occ[c]++;
+                    }
+                    //Save the data
+                    print3ColumnOccurrenceStatistics (fout, bn);
+                    //Clear the map data
+                    occ.clear();
+                }
+        }
+    else if (vm.count ("sentences"))
         {
             for (static ulong bn = 0;fin.good ();bn++)
                 {
