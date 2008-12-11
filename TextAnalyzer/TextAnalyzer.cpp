@@ -7,10 +7,45 @@
 
 #include <stdlib.h>
 #include <string>
+#include <map>
+#include <fstream>
+#include <wctype.h>
+#include <wchar.h>
+#include <iostream>
+#include <boost/foreach.hpp>
 #include <boost/program_options.hpp>
 
 using namespace std;
 using namespace boost;
+using namespace boost::program_options;
+
+//#ifdef DISABLE_UNICODE
+typedef char char_t;
+typedef string string_t;
+//#else
+//typedef wchar_t char_t;
+//typedef wstring string_t;
+//#endif
+
+/**
+ * Global variables
+ */
+static map<char_t,ulong> occ;
+static pair<char_t,ulong> p;
+static string separator;
+static variables_map vm;
+
+inline void
+print2ColumnOccurrenceStatistics (ostream& of)
+{
+    BOOST_FOREACH (p, occ)
+    {
+        /**
+         * p.first = blockNum; p.second = shannonEntropy(blockNum)
+         */
+        of << p.first << separator << p.second << "\n";
+    }
+}
 
 /*
  * 
@@ -18,14 +53,19 @@ using namespace boost;
 int
 main (int argc, char** argv)
 {
+    static string infile;
+    static string outfile;
     // Declare the supported options.
     options_description allowedOptions ("Allowed options");
-    options_description genericOptions ("Generic options");
-    genericOptions.add_options ()
+    allowedOptions.add_options ()
             ("help,h", "Show help")
             ("input,i", value<string > (&infile), "The input file")
             ("out,o", value<string > (&outfile)->default_value ("stats.dat"), "Set statistics output file")
+            ("separator", value<string>(&separator)->default_value(","), "CSV field separator")
+            ("lines,l", "Split by lines")
+            ("sentences,s", "Split by sentences")
             ;
+
     positional_options_description p;
     p.add ("input", 1);
 
@@ -45,6 +85,28 @@ main (int argc, char** argv)
         {
             cout << "No input file specified!\n" << allowedOptions << "\n";
             return 2;
+        }
+
+    /**
+     * Main section: analyze the text
+     */
+    static ifstream fin(infile.c_str());
+    static ofstream of(outfile.c_str());
+    static string_t buffer;
+
+    if(vm.count("lines"))
+        {
+            while(fin.good())
+                {
+                    //Read one line
+                    fin >> buffer;
+                    BOOST_FOREACH(char_t c, buffer)
+                    {
+                        occ[c]++;
+                    }
+                }
+            //Save the data
+            print2ColumnOccurrenceStatistics (of);
         }
 
     return (EXIT_SUCCESS);
