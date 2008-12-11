@@ -29,9 +29,10 @@ typedef string string_t;
 /**
  * Global variables
  */
-static map<char_t,ulong> occ;
-static pair<char_t,ulong> p;
-static string separator;
+static map<char_t, ulong> occ;
+static pair<char_t, ulong> p;
+static char sentenceSeparator; //Sentence separator
+static string_t separator; //CSV separator
 static variables_map vm;
 
 inline void
@@ -41,6 +42,32 @@ print2ColumnOccurrenceStatistics (ostream& of)
     {
         of << p.first << separator << p.second << "\n";
     }
+}
+
+inline void
+print3ColumnOccurrenceStatistics (ostream& of, ulong blockNum)
+{
+    BOOST_FOREACH (p, occ)
+    {
+        of << p.first << separator << p.second << separator << blockNum << "\n";
+    }
+}
+
+inline string_t
+readSentence(ifstream& fin)
+{
+    static string_t ret;
+    static char c;
+    while(fin.good())
+        {
+            //Read a character from the stream
+            fin.get(c);
+            //Break if it is the separator
+            if(c == sentenceSeparator){break;}
+            ret += c; //The separator is not added to the return string
+        }
+    return ret;
+
 }
 
 /*
@@ -57,9 +84,12 @@ main (int argc, char** argv)
             ("help,h", "Show help")
             ("input,i", value<string > (&infile), "The input file")
             ("out,o", value<string > (&outfile)->default_value ("stats.dat"), "Set statistics output file")
-            ("separator", value<string>(&separator)->default_value(","), "CSV field separator")
+            ("separator", value<string> (&separator)->default_value (","), "CSV field separator")
+            ("sentence-separator", value<char> (&sentenceSeparator)->default_value ('.'), "CSV field separator")
+            ("overall,o", "Don't split (default)")
             ("lines,l", "Split by lines")
             ("sentences,s", "Split by sentences")
+            ("words,w", "Split by words")
             ;
 
     positional_options_description p;
@@ -86,26 +116,74 @@ main (int argc, char** argv)
     /**
      * Main section: analyze the text
      */
-    static ifstream fin(infile.c_str());
-    static ofstream of(outfile.c_str());
+    static ifstream fin (infile.c_str ());
+    static ofstream fout(outfile.c_str ());
     static string_t buffer;
 
-    if(vm.count("lines")){} //TODO
-    else
+    if (vm.count ("sentences"))
         {
-            while(fin.good())
+            for (static ulong bn = 0;fin.good ();bn++)
+                {
+                    //Read a sentence
+                    buffer = readSentence (fin);
+
+                    BOOST_FOREACH (char_t c, buffer)
+                    {
+                        if (occ[c] == 0)
+                            {
+                                occ[c] = 0;
+                            }
+                        occ[c]++;
+                    }
+                    //Save the data
+                    print3ColumnOccurrenceStatistics (fout, bn);
+                    //Clear the map data
+                    occ.clear();
+                }
+        }
+    else if (vm.count ("words"))
+        {
+            for (static ulong bn = 0;fin.good ();bn++)
                 {
                     //Read one line
                     fin >> buffer;
-                    BOOST_FOREACH(char_t c, buffer)
+
+                    BOOST_FOREACH (char_t c, buffer)
                     {
-                        if(occ[c] == 0){occ[c] = 0;}
+                        if (occ[c] == 0)
+                            {
+                                occ[c] = 0;
+                            }
+                        occ[c]++;
+                    }
+                    //Save the data
+                    print3ColumnOccurrenceStatistics (fout, bn);
+                    //Clear the map data
+                    occ.clear();
+                }
+        }
+    else //Overall statistics
+        {
+            while (fin.good ())
+                {
+                    //Read one line
+                    fin >> buffer;
+
+                    BOOST_FOREACH (char_t c, buffer)
+                    {
+                        if (occ[c] == 0)
+                            {
+                                occ[c] = 0;
+                            }
                         occ[c]++;
                     }
                 }
             //Save the data
-            print2ColumnOccurrenceStatistics (of);
+            print2ColumnOccurrenceStatistics (fout);
         }
+
+    fin.close ();
+    fout.close ();
 
     return (EXIT_SUCCESS);
 }
