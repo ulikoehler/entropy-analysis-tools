@@ -19,13 +19,12 @@ using namespace std;
 using namespace boost;
 using namespace boost::program_options;
 
-//#ifdef DISABLE_UNICODE
+/**
+ * Typedefs
+ */
+//Maybe for unicode support
 typedef char char_t;
 typedef string string_t;
-//#else
-//typedef wchar_t char_t;
-//typedef wstring string_t;
-//#endif
 
 /**
  * Global variables
@@ -40,9 +39,6 @@ print2ColumnOccurrenceStatistics (ostream& of)
 {
     BOOST_FOREACH (p, occ)
     {
-        /**
-         * p.first = blockNum; p.second = shannonEntropy(blockNum)
-         */
         of << p.first << separator << p.second << "\n";
     }
 }
@@ -94,7 +90,8 @@ main (int argc, char** argv)
     static ofstream of(outfile.c_str());
     static string_t buffer;
 
-    if(vm.count("lines"))
+    if(vm.count("lines")){} //TODO
+    else
         {
             while(fin.good())
                 {
@@ -102,6 +99,7 @@ main (int argc, char** argv)
                     fin >> buffer;
                     BOOST_FOREACH(char_t c, buffer)
                     {
+                        if(occ[c] == 0){occ[c] = 0;}
                         occ[c]++;
                     }
                 }
