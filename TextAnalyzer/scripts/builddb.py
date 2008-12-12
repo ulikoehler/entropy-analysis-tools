@@ -24,20 +24,21 @@ if dbExists:
 		data[splits[0]] = int(splits[2])
 	
 #Perform the user-selected action
-if action is "train":
-	infile = open(inputFilename)
+if action == "train":
 	#Set the last character variable to a default value
 	lastc = ' '
 	with open(inputFilename) as infile:
-		print "t" #TODO DEBUG
-		c = f.read(1).upper().swapcase()
-		if c.isalpha():
-			if lastc.isalpha():
-				pattern = lastc + c
-				data[pattern] += 1
-				lastc = c
-			else:
-				lastc = c
+		while 1:
+			c = infile.read(1).upper().swapcase()
+			if len(c) is 0:
+				break
+			if c.isalpha():
+				if lastc.isalpha():
+					pattern = lastc + c
+					if not pattern in data:
+						data[pattern] = 0
+					data[pattern] = data[pattern] + 1
+			lastc = c
 	infile.close()
 	
 #Close the database
