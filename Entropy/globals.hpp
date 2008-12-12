@@ -107,6 +107,8 @@ variables_map vm;
  */
 
 //Algorithms
+#include "output.hpp"
+#include "analyze-numeric.hpp"
 #include "entropy-algorithms.hpp"
 #include "count1bits.hpp"
 #include "analyze-bits.hpp"

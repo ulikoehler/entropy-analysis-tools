@@ -8,7 +8,9 @@
 #ifndef _ANALYZE_NUMERIC_HPP
 #define	_ANALYZE_NUMERIC_HPP
 
-
+/**
+ * 
+ */
 
 #endif	/* _ANALYZE_NUMERIC_HPP */
 

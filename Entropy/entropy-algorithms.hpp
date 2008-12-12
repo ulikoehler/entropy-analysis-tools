@@ -18,7 +18,7 @@
  * Calculates entropy of two given values
  * (used in analyze-bits.hpp with 0 and 1 values)
  */
-inline long double shannonEntropy(ull zeroes, ull ones, ulong size)
+inline long double shannonEntropy(ull& zeroes, ull& ones, ulong size)
 {
     static long double entropy = 0.0E0l; //Return value
     static long double prob; //The probability of a single char to occur (used as buffer)
