@@ -61,6 +61,7 @@ main (int argc, char** argv)
 
     positional_options_description p;
     p.add ("number", 1);
+    p.add ("out", 1);
 
     store (command_line_parser (argc, argv).
            options (allowedOptions).positional (p).run (), vm);
