@@ -8,6 +8,7 @@
                    projectFiles="true">
       <itemPath>analyze-bits.hpp</itemPath>
       <itemPath>analyze-chunks.hpp</itemPath>
+      <itemPath>analyze-numeric.hpp</itemPath>
       <itemPath>count1bits.hpp</itemPath>
       <itemPath>entropy-algorithms.hpp</itemPath>
       <itemPath>focus.hpp</itemPath>
@@ -52,6 +53,9 @@
         <itemTool>3</itemTool>
       </item>
       <item path="analyze-chunks.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="analyze-numeric.hpp">
         <itemTool>3</itemTool>
       </item>
       <item path="count1bits.hpp">
@@ -103,6 +107,9 @@
       <item path="analyze-chunks.hpp">
         <itemTool>3</itemTool>
       </item>
+      <item path="analyze-numeric.hpp">
+        <itemTool>3</itemTool>
+      </item>
       <item path="count1bits.hpp">
         <itemTool>3</itemTool>
       </item>
@@ -142,6 +149,9 @@
         <itemTool>3</itemTool>
       </item>
       <item path="analyze-chunks.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="analyze-numeric.hpp">
         <itemTool>3</itemTool>
       </item>
       <item path="count1bits.hpp">

@@ -12,6 +12,18 @@
 
 #include "globals.hpp"
 
+inline void
+print2ColumnOccurrenceStatistics (ostream& of)
+{
+    BOOST_FOREACH (p, allOcc)
+    {
+        /**
+         * p.first = blockNum; p.second = shannonEntropy(blockNum)
+         */
+        of << p.first << separator << format(ldFormatString) % p.second << "\n";
+    }
+}
+
 /**
  * Template analyzator function
  */
@@ -90,13 +102,7 @@ analyzeChunksFocus (istream& f, ostream& of)
             /**
              * Write the data to the statistics file
              */
-
-            BOOST_FOREACH (p, allOcc)
-            {
-                standardAcc (p.second);
-                entropyWeightedAcc (p.second, weight = entropy);
-                entropyRecipWeightedAcc (p.second, weight = (1 / entropy));
-            }
+            print2ColumnOccurrenceStatistics (of);
         }
 
 }

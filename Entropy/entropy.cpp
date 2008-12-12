@@ -23,14 +23,19 @@ main (int argc, char** argv)
             ;
     options_description analysisOptions ("Analysis options:");
     analysisOptions.add_options ()
+            ("numeric,n", "Analyze a file containing numbers (1 per line) instead of binary data")
             ("chunks,c", "Analyze chunks of chunksize bits rather than bits. Must be a multiple of chunksize.")
             ("blocksize,b", value<uint > (&blocksize)->default_value (1024), "Set block size (must be a multiple of chunksize).")
             ("chunksize,s", value<uint > (&chunksize)->default_value (4), "Set chunk size")
             ("per-block,p", "Analyze each block separately")
             ("entropy,e", "Calculate Shannon's entropy for each block separately (Has to be called with -c and -p)")
             ("focus,f", value<uint > (&focus), "Just look at chunks equal to the supplied number (must be used with -c)")
-            ("fill", value<uint > (&fillByte)->default_value (0), "The fill byte (as integer) if filesize is not multiple of chunksize")
+            ("fill", value<uint > (&fillByte)->default_value (0), "The fill byte (as unsigned integer) if filesize is not multiple of chunksize")
             ;
+    options_description numericOptions("Numeric analysis options");
+    numericOptions.add_options ()
+            ("long", "Use long as datatype")
+            ("ld", "Use long double as datatype")
     options_description outputFormatOptions ("Output format options");
     outputFormatOptions.add_options ()
             ("decimal,d", "Print statistics keys in decimal (for use with -c)")
