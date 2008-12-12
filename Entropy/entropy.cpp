@@ -37,7 +37,7 @@ main (int argc, char** argv)
             ("long", "Use long as datatype")
             ("ld", "Use long double as datatype")
             ;
-    options_description outputFormatOptions ("Output format options");
+    options_description outputFormatOptions ("Output options");
     outputFormatOptions.add_options ()
             ("decimal,d", "Print statistics keys in decimal (for use with -c)")
             ("precision", value<int>(&precision)->default_value (15), "Precision (for floating point output in statistical indicators)")

@@ -24,7 +24,7 @@ void analyzeNumeric(istream& fin, ostream& fout)
         {
             analyzeNumericData<long>(fin, fout);
         }
-    else if(vm.count("ld")) //Long double
+    else //(vm.count("ld")) //Long double
         {
             analyzeNumericData<long double>(fin, fout);
         }
