@@ -134,43 +134,43 @@ main (int argc, char** argv)
         }
     else if (vm.count ("uniint"))
         {
-            algorithmNum = 1;
+            distributionNum = 1;
         }
     else if (vm.count ("unireal"))
         {
-            algorithmNum = 2;
+            distributionNum = 2;
         }
     else if (vm.count ("triangle"))
         {
-            algorithmNum = 3;
+            distributionNum = 3;
         }
     else if (vm.count ("bernoulli"))
         {
-            algorithmNum = 4;
+            distributionNum = 4;
         }
     else if (vm.count ("cauchy"))
         {
-            algorithmNum = 5;
+            distributionNum = 5;
         }
     else if (vm.count ("exponential"))
         {
-            algorithmNum = 6;
+            distributionNum = 6;
         }
     else if (vm.count ("geometric"))
         {
-            algorithmNum = 7;
+            distributionNum = 7;
         }
     else if (vm.count ("normal"))
         {
-            algorithmNum = 8;
+            distributionNum = 8;
         }
     else if (vm.count ("lognormal"))
         {
-            algorithmNum = 9;
+            distributionNum = 9;
         }
     else if (vm.count ("unionsphere"))
         {
-            algorithmNum = 10;
+            distributionNum = 10;
         }
     else //No distribution selected
         {

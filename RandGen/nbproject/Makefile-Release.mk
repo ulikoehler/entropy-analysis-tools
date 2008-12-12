@@ -49,7 +49,7 @@ LDLIBSOPTIONS=
 
 dist/Release/${PLATFORM}/randgen: ${OBJECTFILES}
 	${MKDIR} -p dist/Release/${PLATFORM}
-	${LINK.cc} -lboost_program_options-gcc43-mt -o dist/Release/${PLATFORM}/randgen ${OBJECTFILES} ${LDLIBSOPTIONS} 
+	${LINK.cc} -lboost_program_options-gcc43-mt -o dist/Release/${PLATFORM}/randgen -s ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
 ${OBJECTDIR}/randgen.o: randgen.cpp 
 	${MKDIR} -p ${OBJECTDIR}

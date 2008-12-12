@@ -70,6 +70,7 @@
           <developmentMode>5</developmentMode>
         </fortranCompilerTool>
         <linkerTool>
+          <stripSymbols>true</stripSymbols>
           <linkerLibItems>
           </linkerLibItems>
           <commandLine>-lboost_program_options-gcc43-mt</commandLine>
