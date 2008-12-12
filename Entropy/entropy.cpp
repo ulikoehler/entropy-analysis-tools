@@ -36,6 +36,7 @@ main (int argc, char** argv)
     numericOptions.add_options ()
             ("long", "Use long as datatype")
             ("ld", "Use long double as datatype")
+            ;
     options_description outputFormatOptions ("Output format options");
     outputFormatOptions.add_options ()
             ("decimal,d", "Print statistics keys in decimal (for use with -c)")
@@ -66,6 +67,10 @@ main (int argc, char** argv)
             return 2;
         }
 
+    /**
+     * Main section
+     */
+
     //Build the format strings
     ldFormatString = "%." + lexical_cast<string > (precision) + "Lf";
 
@@ -73,24 +78,16 @@ main (int argc, char** argv)
     ifstream f (infile.c_str (), fstream::binary | fstream::in);
     ofstream of (outfile.c_str (), fstream::out);
 
-    int ret = 0; //Return value
-
-    ret = analyzeBinaryFile (f, of);
-
-    f.close ();
-    of.close ();
-    return ret;
-}
-
-inline int
-analyzeBinaryFile (ifstream& f, ofstream& of)
-{
     perblock = vm.count ("per-block"); //Behaves like a boolean, also consumes only one byte
 
     //Initalize the buffer array
     buffer = new char[blocksize];
     //Call the appropriate analysator function
-    if (vm.count ("chunks"))
+    if(vm.count("numeric"))
+        {
+            analyzeNumeric(f, of);
+        }
+    else if (vm.count ("chunks"))
         {
             //Validate chunk size
             if (blocksize % chunksize != 0)
@@ -124,6 +121,11 @@ analyzeBinaryFile (ifstream& f, ofstream& of)
 
     //Delete the buffer array
     delete buffer;
-    return 0;
+
+    f.close ();
+    of.close ();
+
+    //No error occured
+    return (EXIT_SUCCESS);
 }
 

@@ -16,7 +16,7 @@
  * Template analyzator function
  */
 template<class T>
-ulong
+inline ulong
 chta (char* arg)
 {
     ulong ctr = 0;

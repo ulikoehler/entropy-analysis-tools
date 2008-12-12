@@ -13,6 +13,7 @@
       <itemPath>entropy-algorithms.hpp</itemPath>
       <itemPath>focus.hpp</itemPath>
       <itemPath>globals.hpp</itemPath>
+      <itemPath>output.hpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -73,6 +74,9 @@
       <item path="globals.hpp">
         <itemTool>3</itemTool>
       </item>
+      <item path="output.hpp">
+        <itemTool>3</itemTool>
+      </item>
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
@@ -125,6 +129,9 @@
       <item path="globals.hpp">
         <itemTool>3</itemTool>
       </item>
+      <item path="output.hpp">
+        <itemTool>3</itemTool>
+      </item>
     </conf>
     <conf name="Fast" type="1">
       <toolsSet>
@@ -167,6 +174,9 @@
         <itemTool>3</itemTool>
       </item>
       <item path="globals.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="output.hpp">
         <itemTool>3</itemTool>
       </item>
     </conf>
