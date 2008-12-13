@@ -9,6 +9,7 @@
 #define	_ANALYZE_NUMERIC_HPP
 
 #include "globals.hpp"
+#include "output.hpp"
 
 //Forward declarations
 template<class T> void analyzeNumericData (istream& fin, ostream& fout);
@@ -126,7 +127,8 @@ analyzeNumericData (istream& fin, ostream& fout)
             >, void > accumulator;
 
     T buffer;
-    map<T, ulong> data ();
+    map<T, ulong> data;
+    pair<T,ulong> dataPair;
     /**
      * Read the data from the file and process it
      */
@@ -137,17 +139,21 @@ analyzeNumericData (istream& fin, ostream& fout)
             accumulator (buffer);
             //Round the value to the specified resolution and increase the map counter
             static T rounded = _round<T>::roundArb (buffer, res);
-            if (allOcc.count (rounded) == 0)
+            if (data.count (rounded) == 0)
                 {
-                    allOcc[rounded] = 1;
+                    data[rounded] = 1;
                 }
             else
                 {
-                    allOcc[rounded]++;
+                    data[rounded]++;
                 }
             /**
              * Write the data from the map to the output file
              */
+            BOOST_FOREACH (dataPair, data)
+            {
+                fout << dataPair.first << separator << format(ldFormatString) % dataPair.second << "\n";
+            }
             /**
              * Print out the statistical indicators
              */
