@@ -34,6 +34,7 @@ main (int argc, char** argv)
             ;
     options_description numericOptions("Numerical analysis options");
     numericOptions.add_options ()
+            ("res", value<uint>(&res)->default_value(2), "y-axis resolution")
             ("long", "Use long as datatype")
             ("ld", "Use long double as datatype")
             ;
@@ -44,7 +45,7 @@ main (int argc, char** argv)
             ("r-compatible,r", "Produce ordered output (with -p -c, compatible with all R scripts)")
             ("separator", value<string > (&separator)->default_value (","), "Set the CSV field separator")
             ;
-    allowedOptions.add (genericOptions).add (analysisOptions).add (outputFormatOptions);
+    allowedOptions.add (genericOptions).add (analysisOptions).add(numericOptions).add (outputFormatOptions);
 
     positional_options_description p;
     p.add ("input", 1);

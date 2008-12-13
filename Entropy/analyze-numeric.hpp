@@ -132,7 +132,6 @@ analyzeNumericData (istream& fin, ostream& fout)
     /**
      * Read the data from the file and process it
      */
-    const int res = 2;
     while (fin.good ())
         {
             fin >> buffer;
@@ -147,30 +146,30 @@ analyzeNumericData (istream& fin, ostream& fout)
                 {
                     data[rounded]++;
                 }
-            /**
-             * Write the data from the map to the output file
-             */
-            BOOST_FOREACH (dataPair, data)
-            {
-                fout << dataPair.first << separator << format(ldFormatString) % dataPair.second << "\n";
-            }
-            /**
-             * Print out the statistical indicators
-             */
-            static long double variance = 0;
-            variance = extract::variance (accumulator);
-            cout << "Statistical indicators:\n";
-            cout << "   Count: " << extract::count (accumulator) << "\n";
-            cout << "   Min: " << extract::min (accumulator) << "\n";
-            cout << "   Max: " << extract::max (accumulator) << "\n";
-            cout << "   Mean: " << format (ldFormatString) % extract::mean (accumulator) << "\n";
-            cout << "   Sum: " << format (ldFormatString) % extract::sum (accumulator) << "\n";
-            cout << "   Momentum (2): " << format (ldFormatString) % extract::moment < 2 > (accumulator) << "\n";
-            cout << "   Momentum (3): " << format (ldFormatString) % extract::moment < 3 > (accumulator) << "\n";
-            cout << "   Variance: " << format (ldFormatString) % variance << "\n";
-            cout << "   Standard deviation: " << format (ldFormatString) % sqrt (variance) << "\n";
-            cout << "   Skewness: " << format (ldFormatString) % extract::skewness (accumulator) << "\n";
         }
+        /**
+         * Write the data from the map to the output file
+         */
+        BOOST_FOREACH (dataPair, data)
+        {
+            fout << dataPair.first << separator << dataPair.second << "\n";
+        }
+        /**
+         * Print out the statistical indicators
+         */
+        static long double variance = 0;
+        variance = extract::variance (accumulator);
+        cout << "Statistical indicators:\n";
+        cout << "   Count: " << extract::count (accumulator) << "\n";
+        cout << "   Min: " << extract::min (accumulator) << "\n";
+        cout << "   Max: " << extract::max (accumulator) << "\n";
+        cout << "   Mean: " << format (ldFormatString) % extract::mean (accumulator) << "\n";
+        cout << "   Sum: " << format (ldFormatString) % extract::sum (accumulator) << "\n";
+        cout << "   Momentum (2): " << format (ldFormatString) % extract::moment < 2 > (accumulator) << "\n";
+        cout << "   Momentum (3): " << format (ldFormatString) % extract::moment < 3 > (accumulator) << "\n";
+        cout << "   Variance: " << format (ldFormatString) % variance << "\n";
+        cout << "   Standard deviation: " << format (ldFormatString) % sqrt (variance) << "\n";
+        cout << "   Skewness: " << format (ldFormatString) % extract::skewness (accumulator) << "\n";
 }
 
 #endif	/* _ANALYZE_NUMERIC_HPP */

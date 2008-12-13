@@ -98,9 +98,10 @@ static uint i,j,c; //Ugly but saving memory and time in nested loops
  */
 static map<val_t, ulong> allOcc; // All occurrences
 static pair<val_t, ulong> p;
+static uint res;
 
 //Program options
-variables_map vm;
+static variables_map vm;
 
 /**
  * Local includes
