@@ -74,6 +74,9 @@ main (int argc, char** argv)
             return 1;
         }
 
+    //Fix bug: producing one number too much
+    amount--;
+
     /**
      *******************************
      ********Main section***********
