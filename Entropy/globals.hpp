@@ -17,12 +17,12 @@
 /**
  * C/C++ Standard library
  */
-#include <stdlib.h>
-#include <math.h>
+#include <cstdlib>
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <map>
+#include <cmath>
 #include <bitset>
 
 /**
@@ -63,7 +63,7 @@ typedef unsigned short ushort;
 typedef unsigned long long ull;
 //typedef long double ld;
 
-typedef unsigned long val_t; //For use in analyze-chunks.hpp
+typedef unsigned long val_t;
 
 /**
  * Command line options

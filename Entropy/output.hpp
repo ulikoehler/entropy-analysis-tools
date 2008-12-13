@@ -13,9 +13,6 @@ print2ColumnOccurrenceStatistics (ostream& of)
 {
     BOOST_FOREACH (p, allOcc)
     {
-        /**
-         * p.first = blockNum; p.second = shannonEntropy(blockNum)
-         */
         of << p.first << separator << format(ldFormatString) % p.second << "\n";
     }
 }

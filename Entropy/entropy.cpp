@@ -32,7 +32,7 @@ main (int argc, char** argv)
             ("focus,f", value<uint > (&focus), "Just look at chunks equal to the supplied number (must be used with -c)")
             ("fill", value<uint > (&fillByte)->default_value (0), "The fill byte (as unsigned integer) if filesize is not multiple of chunksize")
             ;
-    options_description numericOptions("Numeric analysis options");
+    options_description numericOptions("Numerical analysis options");
     numericOptions.add_options ()
             ("long", "Use long as datatype")
             ("ld", "Use long double as datatype")
