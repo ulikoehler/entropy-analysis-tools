@@ -126,18 +126,26 @@ analyzeNumericData (istream& fin, ostream& fout)
             tag::skewness
             >, void > accumulator;
 
-    T buffer;
     map<T, ulong> data;
-    pair<T,ulong> dataPair;
+    pair<T, ulong> dataPair;
     /**
      * Read the data from the file and process it
      */
+    static string bufferString;
+    static T buffer;
     while (fin.good ())
         {
-            fin >> buffer;
+            fin >> bufferString;
+            buffer = lexical_cast<T > (bufferString);
             accumulator (buffer);
-            //Round the value to the specified resolution and increase the map counter
-            static T rounded = _round<T>::roundArb (buffer, res);
+            /**
+             * Round the value to the specified resolution
+             * (res digits after the decimal point
+             *   s.find(...) points at the character before the decimal point,
+             *   so s.find(...) + 1 points at the decimal point character
+             * )
+             */
+            static T rounded = lexical_cast<T > (bufferString.substr (0, bufferString.find (".") + 1 + res));
             if (data.count (rounded) == 0)
                 {
                     data[rounded] = 1;
@@ -147,29 +155,31 @@ analyzeNumericData (istream& fin, ostream& fout)
                     data[rounded]++;
                 }
         }
-        /**
-         * Write the data from the map to the output file
-         */
-        BOOST_FOREACH (dataPair, data)
-        {
-            fout << dataPair.first << separator << dataPair.second << "\n";
-        }
-        /**
-         * Print out the statistical indicators
-         */
-        static long double variance = 0;
-        variance = extract::variance (accumulator);
-        cout << "Statistical indicators:\n";
-        cout << "   Count: " << extract::count (accumulator) << "\n";
-        cout << "   Min: " << extract::min (accumulator) << "\n";
-        cout << "   Max: " << extract::max (accumulator) << "\n";
-        cout << "   Mean: " << format (ldFormatString) % extract::mean (accumulator) << "\n";
-        cout << "   Sum: " << format (ldFormatString) % extract::sum (accumulator) << "\n";
-        cout << "   Momentum (2): " << format (ldFormatString) % extract::moment < 2 > (accumulator) << "\n";
-        cout << "   Momentum (3): " << format (ldFormatString) % extract::moment < 3 > (accumulator) << "\n";
-        cout << "   Variance: " << format (ldFormatString) % variance << "\n";
-        cout << "   Standard deviation: " << format (ldFormatString) % sqrt (variance) << "\n";
-        cout << "   Skewness: " << format (ldFormatString) % extract::skewness (accumulator) << "\n";
+
+    /**
+     * Write the data from the map to the output file
+     */
+    BOOST_FOREACH (dataPair, data)
+    {
+        fout << dataPair.first << separator << dataPair.second << "\n";
+    }
+    cout << "Written data to statistics file\n";
+    /**
+     * Print out the statistical indicators
+     */
+    static long double variance = 0;
+    variance = extract::variance (accumulator);
+    cout << "Statistical indicators:\n";
+    cout << "   Count: " << extract::count (accumulator) << "\n";
+    cout << "   Min: " << extract::min (accumulator) << "\n";
+    cout << "   Max: " << extract::max (accumulator) << "\n";
+    cout << "   Mean: " << format (ldFormatString) % extract::mean (accumulator) << "\n";
+    cout << "   Sum: " << format (ldFormatString) % extract::sum (accumulator) << "\n";
+    cout << "   Momentum (2): " << format (ldFormatString) % extract::moment < 2 > (accumulator) << "\n";
+    cout << "   Momentum (3): " << format (ldFormatString) % extract::moment < 3 > (accumulator) << "\n";
+    cout << "   Variance: " << format (ldFormatString) % variance << "\n";
+    cout << "   Standard deviation: " << format (ldFormatString) % sqrt (variance) << "\n";
+    cout << "   Skewness: " << format (ldFormatString) % extract::skewness (accumulator) << "\n";
 }
 
 #endif	/* _ANALYZE_NUMERIC_HPP */
