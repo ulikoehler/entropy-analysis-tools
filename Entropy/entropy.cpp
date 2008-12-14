@@ -71,8 +71,10 @@ main (int argc, char** argv)
     /**
      * Main section
      */
-
-    //Build the format strings
+    
+    /**
+     * Build the long double format string
+     */
     ldFormatString = "%." + lexical_cast<string > (precision) + "Lf";
 
     ///Open the streams

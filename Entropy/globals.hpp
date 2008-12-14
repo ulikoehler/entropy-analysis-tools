@@ -71,8 +71,8 @@ typedef unsigned long val_t;
 //Bools (here used as chars
 static char perblock;
 
-static string separator = ","; //For CSV output
-static string ldFormatString; //long double format string
+static string separator = ","; //For CSV output#
+static string ldFormatString; //Format string for long double variables
 
 /**
  * Buffers and globally used variables

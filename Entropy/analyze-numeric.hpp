@@ -36,72 +36,116 @@ analyzeNumeric (istream& fin, ostream& fout)
  * Rounds a value to a arbitrary number of decimal digits.
  * Contains only one function, template class is overridden for types with specific functions
  */
+inline long double
+around (long double n, unsigned e)
+{
+    return floor (n * pow (10., e) + .5) / pow (10., e);
+}
+//Manual overrides
+inline double
+around (double n, unsigned e)
+{
+    return floor (n * pow (10., e) + .5) / pow (10., e);
+}
+inline float
+around (float n, unsigned e)
+{
+    return floor (n * pow (10., e) + .5) / pow (10., e);
+}
+
+/**
+ * Prepares a value for storing in the map as a key
+ * Returns either a rounded value or the input itself depending on
+ * the template-supplied type
+ */
 template<class T>
-class _round
+class _prepVal
+{
+public:
+    static inline T
+    prepVal (T in)
+    {
+        return in;
+    }
+};
+//Overrides
+
+template<> class _prepVal<double>
 {
 public:
 
-    static inline T
-    roundArb (T num, ushort n)
+    static inline double
+    prepVal (double in)
     {
-        static T log = log10 (num);
-        static T pw; //Power
-        if (num > 0)
-            {
-                log = ceil (log);
-            }
-        else
-            {
-                log = floor (log);
-            }
-        pw = -(log - n);
-        return (int) ((num * pow ((T) 10.0L, pw) + 0.5) * pow ((T) 10.0L, -pw));
+        return around (in, res);
     }
 };
 
-template<>
-class _round<long double>
+template<> class _prepVal<long double>
 {
 public:
 
     static inline long double
-    roundArb (long num, ushort n)
+    prepVal (long double in)
     {
-        static long double log = log10 (num);
-        static long double pw; //Power
-        if (num > 0)
-            {
-                log = ceil (log);
-            }
-        else
-            {
-                log = floor (log);
-            }
-        pw = -(log - n);
-        return (long double) (num * pow (10, pw) + 0.5) * pow (10, -pw);
+        return around (in, res);
     }
 };
 
-template<>
-class _round<long>
+template<> class _prepVal<float>
 {
 public:
 
-    static inline long
-    roundArb (long num, ushort n)
+    static inline float
+    prepVal (float in)
     {
-        static double log = log10 (num);
-        static long pw; //Power
-        if (num > 0)
-            {
-                log = ceil (log);
-            }
-        else
-            {
-                log = floor (log);
-            }
-        pw = -(log - n);
-        return (long) (num * pow (10, pw) + 0.5) * pow (10, -pw);
+        return around (in, res);
+    }
+};
+
+/**
+ * Builds a format string for storing numeric values as string int the map
+ */
+template<class T>
+class _buildFormatString
+{
+public:
+    static inline string
+    buildFormatString ()
+    {
+        return "%i";
+    }
+};
+//Overrides
+
+template<> class _buildFormatString<double>
+{
+public:
+    static inline string
+    buildFormatString ()
+    {
+        return ("%." + lexical_cast<string>(res) + "f");
+    }
+};
+
+template<> class _buildFormatString<long double>
+{
+public:
+
+    static inline string
+    buildFormatString ()
+    {
+        return "%." + lexical_cast<string>(res) + "Lf";
+    }
+};
+
+template<> class _buildFormatString<float>
+{
+public:
+    static inline string
+    buildFormatString ()
+    {
+        return "%." + lexical_cast<string>(res) + "f";
     }
 };
 
@@ -126,33 +170,32 @@ analyzeNumericData (istream& fin, ostream& fout)
             tag::skewness
             >, void > accumulator;
 
-    map<T, ulong> data;
-    pair<T, ulong> dataPair;
+    map<string, ulong> data;
+    pair<string, ulong> dataPair;
+    /**
+     * Build the format string
+     */
+    static string formatString = _buildFormatString<T>::buildFormatString();
     /**
      * Read the data from the file and process it
      */
-    static string bufferString;
     static T buffer;
     while (fin.good ())
         {
-            fin >> bufferString;
-            buffer = lexical_cast<T > (bufferString);
+            fin >> buffer;
             accumulator (buffer);
             /**
              * Round the value to the specified resolution
-             * (res digits after the decimal point
-             *   s.find(...) points at the character before the decimal point,
-             *   so s.find(...) + 1 points at the decimal point character
-             * )
+             * (res digits after the decimal point)
              */
-            static T rounded = lexical_cast<T > (bufferString.substr (0, bufferString.find (".") + 1 + res));
-            if (data.count (rounded) == 0)
+            string roundedString = str(format (formatString) % _prepVal<T>::prepVal(buffer));
+            if (data.count (roundedString) == 0)
                 {
-                    data[rounded] = 1;
+                    data[roundedString] = 1;
                 }
             else
                 {
-                    data[rounded]++;
+                    data[roundedString]++;
                 }
         }
 

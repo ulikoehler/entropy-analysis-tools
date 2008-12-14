@@ -92,7 +92,7 @@
           <developmentMode>6</developmentMode>
           <stripSymbols>true</stripSymbols>
           <architecture>2</architecture>
-          <commandLine>-fexpensive-optimizations -fomit-frame-pointer -march=core2 -ftree-vectorize -msse2 -msse3 -msse4 -ffunction-sections -ffast-math -fno-strict-aliasing</commandLine>
+          <commandLine>-fexpensive-optimizations -fomit-frame-pointer -march=core2 -ftree-vectorize -msse2 -msse3 -msse4 -ffunction-sections -fno-strict-aliasing</commandLine>
           <warningLevel>2</warningLevel>
         </ccCompilerTool>
         <fortranCompilerTool>

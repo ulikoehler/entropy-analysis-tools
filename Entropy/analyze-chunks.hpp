@@ -273,7 +273,8 @@ chna (char* b)
  */
 inline void
 analyzeChunks (istream& f, ostream& of)
-{    /**
+{   
+    /**
      * Declare the accumulator sets used to perform a statistical analysis on the data
      * The standard deviation is calculated directly from the variance (sqrt(variance))
      * standardAcc = unweighted
