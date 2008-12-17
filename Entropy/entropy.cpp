@@ -35,7 +35,14 @@ main (int argc, char** argv)
     options_description numericOptions("Numerical analysis options");
     numericOptions.add_options ()
             ("res", value<uint>(&res)->default_value(2), "y-axis resolution")
+            ("int", "Use int as datatype")
+            ("uint", "Use unsigned int as datatype")
             ("long", "Use long as datatype")
+            ("ulong", "Use unsigned long as datatype")
+            ("llong", "Use long long as datatype")
+            ("ullong", "Use unsigned long long as datatype")
+            ("float", "Use float as datatype")
+            ("double", "Use double as datatype")
             ("ld", "Use long double as datatype")
             ;
     options_description outputFormatOptions ("Output options");

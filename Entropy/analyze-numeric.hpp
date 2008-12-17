@@ -26,6 +26,30 @@ analyzeNumeric (istream& fin, ostream& fout)
         {
             analyzeNumericData<long>(fin, fout);
         }
+    else if (vm.count ("int")) //Int
+        {
+            analyzeNumericData<int>(fin, fout);
+        }
+    else if (vm.count ("uint")) //Long
+        {
+            analyzeNumericData<uint>(fin, fout);
+        }
+    else if (vm.count ("llong")) //Long long
+        {
+            analyzeNumericData<long long>(fin, fout);
+        }
+    else if (vm.count ("ullong")) //Unsigned long long
+        {
+            analyzeNumericData<unsigned long long>(fin, fout);
+        }
+    else if (vm.count ("float")) //float
+        {
+            analyzeNumericData<float>(fin, fout);
+        }
+    else if (vm.count ("double")) //Long
+        {
+            analyzeNumericData<double>(fin, fout);
+        }
     else //(vm.count("ld")) //Long double
         {
             analyzeNumericData<long double>(fin, fout);
