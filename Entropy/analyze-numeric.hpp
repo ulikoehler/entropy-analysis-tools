@@ -11,6 +11,11 @@
 #include "globals.hpp"
 #include "output.hpp"
 
+/**
+ * Global variables used only in this file
+ */
+static string resString;
+
 //Forward declarations
 template<class T> void analyzeNumericData (istream& fin, ostream& fout);
 
@@ -148,7 +153,7 @@ public:
     static inline string
     buildFormatString ()
     {
-        return ("%." + lexical_cast<string>(res) + "f");
+        return ("%." + resString + "f");
     }
 };
 
@@ -159,7 +164,7 @@ public:
     static inline string
     buildFormatString ()
     {
-        return "%." + lexical_cast<string>(res) + "Lf";
+        return "%." + resString + "Lf";
     }
 };
 
@@ -169,7 +174,7 @@ public:
     static inline string
     buildFormatString ()
     {
-        return "%." + lexical_cast<string>(res) + "f";
+        return "%." + resString + "f";
     }
 };
 
@@ -197,9 +202,10 @@ analyzeNumericData (istream& fin, ostream& fout)
     map<string, ulong> data;
     pair<string, ulong> dataPair;
     /**
-     * Build the format string
+     * Build the format string and caching variables
      */
     static string formatString = _buildFormatString<T>::buildFormatString();
+    static string resString = lexical_cast<string>(res); //Cached
     /**
      * Read the data from the file and process it
      */
