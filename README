@@ -1,0 +1,20 @@
+Entropy analysis tools is a tool suite for analyzing data in binary or numeric form.
+The project consist of the following subprojects:
+-Entropy: Fast analyzator for binary and numeric files; contains R scripts for displaying the data.
+-NumBinConverter: Converts numeric files to binary (and reverse).
+-RandGen; Fast random number generator using Boost::Random (TR1 canditate). Supports multiple generators and distributions.
+-TextAnalyzer: Tool for statistical cryptographic text analysis. Contains a python script for text pattern scoring (To be extended).
+
+Compile using NetBeans or directly using the Makefile.
+Compilation may take very long (caused by the very high optimizing level).
+If you just want to test, make the target "Fast". This may result in a slow executable.
+All applications are optimized for 64-bit targets.
+
+If you don't use a Core2 processor or anything compatible, change the Makefile directive
+"-march=core2" to the best architecture directive for your processor.
+
+You may disable some features by supplying preprocessor definitions on make command line.
+See the subproject README.compile for details
+
+All code in this project is free software. (See LICENSE file for details
+
