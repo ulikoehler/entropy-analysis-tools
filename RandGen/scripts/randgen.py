@@ -30,11 +30,15 @@ parser.add_option("-d",
 				choices=["01","uniform","beta","exponential","gamma","gauss","lognormal","normal","vonmises","pareto","weibull"],
 				dest="distribution",
 				action="store")
-parser.add_option("-p",
-				"--parameters",
+parser.add_option("-p1",
+				"--param1",
 				type="string",
-				nargs=2,
-				dest="params",
+				dest="param1",
+				action="store")
+parser.add_option("-p2",
+				"--param2",
+				type="string",
+				dest="param2",
 				action="store")
 #Set defaults
 parser.set_defaults(generatorName="mt",
@@ -51,16 +55,15 @@ parser.set_defaults(generatorName="mt",
 distribution = options.distribution
 generatorName = options.generatorName
 outputFilename = options.outputFilename
-params = options.params
 count = options.count
 
 #Convert the parameter options to a numeric literal of the appropriate type
 if distribution == "01":
-	param1 = int(params[0])
-	param2 = int(params[1])
+	param1 = int(options.param1)
+	param2 = int(options.param2)
 else:
-	param1 = float(params[0])
-	param2 = float(params[1])
+	param1 = float(options.param2)
+	param2 = float(options.param2)
 	
 #
 #Set the right random generator object and function pointer
