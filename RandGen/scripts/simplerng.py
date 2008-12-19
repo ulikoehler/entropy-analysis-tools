@@ -62,6 +62,7 @@ elif generatorName == "sys":
 		print "System random number generator is not available on your operating system:"
 		print str(err)
 		print "Using default random number generator."
+		generator = Random()
 elif generatorName == "wh":
 	generator = WichmannHill()
 
@@ -73,7 +74,7 @@ if distribution == "uniform":
 elif distribution == "beta":
 	fgen = generator.betavariate
 elif distribution == "exponential":
-	fgen = generator.expovariate
+	 fgen = lambdy generator.expovariate #expovariate takes only one parameter
 elif distribution == "gamma":
 	fgen = generator.gammavariate
 elif distribution == "gauss":
@@ -86,7 +87,7 @@ elif distribution == "vonmises":
 	fgen = generator.vonmisesvariate
 elif distribution == "pareto":
 	fgen = lambda x,y: generator.paretovariate(x) #Only 1 parameter needed
-elif distribution == "weibullvariate":
+elif distribution == "weibull":
 	fgen = generator.weibullvariate
 	
 #Main loop
