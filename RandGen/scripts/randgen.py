@@ -30,12 +30,12 @@ parser.add_option("-d",
 				choices=["01","uniform","beta","exponential","gamma","gauss","lognormal","normal","vonmises","pareto","weibull"],
 				dest="distribution",
 				action="store")
-parser.add_option("-p1",
+parser.add_option("-p",
 				"--param1",
 				type="string",
 				dest="param1",
 				action="store")
-parser.add_option("-p2",
+parser.add_option("-q",
 				"--param2",
 				type="string",
 				dest="param2",
@@ -44,7 +44,8 @@ parser.add_option("-p2",
 parser.set_defaults(generatorName="mt",
 				 outputFilename="rand.txt",
 				 distribution="01",
-				 params=("1","1"),
+				 param1="1",
+				 param2="5",
 				 count=10000
 				 )
 

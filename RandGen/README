@@ -48,7 +48,7 @@ Call with option "-h" or "--help" to see additional options.
 Only the Python standard libraries are used.
 
 Reference:
-The parameters are supplied using "-p1 [param 1]" and "-p2 [param 2]"
+The parameters are supplied using "-p [param 1]" and "-p [param 2]"
 If you supply too many parameters, the last ones is ignored
 Uniform distribution yields a value N: lower limit <= N < upper limit
 
