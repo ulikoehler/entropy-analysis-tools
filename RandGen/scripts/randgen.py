@@ -5,50 +5,62 @@ from __future__ import with_statement
 from random import *
 from decimal import *
 import sys
-import getopt
-
-if len(sys.argv) < 2: #Output file and count needed
-	print "You have to supply at least 2 arguments"
-	usage()
-	sys.exit(1)
-
-outfileName = sys.argv[1]
-count = int(sys.argv[2])
+from optparse import OptionParser
 
 #Parse the command line options
-try:
-	opts,args = getopt.gnu_getopt(sys.argv[1:], "hg:d:p:q:", ["help","generator=","distribution=","param1=","param2="])
-except getop.GetoptError, err:
-	print str(err)
-	usage()
-	sys.exit(2)
-	
-#Ensure object existence
-generatorName = "mt" #Default MT19937
-distribution = "01" #Default [0;1]
-param1 = "1"
-param2 = "1"
+parser = OptionParser()
+parser.add_option("-c",
+				"--count",
+				type="int",
+				action="store",
+				dest="count")
+parser.add_option("-o",
+				"--out",
+				dest="outputFilename",
+				help="Statistics output file")
+parser.add_option("-g",
+				"--generator",
+				dest="generatorName",
+				type="choice",
+				choices=["mt","sys","wh"],
+				action="store")
+parser.add_option("-d",
+				"--distribution",
+				type="choice",
+				choices=["01","uniform","beta","exponential","gamma","gauss","lognormal","normal","vonmises","pareto","weibull"],
+				dest="distribution",
+				action="store")
+parser.add_option("-p",
+				"--parameters",
+				type="string",
+				nargs=2,
+				dest="params",
+				action="store")
+#Set defaults
+parser.set_defaults(generatorName="mt",
+				 outputFilename="rand.txt",
+				 distribution="01",
+				 params=("1","1"),
+				 count=10000
+				 )
 
-for o, a in opts:
-	if o in ("-h", "--help"):
-		usage()
-		sys.exit(2)
-	elif o in ("-g", "--generator"):
-		generatorName = a
-	elif o in ("-d", "--distribution"):
-		distribution = a
-	elif o in ("-p", "--param1"):
-		param1 = a[1:] #Cut off '='
-	elif o in("-q", "--param2"):
-		param2 = a[1:] #Cut off '='
+#Parse			
+(options,args) = parser.parse_args()
 
-#Convert the parameter options to a numeric literal of the right type
+#Declare global aliases to the option variables
+distribution = options.distribution
+generatorName = options.generatorName
+outputFilename = options.outputFilename
+params = options.params
+count = options.count
+
+#Convert the parameter options to a numeric literal of the appropriate type
 if distribution == "01":
-	param1 = int(param1)
-	param2 = int(param2)
+	param1 = int(params[0])
+	param2 = int(params[1])
 else:
-	param1 = float(param1)
-	param2 = float(param2)
+	param1 = float(params[0])
+	param2 = float(params[1])
 	
 #
 #Set the right random generator object and function pointer
@@ -74,7 +86,7 @@ if distribution == "uniform":
 elif distribution == "beta":
 	fgen = generator.betavariate
 elif distribution == "exponential":
-	 fgen = lambdy generator.expovariate #expovariate takes only one parameter
+	 fgen = generator.expovariate #expovariate takes only one parameter
 elif distribution == "gamma":
 	fgen = generator.gammavariate
 elif distribution == "gauss":
@@ -91,6 +103,6 @@ elif distribution == "weibull":
 	fgen = generator.weibullvariate
 	
 #Main loop
-with open(outfileName, "w") as outfile:
+with open(outputFilename, "w") as outfile:
 	for i in xrange(count):
 		print >> outfile, fgen(param1,param2)
