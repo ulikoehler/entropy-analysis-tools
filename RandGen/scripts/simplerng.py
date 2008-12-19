@@ -2,6 +2,7 @@
 from __future__ import with_statement
 from random import *
 import sys
+import getopt
 
 if len(sys.argv) < 2: #Output file and count needed
 	print "You have to supply at least 2 arguments"
@@ -17,7 +18,8 @@ except getop.GetoptError, err:
 	print str(err)
 	usage()
 	sys.exit(2)
-	
+
+distribution = None #Object existence is needed
 for o, a in opts:
 	if o in ("-h", "--help"):
 		usage()
@@ -32,6 +34,7 @@ for o, a in opts:
 		lower = int(a)
 	elif o in("-q", "--upper"):
 		upper = int(a)
+		
 		
 #
 #Set the right random generator function pointer
