@@ -13,7 +13,7 @@ occ = {}
 #read the data
 with open(options.input) as fin:
 	for line in fin:
-		line = line.strip()
+		line = line[:-1] #Remove the newline character
 		if not line in  occ:
 			occ[line] = 1L
 			continue
