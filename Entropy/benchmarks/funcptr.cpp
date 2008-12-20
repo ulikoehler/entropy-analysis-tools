@@ -18,7 +18,7 @@ uint doCalc(uint n)
 	return n*n;
 }
 
-uint doCalcInline(uint n)
+inline uint doCalcInline(uint n)
 {
 	return n*n;
 }
