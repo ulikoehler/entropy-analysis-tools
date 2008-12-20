@@ -10,9 +10,9 @@ parser.add_option("-o", "--out", dest="output",help="Statistics output file")
 parser.add_option("-s","--separator",dest="separator",help="CSV separator")
 
 parser.add_option("--int",action="store_true",dest="int",help="Use int as key type (instead of string)")
-parser.add_option("--long",action="store_true",dest="long",help="Use long as key type (instead of string)")
-parser.add_option("--float",action="store_true",dest="float",help="Use string as key type (instead of string)")
-parser.add_option("--Decimal",action="store_true",dest="decimal",help="Use  as key type (instead of string)")
+parser.add_option("-l","--long",action="store_true",dest="long",help="Use long as key type (instead of string)")
+parser.add_option("-f","--float",action="store_true",dest="float",help="Use string as key type (instead of string)")
+parser.add_option("-d","--decimal",action="store_true",dest="decimal",help="Use Decimal as key type (instead of string)")
 #Set the defaults
 parser.set_defaults(output="counts.txt",separator=",")
 #Do the actual parsing
