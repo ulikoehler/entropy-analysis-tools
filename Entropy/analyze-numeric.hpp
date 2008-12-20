@@ -12,9 +12,24 @@
 #include "output.hpp"
 
 /**
+ * Arbitrary rounding macro
+ * Replaced old Boost::format algorithm.
+ * According to benchmarks/quantize it should make
+ * the calculation about 48 times faster on a Pentium M.
+ * Parameters: n is the number; x is 10^-precision
+ * where precision is the number of digits to round to.
+ * Although it is call rounding it will be more likely cutting
+ * the last digits off.
+ * To avoid performance losses on badly-optimizing compilers,
+ * precalculate n = 10^-precision.
+ */
+#define roundarb(x,n) x-fmod(x,n)
+
+/**
  * Global variables used only in this file
  */
-static string resString;
+static double prec; //= 10^-res
+static string resString; //TODO check if needed
 
 //Forward declarations
 template<class T> void analyzeNumericData (istream& fin, ostream& fout);
@@ -133,48 +148,48 @@ public:
 };
 
 /**
- * Builds a format string for storing numeric values as string int the map
+ * Rounds floating point numbers to res digits
+ * and returns integers.
  */
 template<class T>
-class _buildFormatString
+class _fitvalue 
 {
 public:
-    static inline string
-    buildFormatString ()
+    static inline T
+    fitvalue(T& p)
     {
-        return "%i";
+        return p;
     }
 };
 //Overrides
 
-template<> class _buildFormatString<double>
+template<> class _fitvalue<double>
 {
 public:
-    static inline string
-    buildFormatString ()
+    static inline double
+    fitvalue(double& p)
     {
-        return ("%." + resString + "f");
+        return roundarb(p,prec);
     }
 };
 
-template<> class _buildFormatString<long double>
+template<> class _fitvalue<long double>
 {
 public:
-
-    static inline string
-    buildFormatString ()
+    static inline long double
+    fitvalue(long double& p)
     {
-        return "%." + resString + "Lf";
+        return roundarb(p,prec);
     }
 };
 
-template<> class _buildFormatString<float>
+template<> class _fitvalue<float>
 {
 public:
-    static inline string
-    buildFormatString ()
+    static inline float
+    fitvalue(float& p)
     {
-        return "%." + resString + "f";
+        return roundarb(p,prec);
     }
 };
 
@@ -202,10 +217,10 @@ analyzeNumericData (istream& fin, ostream& fout)
     map<string, ulong> data;
     pair<string, ulong> dataPair;
     /**
-     * Build the format string and caching variables
+     * Precalculate some parameters
      */
-    static string formatString = _buildFormatString<T>::buildFormatString();
-    resString = lexical_cast<string>(res); //Cached
+    prec = pow(10,-res);
+    resString = lexical_cast<string>(res); //Cached //TODO check if needed
     /**
      * Read the data from the file and process it
      */
@@ -218,7 +233,7 @@ analyzeNumericData (istream& fin, ostream& fout)
              * Round the value to the specified resolution
              * (res digits after the decimal point)
              */
-            string roundedString = str(format (formatString) % _prepVal<T>::prepVal(buffer));
+            T rounded = str(format (formatString) % _prepVal<T>::prepVal(buffer));
             if (data.count (roundedString) == 0)
                 {
                     data[roundedString] = 1;
