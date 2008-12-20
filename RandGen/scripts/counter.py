@@ -3,11 +3,12 @@ from __future__ import with_statement
 from optparse import OptionParser
 
 parser = OptionParser()
+parser.enable_interspersed_args()
 parser.add_option("-i","--in",dest="input",help="Data input file")
 parser.add_option("-o", "--out", dest="output",help="Statistics output file")
 parser.add_option("-s","--separator",dest="separator",help="CSV separator")
 #Set the defaults
-parser.set_defaults(output="out.txt",separator=",")
+parser.set_defaults(output="counts.txt",separator=",")
 #Do the actual parsing
 (options,args) = parser.parse_args()
 

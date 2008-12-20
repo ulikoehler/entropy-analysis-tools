@@ -9,6 +9,7 @@ from optparse import OptionParser
 
 #Parse the command line options
 parser = OptionParser()
+enable_interspersed_args()
 parser.add_option("-c",
 				"--count",
 				type="int",
