@@ -3,6 +3,7 @@ from __future__ import with_statement
 from sys import *
 from optparse import OptionParser
 from math import *
+from decimal import Decimal
 
 parser = OptionParser()
 parser.enable_interspersed_args()
