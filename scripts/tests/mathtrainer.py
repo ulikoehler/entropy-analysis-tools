@@ -74,9 +74,14 @@ def block(n):
 min = int(raw_input("Min: "))
 max = int(raw_input("Max: "))
 
-#Tuple containing function pointers
-#to all exercise-producing functions
-exFunctions = (addEx,subEx,multEx)
+exFunctions = []
+operators = raw_input("Operators: ")
+if '+' in operators:
+	exFunctions.append(addEx)
+if '-' in operators:
+	exFunctions.append(subEx)
+if '*' in operators:
+	exFunctions.append(multEx)
 
 mode = raw_input("Mode: ")
 
