@@ -70,9 +70,19 @@ def block(n):
 #
 #Main
 #
-#Ask for the least number to use
-min = int(raw_input("Min: "))
-max = int(raw_input("Max: "))
+#Ask for the minimum and maximum of the numbers to use
+while 1:
+	try:
+		min = int(raw_input("Min: "))
+		break
+	except ValueError:
+		continue #Ask again
+while 1:
+	try:
+		max = int(raw_input("Max: "))
+		break
+	except ValueError:
+		continue #Ask again
 
 exFunctions = []
 operators = raw_input("Operators: ")
@@ -89,5 +99,11 @@ if mode == "loop":
 	loop()
 elif mode == "block":
 	while 1:
-		blockCount = int(raw_input("Exercises: "))
+		#Ask the user for input until there is a valid number
+		while 1:
+			try:
+				blockCount = int(raw_input("Exercises: "))
+				break
+			except ValueError:
+				continue #Ask again
 		block(blockCount)
