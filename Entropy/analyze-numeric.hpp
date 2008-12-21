@@ -214,8 +214,8 @@ analyzeNumericData (istream& fin, ostream& fout)
             tag::skewness
             >, void > accumulator;
 
-    map<string, ulong> data;
-    pair<string, ulong> dataPair;
+    map<T, ulong> data;
+    pair<T, ulong> dataPair;
     /**
      * Precalculate some parameters
      */
