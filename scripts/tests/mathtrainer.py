@@ -63,7 +63,10 @@ def loop():
 def block(n):
 	startTime = time.time()
 	for i in xrange(n):
-		choice(exFunctions)() #Generate an exercise
+		try:
+			choice(exFunctions)() #Generate an exercise
+		except ValueError:
+			continue #Next exercise
 	deltaTime = time.time() - startTime
 	print n,"exercises took",deltaTime,"seconds"
 
@@ -106,4 +109,4 @@ elif mode == "block":
 				break
 			except ValueError:
 				continue #Ask again
-		block(blockCount)
+		block(blockCount) 

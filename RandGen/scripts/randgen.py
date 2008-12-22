@@ -14,7 +14,8 @@ parser.add_option("-c",
 				"--count",
 				type="int",
 				action="store",
-				dest="count")
+				dest="count",
+				help="The count of random numbers to generate")
 parser.add_option("-o",
 				"--out",
 				dest="outputFilename",
@@ -24,23 +25,27 @@ parser.add_option("-g",
 				dest="generatorName",
 				type="choice",
 				choices=["mt","sys","wh"],
-				action="store")
+				action="store",
+				help="The pseudo-random number generator algorithm")
 parser.add_option("-d",
 				"--distribution",
 				type="choice",
 				choices=["01","uniform","beta","exponential","gamma","gauss","lognormal","normal","vonmises","pareto","weibull"],
 				dest="distribution",
-				action="store")
+				action="store",
+				help="The distribution of the random numbers to be generated")
 parser.add_option("-p",
 				"--param1",
 				type="string",
 				dest="param1",
-				action="store")
+				action="store",
+				help="The first distribution parameter")
 parser.add_option("-q",
 				"--param2",
 				type="string",
 				dest="param2",
-				action="store")
+				action="store",
+				help="The second distribution parameter")
 #Set defaults
 parser.set_defaults(generatorName="mt",
 				 outputFilename="rand.txt",
