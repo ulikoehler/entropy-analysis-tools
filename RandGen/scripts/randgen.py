@@ -19,7 +19,7 @@ parser.add_option("-c",
 parser.add_option("-o",
 				"--out",
 				dest="outputFilename",
-				help="Statistics output file")
+				help="Random number output file")
 parser.add_option("-g",
 				"--generator",
 				dest="generatorName",
