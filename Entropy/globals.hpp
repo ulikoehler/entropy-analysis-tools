@@ -26,33 +26,36 @@
 #include <bitset>
 
 /**
- * Boosting entropy
+ * Boost library
  */
 #include <boost/cstdint.hpp>
 #include <boost/program_options.hpp>
 #include <boost/function.hpp>
 #include <boost/foreach.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/accumulators/accumulators.hpp>
-#include <boost/accumulators/statistics/stats.hpp>
-#include <boost/accumulators/statistics/mean.hpp>
-#include <boost/accumulators/statistics/max.hpp>
-#include <boost/accumulators/statistics/min.hpp>
-#include <boost/accumulators/statistics/sum.hpp>
-#include <boost/accumulators/statistics/variance.hpp>
-#include <boost/accumulators/statistics/count.hpp>
-#include <boost/accumulators/statistics/skewness.hpp>
+#include <boost/format.hpp>
 
-#include <boost/accumulators/statistics/weighted_mean.hpp>
-#include <boost/accumulators/statistics/weighted_moment.hpp>
-#include <boost/accumulators/statistics/weighted_mean.hpp>
-#include <boost/accumulators/statistics/weighted_variance.hpp>
-#include <boost/accumulators/statistics/weighted_skewness.hpp>
-#include "boost/format.hpp"
+#ifndef NOSTATISTICSDATA
+	#include <boost/accumulators/accumulators.hpp>
+	#include <boost/accumulators/statistics/stats.hpp>
+	#include <boost/accumulators/statistics/mean.hpp>
+	#include <boost/accumulators/statistics/max.hpp>
+	#include <boost/accumulators/statistics/min.hpp>
+	#include <boost/accumulators/statistics/sum.hpp>
+	#include <boost/accumulators/statistics/variance.hpp>
+	#include <boost/accumulators/statistics/count.hpp>
+	#include <boost/accumulators/statistics/skewness.hpp>
+
+	#include <boost/accumulators/statistics/weighted_mean.hpp>
+	#include <boost/accumulators/statistics/weighted_moment.hpp>
+	#include <boost/accumulators/statistics/weighted_mean.hpp>
+	#include <boost/accumulators/statistics/weighted_variance.hpp>
+	#include <boost/accumulators/statistics/weighted_skewness.hpp>
+	using namespace boost::accumulators;
+#endif //NOSTATISTICSDATA
 
 using namespace std;
 using namespace boost;
-using namespace boost::accumulators;
 using namespace boost::program_options;
 
 //Typedefs
@@ -77,8 +80,10 @@ static string ldFormatString; //Format string for long double variables
 /**
  * Buffers and globally used variables
  */
-//Buffer char array, initialized
-//in main function before analyzator function calls
+/**
+ *Buffer char array, initialized
+ * in the analyzator functions befor any usage
+ */
 static char* buffer SSE;
 
 static uint blocksize;
@@ -86,7 +91,7 @@ static uint chunksize;
 static uint fillByte;
 static uint focus;
 
-static uint i,j,c; //Ugly but saving memory and time in nested loops
+static uint i,j,c; //Ugly but saving memory and maybe time in nested loops
 
 //STL containers
 /*

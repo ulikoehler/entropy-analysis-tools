@@ -200,6 +200,7 @@ template<class T>
 void
 analyzeNumericData (istream& fin, ostream& fout)
 {
+    #ifndef NOSTATISTICSDATA
     static accumulator_set<T, features<
             //Standard algebra
             tag::count,
@@ -213,6 +214,7 @@ analyzeNumericData (istream& fin, ostream& fout)
             tag::moment < 3 >,
             tag::skewness
             >, void > accumulator;
+    #endif //NOSTATISTICSDATA
 
     map<T, ulong> data;
     pair<T, ulong> dataPair;
@@ -228,7 +230,9 @@ analyzeNumericData (istream& fin, ostream& fout)
     while (fin.good ())
         {
             fin >> buffer;
-            accumulator (buffer);
+	    #ifndef NOSTATISTICSDATA
+		accumulator (buffer);
+	    #endif //NOSTATISTICSDATA
             /**
              * Round the value to the specified resolution
              * (res digits after the decimal point)
@@ -252,22 +256,24 @@ analyzeNumericData (istream& fin, ostream& fout)
         fout << dataPair.first << separator << dataPair.second << "\n";
     }
     cout << "Written data to statistics file\n";
-    /**
-     * Print out the statistical indicators
-     */
-    static long double variance = 0;
-    variance = extract::variance (accumulator);
-    cout << "Statistical indicators:\n";
-    cout << "   Count: " << extract::count (accumulator) << "\n";
-    cout << "   Min: " << extract::min (accumulator) << "\n";
-    cout << "   Max: " << extract::max (accumulator) << "\n";
-    cout << "   Mean: " << format (ldFormatString) % extract::mean (accumulator) << "\n";
-    cout << "   Sum: " << format (ldFormatString) % extract::sum (accumulator) << "\n";
-    cout << "   Momentum (2): " << format (ldFormatString) % extract::moment < 2 > (accumulator) << "\n";
-    cout << "   Momentum (3): " << format (ldFormatString) % extract::moment < 3 > (accumulator) << "\n";
-    cout << "   Variance: " << format (ldFormatString) % variance << "\n";
-    cout << "   Standard deviation: " << format (ldFormatString) % sqrt (variance) << "\n";
-    cout << "   Skewness: " << format (ldFormatString) % extract::skewness (accumulator) << "\n";
+    #ifndef NOSTATISTICSDATA
+	    /**
+	     * Print out the statistical indicators
+	     */
+	    static long double variance = 0;
+	    variance = extract::variance (accumulator);
+	    cout << "Statistical indicators:\n";
+	    cout << "   Count: " << extract::count (accumulator) << "\n";
+	    cout << "   Min: " << extract::min (accumulator) << "\n";
+	    cout << "   Max: " << extract::max (accumulator) << "\n";
+	    cout << "   Mean: " << format (ldFormatString) % extract::mean (accumulator) << "\n";
+	    cout << "   Sum: " << format (ldFormatString) % extract::sum (accumulator) << "\n";
+	    cout << "   Momentum (2): " << format (ldFormatString) % extract::moment < 2 > (accumulator) << "\n";
+	    cout << "   Momentum (3): " << format (ldFormatString) % extract::moment < 3 > (accumulator) << "\n";
+	    cout << "   Variance: " << format (ldFormatString) % variance << "\n";
+	    cout << "   Standard deviation: " << format (ldFormatString) % sqrt (variance) << "\n";
+	    cout << "   Skewness: " << format (ldFormatString) % extract::skewness (accumulator) << "\n";
+    #endif //NOSTATISTICSDATA
 }
 
 #endif	/* _ANALYZE_NUMERIC_HPP */
