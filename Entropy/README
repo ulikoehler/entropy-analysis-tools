@@ -1,0 +1,23 @@
+Entropy consists of three parts:
+########1########
+Entropy itself is a fast binary file analysis solution written in C++.
+Start with option "-h" or "--help" to see exact usage and options.
+
+########2########
+In the "r-scripts" directory you can find several GNU R scripts intended to
+display the data. Most of them are available in a PNG and a SVG version.
+The input data is read from stats.dat in the same directory.
+All R scripts need a specific number of columns in the input file.
+r.sh is a utility script to execute one of the scripts.
+Use it as follows:
+./r.sh [script name]
+where [script name] is the filename of the script you want to call.
+
+########3########
+There are also several utility scripts located in the "scripts" directory.
+See the header comment of these scripts for an exact description.
+Short description:
+-bitpixel.pl: Show whether bits in a couple of numbers are set or not.
+-chprec.py: Change precision of floating point numbers in a file
+-counter.py: Count how often a number occurs in a file
+-fitlimit.py: Fit numbers in a file into a specified range.
