@@ -15,26 +15,24 @@ close INFILE;
 
 my $png = "out.png";
 
-my $surf = Cairo::ImageSurface->create ('argb32', 32, $count);
+my $surf = Cairo::ImageSurface->create ('rgb24', 32, $count*2);
 my $cr = Cairo::Context->create ($surf);
 
 #Fill
-$cr->rectangle (0, 0, 32, length(@data));
-$cr->set_source_rgba (1, 1, 1, 0.5);
+$cr->rectangle (0, 0, 32, $count);
+$cr->set_source_rgb (1, 1, 1);
 $cr->fill;
 
+$cr->set_source_rgb (0, 0, 0);
+
 for($i = 0;$i < length(@data);$i++)
-{
-	$cr->restore();
-	$cr->translate(0,$i);
-	
-	$cr->set_source_rgba (0, 0, 0, 0);
-	
+{	
 	$d = $data[$i];
 	for($j = 0; $j < 32;$j++)
 	{
-		$cr->translate(1,0);
-		$cr->rel_line_to(1,0) if ($d & 2**$i);
+		$cr->new_path();
+		$cr->rectangle($j*2,$i*2,1,1) if ($d & (2**$i));
+		$cr->stroke();
 	}
 }
 
