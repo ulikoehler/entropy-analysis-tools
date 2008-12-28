@@ -15,20 +15,22 @@ close INFILE;
 
 my $png = "out.png";
 
-my $surf = Cairo::ImageSurface->create ('rgb24', 32, $count);
+my $imgWidth = 32;
+my $imgHeight = $count;
+
+my $surf = Cairo::ImageSurface->create ('rgb24', $imgWidth, $imgHeight);
 my $cr = Cairo::Context->create ($surf);
 
 #Fill
-#$cr->rectangle (0, 0, 32*2, $count);
-#$cr->set_source_rgb (1, 1, 1);
-#$cr->fill;
-
+$cr->rectangle (0, 0, $imgWidth, $imgHeight);
 $cr->set_source_rgb (1, 1, 1);
+$cr->fill;
+
+$cr->set_source_rgb (0, 0, 0);
 
 for($i = 0;$i < $count;$i++)
 {	
 	$d = $data[$i];
-	print "for i=".$i." d=".$d."\n";
 	for($j = 0; $j < 32;$j++)
 	{
 		$cr->new_path();
@@ -39,5 +41,3 @@ for($i = 0;$i < $count;$i++)
 
 $cr->show_page;
 $surf->write_to_png ($png);
-
-
