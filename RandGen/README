@@ -83,3 +83,5 @@ especially on startup, even if you compile it before.
 Python (at least the standard interpreter) uses an underlying C implementation for its
 random generator algorithms the actual number generation
 should be approximately equally fast as the C++ implementation.
+If you often use a script, it may be advantageous to precompile them if this is possible in the specific language.
+This will save the initialization time.
