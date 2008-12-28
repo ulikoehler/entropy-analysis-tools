@@ -1,5 +1,5 @@
 RandGen:
-RandGen is a subproject of entropy analysis tools and consists of two parts:
+RandGen is a subproject of entropy analysis tools and mainly consists of three parts:
 
 #########1#########
 The actual RandGen C++ project is a very fast random number generator
@@ -68,9 +68,18 @@ Distributions ("-d [Distribution name]"):
 	"pareto" (Pareto distribution, takes 1 floating point parameter [alpha])
 	"weibull" (Weibull distribution, takes 2 floating point parameters [alpha,beta])
 	
+#########3#########
+Implementations of runtime-configurable generator scripts producing uniform distributed output.
+The scripts are written in Python and Perl and won't need any external libraries and modules except the interpreter.
+All scripts are standalone-implementations.
+See the head of the specific script file to get information about the usage.
+Scripts:
+lc.py: Linear congruential generator
+lagfib.pl: Lagged Fibonacci generator
+	
 ###Speed comparison###
 Generally the C++ implementation should be faster,
 especially on startup, even if you compile it before.
-Python uses aunderlying C implementation for its
+Python (at least the standard interpreter) uses an underlying C implementation for its
 random generator algorithms the actual number generation
 should be approximately equally fast as the C++ implementation.
