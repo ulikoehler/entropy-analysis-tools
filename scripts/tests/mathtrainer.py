@@ -11,15 +11,21 @@ def statistics():
 	print "False:",false
 	
 def addEx():
+	#Allow write-access to the global statistics counters
 	global correct,false
+	#Generate two random numbers
 	op1 = randint(min,max)
 	op2 = randint(min,max)
+	#Calculate the correct solution
 	correctSolution = op1 + op2
+	#Read the user's solution (not yet converted to a number)
 	userSolution = raw_input(str(op1) + " + " + str(op2) + " = ")
+	#Check if the user requested to show statistics
 	if userSolution == "stats":
 		statistics()
 		return
 	userSolution = int(userSolution)
+	#Check if the user's solution is correct or false (or only has the false sign)
 	if userSolution == correctSolution:
 		print " Correct!"
 		correct += 1
@@ -31,15 +37,21 @@ def addEx():
 		false += 1
 
 def subEx():
+	#Allow write-access to the global statistics counters
 	global correct,false
+	#Generate two random numbers
 	op1 = randint(min,max)
 	op2 = randint(min,max)
+	#Calculate the correct solution
 	correctSolution = op1 - op2
+	#Read the user's solution (not yet converted to a number)
 	userSolution = raw_input(str(op1) + " - " + str(op2) + " = ")
+	#Check if the user requested to show statistics
 	if userSolution == "stats":
 		statistics()
 		return
 	userSolution = int(userSolution)
+	#Check if the user's solution is correct or false (or only has the false sign)
 	if userSolution == correctSolution:
 		print " Correct!"
 		correct += 1
@@ -51,15 +63,21 @@ def subEx():
 		false += 1
 
 def multEx():
+	#Allow write-access to the global statistics counters
 	global correct,false
+	#Generate two random numbers
 	op1 = randint(min,max)
 	op2 = randint(min,max)
+	#Calculate the correct solution
 	correctSolution = op1 * op2
+	#Read the user's solution (not yet converted to a number)
 	userSolution = raw_input(str(op1) + " * " + str(op2) + " = ")
+	#Check if the user requested to show statistics
 	if userSolution == "stats":
 		statistics()
 		return
 	userSolution = int(userSolution)
+	#Check if the user's solution is correct or false (or only has the false sign)
 	if userSolution == correctSolution:
 		print "Correct!"
 		correct += 1
