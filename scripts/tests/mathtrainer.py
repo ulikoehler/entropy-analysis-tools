@@ -99,6 +99,11 @@ def block():
 			choice(exFunctions)() #Generate an exercise
 		except ValueError:
 			continue #Next exercise
+		except EOFError:
+			#The user typed CTRL+D, so print a newline character (before statistics)
+			#and return to the command line interface
+			print
+			break 
 	deltaTime = time.time() - startTime
 	print "%i exercises took %.3f seconds" % (blockCount, deltaTime)
 
@@ -136,7 +141,10 @@ while 1:
 	elif cmd == "exit":
 		break
 	elif cmd == "start":
-		exLoopFunction()
+		try:
+			exLoopFunction()
+		except KeyboardInterrupt:
+			break #Exit if the user typed CTRL+C or CTRL+D
 	elif cmd == "reset":
 		correct = 0
 		false = 0
