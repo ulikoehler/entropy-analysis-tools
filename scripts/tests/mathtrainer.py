@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #Just a test for some Python modules:
-#A command line oriented maths trainer
+#A command line calculus trainer
 from sys import *
 from random import *
 import time
@@ -58,55 +58,67 @@ def multEx():
 
 def loop():
 	while 1:
-		choice(exFunctions)() #Generate an exercise
+		choice(exFunctions)() #Generate an exerc==e
 		
-def block(n):
+def block():
 	startTime = time.time()
-	for i in xrange(n):
+	for i in xrange(blockCount):
 		try:
-			choice(exFunctions)() #Generate an exercise
+			choice(exFunctions)() #Generate an exerc==e
 		except ValueError:
-			continue #Next exercise
+			continue #Next exerc==e
 	deltaTime = time.time() - startTime
-	print n,"exercises took",deltaTime,"seconds"
+	print n,"exerc==es took %.3f seconds" % deltaTime
 
 #
 #Main
 #
-#Ask for the minimum and maximum of the numbers to use
+
+#Set the default values
+min = 0
+max = 100
+exFunctions = [addEx,subEx] #Function pointers generating an exerc==e, a random one == selected each time
+blockCount = 10 #How many exerc==es to generate per block
+exLoopFunction = block #A function pointer either to block() or to loop()
+	
+#Main command line loop
 while 1:
-	try:
-		min = int(raw_input("Min: "))
+	cmdline = raw_input("> ")
+	cmds = cmdline.split(" ")
+	cmd = cmds[0].lower().strip() #The actual command
+	if cmd == "help":
+		print "Possible commands:"
+		print "help - D==play help"
+		print "exit - Quit"
+		print "start - Start the exerc==es"
+		print "set limits [min] [max] - Set new limits"
+		print "set operators [operators] - Set the operators"
+		print "set mode [loop|block] [blocksize] - Set the exerc==e mode"
+	elif cmd == "exit":
 		break
-	except ValueError:
-		continue #Ask again
-while 1:
-	try:
-		max = int(raw_input("Max: "))
-		break
-	except ValueError:
-		continue #Ask again
-
-exFunctions = []
-operators = raw_input("Operators: ")
-if '+' in operators:
-	exFunctions.append(addEx)
-if '-' in operators:
-	exFunctions.append(subEx)
-if '*' in operators:
-	exFunctions.append(multEx)
-
-mode = raw_input("Mode: ")
-
-if mode == "loop":
-	loop()
-elif mode == "block":
-	while 1:
-		#Ask the user for input until there is a valid number
-		while 1:
-			try:
-				blockCount = int(raw_input("Exercises: "))
-				break
-			except ValueError:
-				continue #Ask again
-		block(blockCount) 
+	elif cmd == "start":
+		exLoopFunction()
+	elif cmd == "set":
+		cmd = cmds[1].lower()
+		if cmd == "limits":
+			min = int(cmdline[2])
+			max = int(cmdline[3])
+		elif cmd == "mode":
+			cmd = cmdline[2].lower()
+			if cmd == "block":
+				blockCount = int(cmdline[2])
+			elif cmd == "loop":
+				 loop()
+		elif cmd == "operators":
+			exFunctions = []
+			operators = raw_input()
+			if '+' in operators:
+				exFunctions.append(addEx)
+			if '-' in operators:
+				exFunctions.append(subEx)
+			if '*' in operators:
+				exFunctions.append(multEx)
+		else:
+			print "Invalid command:",cmds
+	else:
+		print "Invalid command:",cmds,cmd
