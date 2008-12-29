@@ -5,16 +5,13 @@ from sys import *
 from random import *
 import time
 
-#Something like global counters
-correct = 0
-false = 0
-
 def statistics():
 	print "Overall solved:",correct+false
 	print "Correct:",correct
 	print "False:",false
 	
 def addEx():
+	global correct,false
 	op1 = randint(min,max)
 	op2 = randint(min,max)
 	correctSolution = op1 + op2
@@ -32,9 +29,9 @@ def addEx():
 	else:
 		print " False:",correctSolution
 		false += 1
-		
-		
+
 def subEx():
+	global correct,false
 	op1 = randint(min,max)
 	op2 = randint(min,max)
 	correctSolution = op1 - op2
@@ -54,6 +51,7 @@ def subEx():
 		false += 1
 
 def multEx():
+	global correct,false
 	op1 = randint(min,max)
 	op2 = randint(min,max)
 	correctSolution = op1 * op2
@@ -97,6 +95,9 @@ ignoresign = 0
 exFunctions = [addEx,subEx] #Function pointers generating an exercise, a random one == selected each time
 blockCount = 10 #How many exercises to generate per block
 exLoopFunction = block #A function pointer either to block() or to loop()
+#Statistical counters
+correct = 0
+false = 0
 	
 #Main command line loop
 while 1:
