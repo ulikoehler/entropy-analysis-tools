@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 #Just a test for some Python modules:
 #A command line calculus trainer
+from __future__ import with_statement
 from sys import *
 from random import *
 import time
@@ -132,6 +133,12 @@ def block():
 		#Decrement the loop counter
 		i -= 1
 	deltaTime = time.time() - startTime
+	#If enabled, write the average time per exercise
+	#into the statistics file
+	if statisticsFile:
+		with open("~/.mathtrainer","w") as fout:
+			print >> fout, "%.3f" % (deltaTime/blockCount)
+	#Print the statistics into stdout
 	print "%i exercises took %.3f seconds" % (blockCount, deltaTime)
 
 #
@@ -146,6 +153,7 @@ exFunctions = [addEx,subEx] #Function pointers generating an exercise, a random 
 blockCount = 10 #How many exercises to generate per block
 exLoopFunction = block #A function pointer either to block() or to loop()
 repeatOnFalse = 1 #If > 0, don't decrease the block loop counter if the exercise has not been solved correctly
+statisticsFile = 0 #Whether to write the solving times into ~/.mathtrainer
 #Statistical counters
 correct = 0
 false = 0
@@ -167,8 +175,17 @@ while 1:
 		print "set operators [operators] - Set the operators (defaults + and -)"
 		print "set mode [loop|block] [blocksize] - Set the exercise mode (default block, blocksize 10)"
 		print "set repeat-on-false [true|false] - Set whether to accept only correctly-solved exercises (default true)"
+		print "[enable|disable] statistics-file - Set whether to save the time in ~/.mathtrainer (default disables)"
 	elif cmd == "exit":
 		break
+	elif cmd == "enable":
+		cmd = cmds[1].lower()
+		if cmd == "statistics-file":
+			statisticsFile = 1
+	elif cmd == "disable":
+		cmd = cmds[1].lower()
+		if cmd == "statistics-file":
+			statisticsFile = 0
 	elif cmd == "start":
 		try:
 			exLoopFunction()
