@@ -136,7 +136,7 @@ def block():
 	#If enabled, write the average time per exercise
 	#into the statistics file
 	if statisticsFile:
-		with open("~/.mathtrainer","w") as fout:
+		with open(".mathtrainer","w") as fout:
 			print >> fout, "%.3f" % (deltaTime/blockCount)
 	#Print the statistics into stdout
 	print "%i exercises took %.3f seconds" % (blockCount, deltaTime)
