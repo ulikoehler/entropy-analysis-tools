@@ -10,6 +10,8 @@ def statistics():
 	print "Correct:",correct
 	print "False:",false
 	
+#Generates an exercise with + as the operator.
+#Returns 0 if solved correctly, 1 else
 def addEx():
 	#Allow write-access to the global statistics counters
 	global correct,false
@@ -29,13 +31,18 @@ def addEx():
 	if userSolution == correctSolution:
 		print " Correct!"
 		correct += 1
+		return 0 #Success
 	elif ignoresign & userSolution == -correctSolution:
 		print " Correct!"
 		correct += 1
+		return 0 #Success
 	else:
 		print " False:",correctSolution
 		false += 1
+		return 1 #Failure
 
+#Generates an exercise with - as the operator.
+#Returns 0 if solved correctly, 1 else
 def subEx():
 	#Allow write-access to the global statistics counters
 	global correct,false
@@ -55,13 +62,18 @@ def subEx():
 	if userSolution == correctSolution:
 		print " Correct!"
 		correct += 1
+		return 0 #Success
 	elif ignoresign & userSolution == -correctSolution:
 		print " Correct!"
 		correct += 1
+		return 0 #Success
 	else:
 		print " False:",correctSolution
 		false += 1
+		return 1 #Failure
 
+#Generates an exercise with * as the operator.
+#Returns 0 if solved correctly, 1 else
 def multEx():
 	#Allow write-access to the global statistics counters
 	global correct,false
@@ -81,12 +93,15 @@ def multEx():
 	if userSolution == correctSolution:
 		print "Correct!"
 		correct += 1
+		return 0 #Success
 	elif ignoresign & userSolution == -correctSolution:
 		print " Correct!"
 		correct += 1
+		return 0 #Success
 	else:
 		print "False:",correctSolution
 		false += 1
+		return 0 #Failure
 
 def loop():
 	while 1:
@@ -94,16 +109,28 @@ def loop():
 		
 def block():
 	startTime = time.time()
-	for i in xrange(blockCount):
+	#i = loop counter
+	i = blockCount
+	#A for+xrange loop can't be used here because
+	#if repeatOnFalse is set the loop counter must be increased by one.
+	#This is not possible with the standard generators.
+	while i > 0:
 		try:
-			choice(exFunctions)() #Generate an exercise
+			ret = choice(exFunctions)() #Generate an exercise			
+			#If the exercise has not been solved correctly
+			#and if repeatOnFalse is set, generate a new one
+			#without decreasing the loop counter (adding one instead)
+			if ret and repeatOnFalse	:
+				i += 1
 		except ValueError:
 			continue #Next exercise
 		except EOFError:
 			#The user typed CTRL+D, so print a newline character (before statistics)
 			#and return to the command line interface
 			print
-			break 
+			break
+		#Decrement the loop counter
+		i -= 1
 	deltaTime = time.time() - startTime
 	print "%i exercises took %.3f seconds" % (blockCount, deltaTime)
 
@@ -118,6 +145,7 @@ ignoresign = 0
 exFunctions = [addEx,subEx] #Function pointers generating an exercise, a random one == selected each time
 blockCount = 10 #How many exercises to generate per block
 exLoopFunction = block #A function pointer either to block() or to loop()
+repeatOnFalse = 1 #If > 0, don't decrease the block loop counter if the exercise has not been solved correctly
 #Statistical counters
 correct = 0
 false = 0
@@ -138,6 +166,7 @@ while 1:
 		print "set ignore-sign [true|false] - Set whether to ignore the sign (default true)"
 		print "set operators [operators] - Set the operators (defaults + and -)"
 		print "set mode [loop|block] [blocksize] - Set the exercise mode (default block, blocksize 10)"
+		print "set repeat-on-false [true|false] - Set whether to accept only correctly-solved exercises (default true)"
 	elif cmd == "exit":
 		break
 	elif cmd == "start":
@@ -175,7 +204,14 @@ while 1:
 			if cmds[2] == "true":
 				ignoresign = 1
 			elif cmds[2] == "false":
-				ignoresign = 2
+				ignoresign = 0
+			else:
+				print "Invalid value:",cmds[2]
+		elif cmd == "repeat-on-false":
+			if cmds[2] == "true":
+				reapeatOnFalse = 1
+			elif cmds[2] == "false":
+				reapeatOnFalse = 0
 			else:
 				print "Invalid value:",cmds[2]
 		else:
