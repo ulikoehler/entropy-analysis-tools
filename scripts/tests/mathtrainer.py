@@ -210,7 +210,7 @@ while 1:
 				 exLoopFunction = loop
 		elif cmd == "operators":
 			exFunctions = []
-			operators = raw_input()
+			operators = cmdline[2]
 			if '+' in operators:
 				exFunctions.append(addEx)
 			if '-' in operators:
