@@ -57,6 +57,7 @@ analyzeBits (ifstream& f)
 void
 analyzeBitsPerBlock (istream& f, ostream& of)
 {
+    #ifndef NOSTATISTICSDATA
     /**
      * Declare the accumulator sets used to perform a statistical analysis on the data
      * The standard deviation is calculated directly from the variance (sqrt(variance))
@@ -118,6 +119,7 @@ analyzeBitsPerBlock (istream& f, ostream& of)
             tag::weighted_variance,
             tag::weighted_skewness
             >, long double> entropyRecipWeightedAcc;
+    #endif //NOSTATISTICSDATA
     /**
      * Print the header into the output stream
      */
@@ -160,15 +162,17 @@ analyzeBitsPerBlock (istream& f, ostream& of)
             glob1 += chunk1;
             chunk0 = 0;
             chunk1 = 0;
-
-            //Add the values to the accumulators (zeroes are used here)
-            static long double entropy = 0;
-            entropy = shannonEntropy(glob0, glob1, blocksize);
-            entropyAcc(entropy);
-            standardAcc(glob0);
-            entropyWeightedAcc(glob0, weight = entropy);
-            entropyRecipWeightedAcc(glob1, weight = (1/entropy));
+	    #ifndef NOSTATISTICSDATA
+		    //Update the statistical accumulators
+		    static long double entropy = 0;
+		    entropy = shannonEntropy(glob0, glob1, blocksize);
+		    entropyAcc(entropy);
+		    standardAcc(glob0);
+		    entropyWeightedAcc(glob0, weight = entropy);
+		    entropyRecipWeightedAcc(glob1, weight = (1/entropy));
+	    #endif //NOSTATISTICSDATA
         }
+    #ifndef NOSTATISTICSDATA
     /**
      * Print out the statistical indiciators
      */
@@ -218,6 +222,7 @@ analyzeBitsPerBlock (istream& f, ostream& of)
     cout << "   Variance: " << format (ldFormatString) % variance << "\n";
     cout << "   Standard deviation: " << format (ldFormatString) % sqrt (variance) << "\n";
     cout << "   Skewness: " << format (ldFormatString) % extract::weighted_skewness (entropyRecipWeightedAcc) << "\n";
+    #endif //NOSTATISTICSDATA
     
     cout << "Written data to statistics file." << endl;
 }

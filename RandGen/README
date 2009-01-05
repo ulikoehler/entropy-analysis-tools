@@ -1,0 +1,87 @@
+RandGen:
+RandGen is a subproject of entropy analysis tools and mainly consists of three parts:
+
+#########1#########
+The actual RandGen C++ project is a very fast random number generator
+using the TR1::Random (Boost::Random implementation) library.
+All distributions  and nearly all generators are implemented
+(Boost::Random only allows template RNG configuration so (a) special form(s)
+declared in the Boost header file (is|are) used.)
+This is intended to be used for scientific purposes or when you need
+the variety of distributions and/or the generators supported.
+There are some distributions and generators not implemented by Boost::Random
+but implemented in Python (see second section).
+Reference:
+Call with option "-h" or "--help" to see complete usage options.
+
+Supported generators (missing will be added soon):
+	lc (Linear congruential (using minstd_rand))
+        mt19937 (Mersenne Twister 19937)
+        ecuyer1988 (Ecuyer 1988 (Additive Combine))
+        hellekalek1995 (Hellekalek 1995 (Inverse Congruential))
+        kreutzer1986 (Kreutzer 1986 (Inverse Congruential))
+	lf607 (Lagged fibonacci 607)
+	    
+Supported distributions:
+	Uniform small integer distribution (requires limit parameters)
+	Uniform integer distribution (requires limit parameters)
+	Uniform real distribution (requires limit parameters)
+	Triangle distribution (requires 3 distribution parameters [a,b,c])
+	Bernoulli distribution (requires 1 distribution parameter [p])
+	Cauchy distribution (requires 2 distribution parameters [median,sigma])
+	Exponential distribution (requires 1 distribution parameter [lambda])
+	Geometric distribution (requires 1 distribution parameter [p])
+	Normal distribution (requires 2 distribution parameters [mu,sigma])
+	Logarithmic normal distribution (requires 2 distribution parameters [mean,sigma])
+	Uniform on sphere distribution (requires 1 distribution parameter [dimension])
+
+#########2#########
+randgen.py is a python script intended for exactly the same purpose as the C++ pendant.
+It doesn't support so many generators but some exotic distributions not implemented
+by Boost::Random (and the Wichmann-Hill generator).
+Use it as follows:
+randgen.py [Output filename] [Count]
+The default generator is "mt" (Mersenne Twister 19937), but in older Python
+versions this may be Wichmann-Hill because MT is not available/default there.
+(Use Wichmann-Hill only if neccessary)
+Call with option "-h" or "--help" to see additional options.
+Only the Python standard libraries are used.
+
+Reference:
+The parameters are supplied using "-p [param 1]" and "-p [param 2]"
+If you supply too many parameters, the last ones is ignored
+Uniform distribution yields a value N: lower limit <= N < upper limit
+
+Generators ("-g [Generator name]"):
+	"mt" (Mersenne Twister 19937, Default)
+	"sys" (System RNG, not available on all platforms, may be slow)
+	"wh" (Wichmann-Hill)
+Distributions ("-d [Distribution name]"):
+	"uniform"(Uniform, takes 2 integer paramters [lower limit,upper limit])
+	"beta" (Beta distribution, takes 2 floating point parameters [alpha,beta])
+	"exponential" (Exponential distribution, takes one floating point parameter [lambda])
+	"gamma" (Gamma distribution, takes 2 floating point parameters [alpha,beta])
+	"gauss" (Gaussian distribution, takes 2 floating point parameters [mu,sigma])
+	"lognormal" (Logarithmic normal distribution, takes 2 floating point parameters [mu,sigma])
+	"normal" (Normal distribution, takes 2 floating point parameters [mu,sigma])
+	"vonmises" (Von Mises distribution, takes 2 floating point parameters [mu,kappa])
+	"pareto" (Pareto distribution, takes 1 floating point parameter [alpha])
+	"weibull" (Weibull distribution, takes 2 floating point parameters [alpha,beta])
+	
+#########3#########
+Implementations of runtime-configurable generator scripts producing uniform distributed output.
+The scripts are written in Python and Perl and won't need any external libraries and modules except the interpreter.
+All scripts are standalone-implementations.
+See the head of the specific script file to get information about the usage.
+Scripts:
+lc.py: Linear congruential generator
+lagfib.pl: Lagged Fibonacci generator
+	
+###Speed comparison###
+Generally the C++ implementation should be faster,
+especially on startup, even if you compile it before.
+Python (at least the standard interpreter) uses an underlying C implementation for its
+random generator algorithms the actual number generation
+should be approximately equally fast as the C++ implementation.
+If you often use a script, it may be advantageous to precompile them if this is possible in the specific language.
+This will save the initialization time.

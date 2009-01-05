@@ -274,6 +274,7 @@ chna (char* b)
 inline void
 analyzeChunks (istream& f, ostream& of)
 {   
+    #ifndef NOSTATISTICSDATA
     /**
      * Declare the accumulator sets used to perform a statistical analysis on the data
      * The standard deviation is calculated directly from the variance (sqrt(variance))
@@ -335,6 +336,7 @@ analyzeChunks (istream& f, ostream& of)
             tag::weighted_variance,
             tag::weighted_skewness
             >, long double> entropyRecipWeightedAcc;
+    #endif //NOSTATISTICSDATA
     static ulong filesize = 0; //Blocksize is added to this counter each iteration
     boost::function<void(char* b) > fa; //function analyze
     //Select the appropriate function
@@ -417,7 +419,9 @@ analyzeChunks (istream& f, ostream& of)
                     static long double entropy = 0;
                     entropy = shannonEntropy (allOcc, blocksize); //Buffered
                     entropies.insert(pair<ulong, long double>(blocknum, entropy));
-                    entropyAcc(entropy);
+		    #ifndef NOSTATISTICSDATA
+			entropyAcc(entropy);
+		    #endif
                     allOcc.clear ();
                 }
             /**
@@ -425,19 +429,21 @@ analyzeChunks (istream& f, ostream& of)
              */
             printEntropyStatistics (of, entropies);
 
-            static long double variance = 0;
-            variance = extract::variance (entropyAcc);
-            cout << "Statistical indicators:\n";
-            cout << "   Count: " << extract::count (entropyAcc) << "\n";
-            cout << "   Min: " << extract::min (entropyAcc) << "\n";
-            cout << "   Max: " << extract::max (entropyAcc) << "\n";
-            cout << "   Mean: " << format (ldFormatString) % extract::mean (entropyAcc) << "\n";
-            cout << "   Sum: " << format (ldFormatString) % extract::sum (entropyAcc) << "\n";
-            cout << "   Momentum (2): " << format (ldFormatString) % extract::moment < 2 > (entropyAcc) << "\n";
-            cout << "   Momentum (3): " << format (ldFormatString) % extract::moment < 3 > (entropyAcc) << "\n";
-            cout << "   Variance: " << format (ldFormatString) % variance << "\n";
-            cout << "   Standard deviation: " << format (ldFormatString) % sqrt(variance) << "\n";
-            cout << "   Skewness: " << format (ldFormatString) % extract::skewness (entropyAcc) << "\n";
+	    #ifndef NOSTATISTICSDATA
+		    static long double variance = 0;
+		    variance = extract::variance (entropyAcc);
+		    cout << "Statistical indicators:\n";
+		    cout << "   Count: " << extract::count (entropyAcc) << "\n";
+		    cout << "   Min: " << extract::min (entropyAcc) << "\n";
+		    cout << "   Max: " << extract::max (entropyAcc) << "\n";
+		    cout << "   Mean: " << format (ldFormatString) % extract::mean (entropyAcc) << "\n";
+		    cout << "   Sum: " << format (ldFormatString) % extract::sum (entropyAcc) << "\n";
+		    cout << "   Momentum (2): " << format (ldFormatString) % extract::moment < 2 > (entropyAcc) << "\n";
+		    cout << "   Momentum (3): " << format (ldFormatString) % extract::moment < 3 > (entropyAcc) << "\n";
+		    cout << "   Variance: " << format (ldFormatString) % variance << "\n";
+		    cout << "   Standard deviation: " << format (ldFormatString) % sqrt(variance) << "\n";
+		    cout << "   Skewness: " << format (ldFormatString) % extract::skewness (entropyAcc) << "\n";
+	    #endif
         }
     else if (perblock)
         {
@@ -467,6 +473,7 @@ analyzeChunks (istream& f, ostream& of)
                         }
                     fa (buffer);
                     print3ColumnStatistics (of, allOcc, blocknum); //Write this block's data to the output file
+		    #ifndef NOSTATISTICSDATA
                     //Update statistical accumulators
                     static long double entropy = shannonEntropy (allOcc, blocksize); //Buffered
                     entropies.insert (pair<ulong, long double>(blocknum, entropy));
@@ -476,9 +483,11 @@ analyzeChunks (istream& f, ostream& of)
                         entropyWeightedAcc (p.second, weight = entropy);
                         entropyRecipWeightedAcc (p.second, weight = (1 / entropy));
                     }
+		    #endif //NOSTATISTICSDATA
                     //Clear the map
                     allOcc.clear ();
                 }
+	    #ifndef NOSTATISTICSDATA
             /**
              * Print out the statistical indiciators
              */
@@ -528,6 +537,7 @@ analyzeChunks (istream& f, ostream& of)
             cout << "   Variance: " << format (ldFormatString) % variance << "\n";
             cout << "   Standard deviation: " << format (ldFormatString) % sqrt (variance) << "\n";
             cout << "   Skewness: " << format (ldFormatString) % extract::weighted_skewness (entropyRecipWeightedAcc) << "\n";
+	    #endif //NOSTATISTICSDATA
         }
     else
         {

@@ -12,9 +12,24 @@
 #include "output.hpp"
 
 /**
+ * Arbitrary rounding macro
+ * Replaced old Boost::format algorithm.
+ * According to benchmarks/quantize it should make
+ * the calculation about 48 times faster on a Pentium M.
+ * Parameters: n is the number; x is 10^-precision
+ * where precision is the number of digits to round to.
+ * Although it is call rounding it will be more likely cutting
+ * the last digits off.
+ * To avoid performance losses on badly-optimizing compilers,
+ * precalculate n = 10^-precision.
+ */
+#define roundarb(x,n) x-fmod(x,n)
+
+/**
  * Global variables used only in this file
  */
-static string resString;
+static double prec; //= 10^-res
+static string resString; //TODO check if needed
 
 //Forward declarations
 template<class T> void analyzeNumericData (istream& fin, ostream& fout);
@@ -133,48 +148,48 @@ public:
 };
 
 /**
- * Builds a format string for storing numeric values as string int the map
+ * Rounds floating point numbers to res digits
+ * and returns integers.
  */
 template<class T>
-class _buildFormatString
+class _fitvalue 
 {
 public:
-    static inline string
-    buildFormatString ()
+    static inline T
+    fitvalue(T& p)
     {
-        return "%i";
+        return p;
     }
 };
 //Overrides
 
-template<> class _buildFormatString<double>
+template<> class _fitvalue<double>
 {
 public:
-    static inline string
-    buildFormatString ()
+    static inline double
+    fitvalue(double& p)
     {
-        return ("%." + resString + "f");
+        return roundarb(p,prec);
     }
 };
 
-template<> class _buildFormatString<long double>
+template<> class _fitvalue<long double>
 {
 public:
-
-    static inline string
-    buildFormatString ()
+    static inline long double
+    fitvalue(long double& p)
     {
-        return "%." + resString + "Lf";
+        return roundarb(p,prec);
     }
 };
 
-template<> class _buildFormatString<float>
+template<> class _fitvalue<float>
 {
 public:
-    static inline string
-    buildFormatString ()
+    static inline float
+    fitvalue(float& p)
     {
-        return "%." + resString + "f";
+        return roundarb(p,prec);
     }
 };
 
@@ -185,6 +200,7 @@ template<class T>
 void
 analyzeNumericData (istream& fin, ostream& fout)
 {
+    #ifndef NOSTATISTICSDATA
     static accumulator_set<T, features<
             //Standard algebra
             tag::count,
@@ -198,14 +214,16 @@ analyzeNumericData (istream& fin, ostream& fout)
             tag::moment < 3 >,
             tag::skewness
             >, void > accumulator;
+    #endif //NOSTATISTICSDATA
 
-    map<string, ulong> data;
-    pair<string, ulong> dataPair;
+    map<T, ulong> data;
+    pair<T, ulong> dataPair;
     /**
-     * Build the format string and caching variables
+     * Precalculate some parameters
      */
     static string formatString = _buildFormatString<T>::buildFormatString();
-    static string resString = lexical_cast<string>(res); //Cached
+    static string resString = lexical_cast<string>(res); //Cached //TODO check if needed
+    prec = pow(10,-res);
     /**
      * Read the data from the file and process it
      */
@@ -213,12 +231,14 @@ analyzeNumericData (istream& fin, ostream& fout)
     while (fin.good ())
         {
             fin >> buffer;
-            accumulator (buffer);
+	    #ifndef NOSTATISTICSDATA
+		accumulator (buffer);
+	    #endif //NOSTATISTICSDATA
             /**
              * Round the value to the specified resolution
              * (res digits after the decimal point)
              */
-            string roundedString = str(format (formatString) % _prepVal<T>::prepVal(buffer));
+            T rounded = str(format (formatString) % _prepVal<T>::prepVal(buffer));
             if (data.count (roundedString) == 0)
                 {
                     data[roundedString] = 1;
@@ -237,22 +257,24 @@ analyzeNumericData (istream& fin, ostream& fout)
         fout << dataPair.first << separator << dataPair.second << "\n";
     }
     cout << "Written data to statistics file\n";
-    /**
-     * Print out the statistical indicators
-     */
-    static long double variance = 0;
-    variance = extract::variance (accumulator);
-    cout << "Statistical indicators:\n";
-    cout << "   Count: " << extract::count (accumulator) << "\n";
-    cout << "   Min: " << extract::min (accumulator) << "\n";
-    cout << "   Max: " << extract::max (accumulator) << "\n";
-    cout << "   Mean: " << format (ldFormatString) % extract::mean (accumulator) << "\n";
-    cout << "   Sum: " << format (ldFormatString) % extract::sum (accumulator) << "\n";
-    cout << "   Momentum (2): " << format (ldFormatString) % extract::moment < 2 > (accumulator) << "\n";
-    cout << "   Momentum (3): " << format (ldFormatString) % extract::moment < 3 > (accumulator) << "\n";
-    cout << "   Variance: " << format (ldFormatString) % variance << "\n";
-    cout << "   Standard deviation: " << format (ldFormatString) % sqrt (variance) << "\n";
-    cout << "   Skewness: " << format (ldFormatString) % extract::skewness (accumulator) << "\n";
+    #ifndef NOSTATISTICSDATA
+	    /**
+	     * Print out the statistical indicators
+	     */
+	    static long double variance = 0;
+	    variance = extract::variance (accumulator);
+	    cout << "Statistical indicators:\n";
+	    cout << "   Count: " << extract::count (accumulator) << "\n";
+	    cout << "   Min: " << extract::min (accumulator) << "\n";
+	    cout << "   Max: " << extract::max (accumulator) << "\n";
+	    cout << "   Mean: " << format (ldFormatString) % extract::mean (accumulator) << "\n";
+	    cout << "   Sum: " << format (ldFormatString) % extract::sum (accumulator) << "\n";
+	    cout << "   Momentum (2): " << format (ldFormatString) % extract::moment < 2 > (accumulator) << "\n";
+	    cout << "   Momentum (3): " << format (ldFormatString) % extract::moment < 3 > (accumulator) << "\n";
+	    cout << "   Variance: " << format (ldFormatString) % variance << "\n";
+	    cout << "   Standard deviation: " << format (ldFormatString) % sqrt (variance) << "\n";
+	    cout << "   Skewness: " << format (ldFormatString) % extract::skewness (accumulator) << "\n";
+    #endif //NOSTATISTICSDATA
 }
 
 #endif	/* _ANALYZE_NUMERIC_HPP */
