@@ -205,7 +205,7 @@ analyzeNumericData (istream& fin, ostream& fout)
      * Build the format string and caching variables
      */
     static string formatString = _buildFormatString<T>::buildFormatString();
-    resString = lexical_cast<string>(res); //Cached
+    static string resString = lexical_cast<string>(res); //Cached
     /**
      * Read the data from the file and process it
      */

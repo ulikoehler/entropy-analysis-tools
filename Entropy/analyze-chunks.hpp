@@ -134,7 +134,7 @@ print3ColumnStatistics (ostream& of, map<val_t, ulong>& occ, ulong blockNum = 0)
                     }
                 default:
                     {
-                        writeBinData < 64 > (of, occ, blockNum);
+                        writeBinData < 8 > (of, occ, blockNum);
                         break;
                     }
                 }
