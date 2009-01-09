@@ -5,6 +5,7 @@ The project consist of the following subprojects:
 -RandGen; Fast random number generator using Boost::Random (TR1 canditate). Supports multiple generators and distributions.
 		There are also some runtime-configurable generator scripts in the scripts directory.
 -TextAnalyzer: Tool for statistical cryptographic text analysis. Contains a python script for text pattern scoring (To be extended).
+-EasyBotan: Provides a high level C++ cryptography interface using Botan and a command line tool using it. Also provides functions suitable for testing the other tools
 
 Compile using NetBeans or directly using the Makefile.
 Compilation may take very long (caused by the very high optimizing level).
