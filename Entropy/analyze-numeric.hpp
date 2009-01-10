@@ -21,14 +21,26 @@
  * Although it is call rounding it will be more likely cutting
  * the last digits off.
  * To avoid performance losses on badly-optimizing compilers,
- * precalculate n = 10^-precision.
+ * remember precalculate n = 10^-precision.
  */
-#define roundarb(x,n) x-fmod(x,n)
+#define roundarb(x,n) x-std::fmod(x,n)
 
 /**
- * Global variables used only in this file
+ * We need copies of the precision of each type
+ * to avoid ambigous constructs with std::fmod
+ * (fmod is taking two parameters of the same type and is call in a template function)
  */
-static double prec; //= 10^-res
+static double dPrec; //= 10^-res, as double
+static float fPrec; //= 10^-res, as float
+static long double ldPrec; //= 10^-res, as long double
+
+inline void setPrecision(uint digits)
+{
+    ldPrec = pow(10,-digits);
+    dPrec = pow(10,-digits);
+    fPrec = pow(10,-digits);
+}
+
 static string resString; //TODO check if needed
 
 //Forward declarations
@@ -38,7 +50,6 @@ template<class T> void analyzeNumericData (istream& fin, ostream& fout);
  * Top-level numeric analysis function: Determinates what type to use and
  * calls the main analyzator function with the appropriate tmeplate argument
  */
-
 void
 analyzeNumeric (istream& fin, ostream& fout)
 {
@@ -152,44 +163,44 @@ public:
  * and returns integers.
  */
 template<class T>
-class _fitvalue 
+class _roundvalue
 {
 public:
     static inline T
-    fitvalue(T& p)
+    roundvalue(T& p)
     {
         return p;
     }
 };
 //Overrides
 
-template<> class _fitvalue<double>
+template<> class _roundvalue<double>
 {
 public:
     static inline double
-    fitvalue(double& p)
+    roundvalue(double& p)
     {
-        return roundarb(p,prec);
+        return roundarb(p,dPrec);
     }
 };
 
-template<> class _fitvalue<long double>
+template<> class _roundvalue<long double>
 {
 public:
     static inline long double
-    fitvalue(long double& p)
+    roundvalue(long double& p)
     {
-        return roundarb(p,prec);
+        return roundarb(p,ldPrec);
     }
 };
 
-template<> class _fitvalue<float>
+template<> class _roundvalue<float>
 {
 public:
     static inline float
-    fitvalue(float& p)
+    roundvalue(float& p)
     {
-        return roundarb(p,prec);
+        return roundarb((float)p,fPrec);
     }
 };
 
@@ -219,11 +230,9 @@ analyzeNumericData (istream& fin, ostream& fout)
     map<T, ulong> data;
     pair<T, ulong> dataPair;
     /**
-     * Precalculate some parameters
+     * Precalculate the precision
      */
-    static string formatString = _buildFormatString<T>::buildFormatString();
-    static string resString = lexical_cast<string>(res); //Cached //TODO check if needed
-    prec = pow(10,-res);
+    setPrecision (res);
     /**
      * Read the data from the file and process it
      */
@@ -238,14 +247,14 @@ analyzeNumericData (istream& fin, ostream& fout)
              * Round the value to the specified resolution
              * (res digits after the decimal point)
              */
-            T rounded = str(format (formatString) % _prepVal<T>::prepVal(buffer));
-            if (data.count (roundedString) == 0)
+            T rounded = _roundvalue<T>::roundvalue(buffer);
+            if (data.count (rounded) == 0)
                 {
-                    data[roundedString] = 1;
+                    data[rounded] = 1;
                 }
             else
                 {
-                    data[roundedString]++;
+                    data[rounded]++;
                 }
         }
 
