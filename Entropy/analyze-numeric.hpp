@@ -81,82 +81,11 @@ analyzeNumeric (istream& fin, ostream& fout)
         {
             analyzeNumericData<double>(fin, fout);
         }
-    else //(vm.count("ld")) //Long double
+    else //if(vm.count("ld")) //Long double
         {
             analyzeNumericData<long double>(fin, fout);
         }
 }
-
-/**
- * Rounds a value to a arbitrary number of decimal digits.
- * Contains only one function, template class is overridden for types with specific functions
- */
-inline long double
-around (long double n, unsigned e)
-{
-    return floor (n * pow (10., e) + .5) / pow (10., e);
-}
-//Manual overrides
-inline double
-around (double n, unsigned e)
-{
-    return floor (n * pow (10., e) + .5) / pow (10., e);
-}
-inline float
-around (float n, unsigned e)
-{
-    return floor (n * pow (10., e) + .5) / pow (10., e);
-}
-
-/**
- * Prepares a value for storing in the map as a key
- * Returns either a rounded value or the input itself depending on
- * the template-supplied type
- */
-template<class T>
-class _prepVal
-{
-public:
-    static inline T
-    prepVal (T in)
-    {
-        return in;
-    }
-};
-//Overrides
-
-template<> class _prepVal<double>
-{
-public:
-
-    static inline double
-    prepVal (double in)
-    {
-        return around (in, res);
-    }
-};
-
-template<> class _prepVal<long double>
-{
-public:
-
-    static inline long double
-    prepVal (long double in)
-    {
-        return around (in, res);
-    }
-};
-
-template<> class _prepVal<float>
-{
-public:
-
-    static inline float
-    prepVal (float in)
-    {
-        return around (in, res);
-    }
-};
 
 /**
  * Rounds floating point numbers to res digits
