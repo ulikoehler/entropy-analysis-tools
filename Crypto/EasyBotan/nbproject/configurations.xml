@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="51">
+  <logicalFolder name="root" displayName="root" projectFiles="true">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header-Dateien"
+                   projectFiles="true">
+      <itemPath>analysis.hpp</itemPath>
+      <itemPath>globals.hpp</itemPath>
+      <itemPath>highlevel.hpp</itemPath>
+      <itemPath>md.hpp</itemPath>
+      <itemPath>rsa.hpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Quelldateien"
+                   projectFiles="true">
+      <itemPath>main.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Ressourcendateien"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Wichtige Dateien"
+                   projectFiles="false">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <compilerSet>GNU|GNU</compilerSet>
+        <platform>2</platform>
+      </toolsSet>
+      <compileType>
+        <linkerTool>
+          <linkerLibItems>
+          </linkerLibItems>
+          <commandLine>-lbotan -lboost_program_options-gcc43-mt</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="analysis.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="globals.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="highlevel.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="main.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="md.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="rsa.hpp">
+        <itemTool>3</itemTool>
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <compilerSet>GNU|GNU</compilerSet>
+        <platform>2</platform>
+      </toolsSet>
+      <compileType>
+        <cCompilerTool>
+          <developmentMode>5</developmentMode>
+        </cCompilerTool>
+        <ccCompilerTool>
+          <developmentMode>5</developmentMode>
+        </ccCompilerTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <linkerTool>
+          <linkerLibItems>
+          </linkerLibItems>
+          <commandLine>-lbotan</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="analysis.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="globals.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="highlevel.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="main.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="md.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="rsa.hpp">
+        <itemTool>3</itemTool>
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
