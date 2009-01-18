@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <boost/program_options.hpp>
 
+#include "ecdsa.hpp"
+
 using namespace boost;
 using namespace std;
 
@@ -25,7 +27,8 @@ main (int argc, char** argv)
 
     if(tlAction == "ec")
         {
-            
+            initECDSA ();
+            generateECDSAKeyPair (argc, argv);
         }
     
 

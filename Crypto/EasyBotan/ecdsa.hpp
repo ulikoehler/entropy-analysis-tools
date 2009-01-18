@@ -12,34 +12,44 @@
 
 /**
  * Name-OID-Associations
+ * A hashmap is used here to make it a bit faster because of decreased lookup complexity
  */
-#define Prime256v1 "1.2.840.10045.3.1.7"
-#define Prime239v3 "1.2.840.10045.3.1.6"
-#define Prime239v2 "1.2.840.10045.3.1.5"
-#define Prime239v1 "1.2.840.10045.3.1.4"
-#define Prime192v3 "1.2.840.10045.3.1.3"
-#define Prime192v2 "1.2.840.10045.3.1.2"
-#define Prime192v1 "1.2.840.10045.3.1.1"
-#define brainpoolP512r1 "1.3.36.3.3.2.8.1.1.13"
-#define brainpoolP384r1 "1.3.36.3.3.2.8.1.1.11"
-#define brainpoolP320r1 "1.3.36.3.3.2.8.1.1.9"
-#define brainpoolP256r1 "1.3.36.3.3.2.8.1.1.7"
-#define brainpoolP224r1 "1.3.36.3.3.2.8.1.1.5"
-#define brainpoolP192r1 "1.3.36.3.3.2.8.1.1.3"
-#define brainpoolP160r1 "1.3.36.3.3.2.8.1.1.1"
-#define NISTP521 "1.3.6.1.4.1.8301.3.1.2.9.0.38"
-#define secp521r1 "1.3.132.0.35"
-#define secp384r1 "1.3.132.0.34"
-#define secp256k1 "1.3.132.0.10"
-#define secp224r1 "1.3.132.0.33"
-#define secp224k1 "1.3.132.0.32"
-#define secp192k1 "1.3.132.0.31"
-#define secp160r2 "1.3.132.0.30"
-#define secp160k1 "1.3.132.0.9"
-#define secp128r2 "1.3.132.0.29"
-#define secp128r1 "1.3.132.0.28"
-#define secp112r2 "1.3.132.0.7"
-#define secp112r1 "1.3.132.0.6"
+static unordered_map<string, string> oids;
+
+/**
+ * Must be called before a main signing function call.
+ * initizalizes the oid map.
+ */
+inline void initECDSA()
+{
+    oids["Prime256v1"] = "1.2.840.10045.3.1.7";
+    oids["Prime239v3"] = "1.2.840.10045.3.1.6";
+    oids["Prime239v2"] = "1.2.840.10045.3.1.5";
+    oids["Prime239v1"] = "1.2.840.10045.3.1.4";
+    oids["Prime192v3"] = "1.2.840.10045.3.1.3";
+    oids["Prime192v2"] = "1.2.840.10045.3.1.2";
+    oids["Prime192v1"] = "1.2.840.10045.3.1.1";
+    oids["brainpoolP512r1"] = "1.3.36.3.3.2.8.1.1.13";
+    oids["brainpoolP384r1"] = "1.3.36.3.3.2.8.1.1.11";
+    oids["brainpoolP320r1"] = "1.3.36.3.3.2.8.1.1.9";
+    oids["brainpoolP256r1"] = "1.3.36.3.3.2.8.1.1.7";
+    oids["brainpoolP224r1"] = "1.3.36.3.3.2.8.1.1.5";
+    oids["brainpoolP192r1"] = "1.3.36.3.3.2.8.1.1.3";
+    oids["brainpoolP160r1"] = "1.3.36.3.3.2.8.1.1.1";
+    oids["NISTP521"] = "1.3.6.1.4.1.8301.3.1.2.9.0.38";
+    oids["secp521r1"] = "1.3.132.0.35";
+    oids["secp384r1"] = "1.3.132.0.34";
+    oids["secp256k1"] = "1.3.132.0.10";
+    oids["secp224r1"] = "1.3.132.0.33";
+    oids["secp224k1"] = "1.3.132.0.32";
+    oids["secp192k1"] = "1.3.132.0.31";
+    oids["secp160r2"] = "1.3.132.0.30";
+    oids["secp160k1"] = "1.3.132.0.9";
+    oids["secp128r2"] = "1.3.132.0.29";
+    oids["secp128r1"] = "1.3.132.0.28";
+    oids["secp112r2"] = "1.3.132.0.7";
+    oids["secp112r1"] = "1.3.132.0.6";
+}
 
 void ecMain(int argc, char** argv)
 {
@@ -58,9 +68,9 @@ void ecMain(int argc, char** argv)
             /**
              * Check which curve to use
              */
-            string oid;
             string name(strlwr(argv[3]));
-            if(name == "prime256v1")
+            string oid = oids[name];
+
 
         }
 }
@@ -68,29 +78,31 @@ void ecMain(int argc, char** argv)
 /**
  * Toplevel function to generate an ECDSA key
  */
-void generateECDSAKey(string& out, string& oid)
+void generateECDSAKeyPair(string& out, string& oid)
 {
     fstream pubout(out, fstream::out);
     fstream privout(out, fstream::out);
-    
-    generateECDSAKey(pubout, privout, Prime256v1);
+
+    //Call a lower level function to generate the key
+    generateECDSAKeyPair(pubout, privout, Prime256v1);
+
+    pubout.close();
+    privout.close();
 }
 
-
+/**
+ * Low-level signing function
+ * default OID is for curve Prime256v1
+ */
 void
-generateECDSAKey (ofstream& pubout, ofstream& privout, string& oid = Prime256v1)
+generateECDSAKeyPair (ofstream& pubout, ofstream& privout, string& oid = "1.2.840.10045.3.1.7")
 {
     //Check which key type to use
-    EC_Domain_Params params = get_EC_Dom_Pars_by_oid (oid);
+    EC_Domain_Params params = get_EC_Dom_Pars_by_oid (oid);e
     ECDSA_PrivateKey privKey (rng, params);
     //Write the key to the specified file
     pubout << X509::PEM_encode (privKey);
     privout << PKCS8::PEM_encode (privKey);
-}
-
-void signECDSA ()
-{
-
 }
 
 #endif	/* _ECDSA_HPP */

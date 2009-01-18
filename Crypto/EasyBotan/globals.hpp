@@ -11,11 +11,13 @@
 #include <fstream> //Include iostream and string
 #include <botan/botan.h>
 #include <boost/shared_ptr.hpp>
+#include <boost/unordered_set.hpp>
 
 using namespace Botan;
 AutoSeededRNG* rng;
 
-#include <md.hpp>
+#include "md.hpp"
+#include "ecdsa.hpp"
 
 #endif	/* _GLOBALS_HPP */
 
