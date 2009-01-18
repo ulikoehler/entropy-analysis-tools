@@ -8,9 +8,8 @@
 #include "globals.hpp"
 
 /**
- * Case-insentive string comparison algorithm
- * Range of accepted template parameters is defined by boost::to_lower_copy tolerance.
- * Preferrably used with string
+ * Case-insentive string hashing algorithms
+ * Possibly to work with strings only
  */
 template <class T> struct equal_to_case_insensitive : binary_function <T, T, bool>
 {
@@ -20,11 +19,20 @@ template <class T> struct equal_to_case_insensitive : binary_function <T, T, boo
     }
 };
 
+template<typename T>
+struct case_insensitive_hash : public std::unary_function<T, std::size_t> {
+  std::size_t operator()(T const& x) const
+  {
+      static boost::hash<T> hash;
+      return hash(to_lower_copy<T>(x));
+  }
+};
+
 /**
  * Name-OID-Associations
  * A hashmap is used here to make it a bit faster because of decreased lookup complexity
  */
-typedef unordered_map<string, string, boost::hash<string>, equal_to_case_insensitive<string> > oid_map;
+typedef unordered_map<string, string, case_insensitive_hash<string>, equal_to_case_insensitive<string> > oid_map;
 static oid_map oids;
 
 /**
@@ -97,9 +105,8 @@ void ecdsaMain(int argc, char** argv)
              */
             //TODO maybe we can optimize out some of these declarations
             string out = argv[4];
-            string curveName = argv[3];
-            to_lower(curveName);
-            generateECDSAKeyPair (out, oids[curveName]);
+            //string curveName = ;
+            generateECDSAKeyPair (out, oids[argv[3]]);
         }
     else if(subAction == "list")
         {
