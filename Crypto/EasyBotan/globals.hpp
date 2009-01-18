@@ -10,8 +10,10 @@
 
 #include <fstream> //Include iostream and string
 #include <botan/botan.h>
+#include <boost/shared_ptr.hpp>
 
 using namespace Botan;
+AutoSeededRNG* rng;
 
 #include <md.hpp>
 

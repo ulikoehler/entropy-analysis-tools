@@ -18,6 +18,17 @@ int
 main (int argc, char** argv)
 {
     Botan::LibraryInitializer init;
+    AutoSeededRNG
+
+    string tlAction(argv[1]); //Toplevel action
+    argc -= 2;//Program name and toplevel action
+
+    if(tlAction == "ec")
+        {
+            
+        }
+    
+
     return (EXIT_SUCCESS);
 }
 
