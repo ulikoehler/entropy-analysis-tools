@@ -28,6 +28,8 @@ OBJECTDIR=build/Debug/${PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/md.o \
+	${OBJECTDIR}/ecdsa.o \
 	${OBJECTDIR}/main.o
 
 # C Compiler Flags
@@ -49,7 +51,15 @@ LDLIBSOPTIONS=
 
 dist/Debug/${PLATFORM}/easybotan: ${OBJECTFILES}
 	${MKDIR} -p dist/Debug/${PLATFORM}
-	${LINK.cc} -lbotan -lboost_program_options-gcc43-mt -o dist/Debug/${PLATFORM}/easybotan ${OBJECTFILES} ${LDLIBSOPTIONS} 
+	${LINK.cc} -lbotan -o dist/Debug/${PLATFORM}/easybotan ${OBJECTFILES} ${LDLIBSOPTIONS} 
+
+${OBJECTDIR}/md.o: md.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	$(COMPILE.cc) -g -o ${OBJECTDIR}/md.o md.cpp
+
+${OBJECTDIR}/ecdsa.o: ecdsa.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	$(COMPILE.cc) -g -o ${OBJECTDIR}/ecdsa.o ecdsa.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}

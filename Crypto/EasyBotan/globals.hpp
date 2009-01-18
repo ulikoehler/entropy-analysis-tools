@@ -8,13 +8,22 @@
 #ifndef _GLOBALS_HPP
 #define	_GLOBALS_HPP
 
-#include <fstream> //Include iostream and string
+#include <fstream>
 #include <botan/botan.h>
 #include <boost/shared_ptr.hpp>
-#include <boost/unordered_set.hpp>
+#include <boost/unordered_map.hpp>
+#include <boost/algorithm/string/case_conv.hpp> //Contains to_lowercase(string)
+#include <botan/botan.h>
+#include <botan/ecdsa.h>
+#include <botan/pubkey.h>
+#include <botan/look_pk.h>
+#include <memory> //Needed by botan
+#include <iostream>
+#include <string>
 
+using namespace std;
+using namespace boost;
 using namespace Botan;
-AutoSeededRNG* rng;
 
 #include "md.hpp"
 #include "ecdsa.hpp"

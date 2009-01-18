@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   md.hpp
  * Author: uli
  *
@@ -6,7 +6,7 @@
  *
  * Created on 9. Januar 2009, 22:35
  */
-#include <globals.hpp>
+#include "globals.hpp"
 
 #ifndef _MD_HPP
 #define	_MD_HPP
@@ -15,41 +15,21 @@
  * Returns the hexadecimal representation of the input hashed
  * using the specified algorithm
  */
-string hash(string algorithm, string input)
-{
-    Pipe hashPipe(new Chainnew Hash_Filter(algorithm), new Hex_Encoder);
-    hashPipe.process_msg(input);
-    hash = hashPipe.read_all_as_string(0);
-}
+string hash(string& algorithm, string& input);
 
 /**
  * For interal use:
  * Hashes the input string using the specifiedm algorithm and returns the result as an
  * SecureVector<byte>
  */
-SecureVector<byte> hashRaw(string algorithm, string input)
-{
-    Pipe hashPipe(new Chainnew Hash_Filter(algorithm));
-    hashPipe.process_msg(input);
-    SecureVector<byte> ret = hashPipe.read_all(0);
-    return ret;
-}
+SecureVector<byte> hashRaw(string& algorithm, string& input);
 
 /**
  * For interal use:
  * Hashes the input string using the specifiedm algorithm and returns the result as an
  * SecureVector<byte>
  */
-SecureVector<byte> hashRawWithSalt(string algorithm, string input, SecureVector<byte> salt)
-{
-    Pipe hashPipe(new Chainnew Hash_Filter(algorithm));
-    hashPipe.start_msg ();
-    hashPipe.write(salt);
-    hashPipe.write(input);
-    hashPipe.end_msg ();
-    SecureVector<byte> ret = hashPipe.read_all(0);
-    return ret;
-}
+SecureVector<byte> hashRawWithSalt(string& algorithm, string& input, SecureVector<byte> salt);
 
 #endif	/* _MD_HPP */
 

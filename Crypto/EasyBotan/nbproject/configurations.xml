@@ -14,7 +14,9 @@
     <logicalFolder name="SourceFiles"
                    displayName="Quelldateien"
                    projectFiles="true">
+      <itemPath>ecdsa.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
+      <itemPath>md.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Ressourcendateien"
@@ -38,11 +40,14 @@
         <linkerTool>
           <linkerLibItems>
           </linkerLibItems>
-          <commandLine>-lbotan -lboost_program_options-gcc43-mt</commandLine>
+          <commandLine>-lbotan</commandLine>
         </linkerTool>
       </compileType>
       <item path="analysis.hpp">
         <itemTool>3</itemTool>
+      </item>
+      <item path="ecdsa.cpp">
+        <itemTool>1</itemTool>
       </item>
       <item path="ecdsa.hpp">
         <itemTool>3</itemTool>
@@ -54,6 +59,9 @@
         <itemTool>3</itemTool>
       </item>
       <item path="main.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="md.cpp">
         <itemTool>1</itemTool>
       </item>
       <item path="md.hpp">
@@ -88,6 +96,9 @@
       <item path="analysis.hpp">
         <itemTool>3</itemTool>
       </item>
+      <item path="ecdsa.cpp">
+        <itemTool>1</itemTool>
+      </item>
       <item path="ecdsa.hpp">
         <itemTool>3</itemTool>
       </item>
@@ -98,6 +109,9 @@
         <itemTool>3</itemTool>
       </item>
       <item path="main.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="md.cpp">
         <itemTool>1</itemTool>
       </item>
       <item path="md.hpp">

@@ -28,6 +28,8 @@ OBJECTDIR=build/Release/${PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/md.o \
+	${OBJECTDIR}/ecdsa.o \
 	${OBJECTDIR}/main.o
 
 # C Compiler Flags
@@ -50,6 +52,14 @@ LDLIBSOPTIONS=
 dist/Release/${PLATFORM}/easybotan: ${OBJECTFILES}
 	${MKDIR} -p dist/Release/${PLATFORM}
 	${LINK.cc} -lbotan -o dist/Release/${PLATFORM}/easybotan ${OBJECTFILES} ${LDLIBSOPTIONS} 
+
+${OBJECTDIR}/md.o: md.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	$(COMPILE.cc) -O2 -o ${OBJECTDIR}/md.o md.cpp
+
+${OBJECTDIR}/ecdsa.o: ecdsa.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	$(COMPILE.cc) -O2 -o ${OBJECTDIR}/ecdsa.o ecdsa.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
