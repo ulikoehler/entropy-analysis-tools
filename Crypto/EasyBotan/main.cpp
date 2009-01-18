@@ -17,7 +17,7 @@ main (int argc, char** argv)
     string tlAction(argv[1]); //Toplevel action
     argc -= 2;//Program name and toplevel action
 
-    if(tlAction == "ec")
+    if(tlAction == "ecdsa")
         {
             initECDSA();
             ecdsaMain(argc, argv);

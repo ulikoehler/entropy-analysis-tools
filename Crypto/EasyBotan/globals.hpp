@@ -13,6 +13,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/algorithm/string/case_conv.hpp> //Contains to_lowercase(string)
+#include <boost/foreach.hpp>
 #include <botan/botan.h>
 #include <botan/ecdsa.h>
 #include <botan/pubkey.h>
@@ -20,6 +21,8 @@
 #include <memory> //Needed by botan
 #include <iostream>
 #include <string>
+
+#define foreach BOOST_FOREACH
 
 using namespace std;
 using namespace boost;
