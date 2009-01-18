@@ -14,19 +14,19 @@
  * Must be called before a main signing function call.
  * Initizalizes the oid map.
  */
-void initECDSA();
+void initECDSA ();
 
 /**
  * ECDSA signing function called by main
  * Argc decreased by the number options already parsed
  * and argv must be passed
  */
-void ecdsaMain(int argc, char** argv);
+void ecdsaMain (int argc, char** argv);
 
 /**
  * Toplevel function to generate an ECDSA key
  */
-void generateECDSAKeyPair(string& out, string& oid);
+void generateECDSAKeyPair (string& out, string& oid);
 
 /**
  * Low-level signing function

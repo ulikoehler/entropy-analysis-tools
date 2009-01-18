@@ -7,25 +7,32 @@
 
 #include "globals.hpp"
 
+///////////////////////
+//////Algorithms///////
+///////////////////////
+
 /**
  * Case-insentive string hashing algorithms
  * Possibly to work with strings only
  */
 template <class T> struct equal_to_case_insensitive : binary_function <T, T, bool>
 {
+
     bool operator() (const T& x, const T & y) const
     {
-        return to_lower_copy<T>(x) == to_lower_copy<T>(y);
+        return to_lower_copy<T > (x) == to_lower_copy<T > (y);
     }
 };
 
 template<typename T>
-struct case_insensitive_hash : public std::unary_function<T, std::size_t> {
-  std::size_t operator()(T const& x) const
-  {
-      static boost::hash<T> hash;
-      return hash(to_lower_copy<T>(x));
-  }
+struct case_insensitive_hash : public std::unary_function<T, std::size_t>
+{
+
+    std::size_t operator()(T const& x) const
+    {
+        static boost::hash<T> hash;
+        return hash (to_lower_copy<T > (x));
+    }
 };
 
 /**
@@ -39,7 +46,8 @@ static oid_map oids;
  * Must be called before a main signing function call.
  * initizalizes the oid map.
  */
-void initECDSA()
+void
+initECDSA ()
 {
     /**
      * Note that the keys are compared case-insensitive so you don't have to write new curve names lowercase
@@ -76,29 +84,32 @@ void initECDSA()
 /**
  * Lists the supported curves
  */
-inline void listSupportedCurves()
+inline void
+listSupportedCurves ()
 {
-    foreach(oid_map::value_type i, oids)
+
+    foreach (oid_map::value_type i, oids)
     {
-        cout<< i.first <<"\n";
+        cout << i.first << "\n";
     }
 }
 
-void ecdsaMain(int argc, char** argv)
+void
+ecdsaMain (int argc, char** argv)
 {
     string subAction = argv[2]; //Second level action
     argc--;
-    if(subAction == "generate" || subAction == "gen")
+    if (subAction == "generate" || subAction == "gen")
         {
             /**
              * Check if there are enough arguments for:
              * -curve
              * -output file
              */
-            if(argc < 2)
+            if (argc < 2)
                 {
                     cout << "Not enough arguments!" << endl;
-                    exit(1);
+                    exit (1);
                 }
             /**
              * Check which curve to use
@@ -108,26 +119,30 @@ void ecdsaMain(int argc, char** argv)
             //string curveName = ;
             generateECDSAKeyPair (out, oids[argv[3]]);
         }
-    else if(subAction == "list")
+    else if (subAction == "list")
         {
             listSupportedCurves ();
         }
 }
 
+///////////////////////
+////Key Generation/////
+///////////////////////
 
 /**
  * Toplevel function to generate an ECDSA key
  */
-void generateECDSAKeyPair(string& out, string& oid)
+void
+generateECDSAKeyPair (string& out, string& oid)
 {
-    ofstream pubout((out + ".pub").c_str());
-    ofstream privout((out + ".priv").c_str());
+    ofstream pubout ((out + ".pub").c_str ());
+    ofstream privout ((out + ".priv").c_str ());
 
     //Call a lower level function to generate the key
-    generateECDSAKeyPair(pubout, privout, oid);
+    generateECDSAKeyPair (pubout, privout, oid);
 
-    pubout.close();
-    privout.close();
+    pubout.close ();
+    privout.close ();
 }
 
 /**
@@ -148,4 +163,43 @@ generateECDSAKeyPair (ofstream& pubout, ofstream& privout, string& oid)
     cout << "ECDSA key pair generation finished\n";
 }
 
+///////////////////////
+///////Signing/////////
+///////////////////////
+
+/**
+ * A wrapper function to read a PKCS8 encoded private ECDSA key from a std::istream (maybe ifstream)
+ * @param filename The name of the file to read the encoded key from
+ */
+PrivateKey readPrivateKey(string& filename)
+{
+    DataSource_Stream in(filename);
+    return PKCS8::load_key (in);
+}
+
+/**
+ * A wrapper function to read a PKCS8 encoded private ECDSA key from a std::istream (maybe ifstream)
+ * @param filename The name of the file to read the encoded key from
+ */
+PublicKey readPublicKey(string& filename)
+{
+    DataSource_Stream in(filename);
+    return X509::load_key (in);
+}
+
+/**
+ * Low-level ECDSA signing function
+ * @param privKey The key to sign with
+ * @param in The stream to read the data to sign from
+ * @param out The stream to write the signature to (may also be cout)
+ */
+string signECDSA(ECDSA_PrivateKey& privKey, istream& in, ostream& out)
+{
+    
+}
+
+string verifyECDSA(ECDSA_PublicKey& pubKey, istream& in)
+{
+    
+}
 
