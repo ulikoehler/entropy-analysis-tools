@@ -57,6 +57,14 @@ analyzeNumeric (istream& fin, ostream& fout)
         {
             analyzeNumericData<long>(fin, fout);
         }
+    else if (vm.count ("short")) //Int
+        {
+            analyzeNumericData<short>(fin, fout);
+        }
+    else if (vm.count ("ushort")) //Int
+        {
+            analyzeNumericData<ushort>(fin, fout);
+        }
     else if (vm.count ("int")) //Int
         {
             analyzeNumericData<int>(fin, fout);
@@ -156,8 +164,8 @@ analyzeNumericData (istream& fin, ostream& fout)
             >, void > accumulator;
     #endif //NOSTATISTICSDATA
 
-    map<T, ulong> data;
-    pair<T, ulong> dataPair;
+    static map<T, ulong> data;
+    static pair<T, ulong> dataPair;
     /**
      * Precalculate the precision
      */
