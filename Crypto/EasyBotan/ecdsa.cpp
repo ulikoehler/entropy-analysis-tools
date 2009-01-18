@@ -15,6 +15,11 @@ typedef unordered_map<string, string> oid_map;
 static oid_map oids;
 
 /**
+ * Array containing the names for all supported curves.
+ * Don't forget to update when new curves are added.
+ */
+static const string curves[] = {"Prime256v1","Prime239v3","Prime239v2","Prime239v1","Prime192v3","Prime192v2","Prime192v1","brainpoolP512r1","brainpoolP384r1","brainpoolP320r1","brainpoolP256r1","brainpoolP224r1","brainpoolP192r1","brainpoolP160r1","NISTP521","secp521r1","secp384r1","secp256k1","secp224r1","secp224k1","secp192k1","secp160r2","secp160k1","secp128r2","secp128r1","secp112r2","secp112r1"};
+/**
  * Must be called before a main signing function call.
  * initizalizes the oid map.
  */
@@ -23,6 +28,7 @@ void initECDSA()
     /**
      * All keys must be lowercase to support lowercased user-input
      */
+    //Don't forget to update the name array when new curves are added.
     oids["prime256v1"] = "1.2.840.10045.3.1.7";
     oids["prime239v3"] = "1.2.840.10045.3.1.6";
     oids["prime239v2"] = "1.2.840.10045.3.1.5";
@@ -54,14 +60,13 @@ void initECDSA()
 
 /**
  * Lists the supported curves
- * //TODO: Find a way to print the out correctly cased
- * Not listed in the header file
+ * //TODO: Find a more effective and developer-friendly way to do this
  */
 inline void listSupportedCurves()
 {
-    foreach(oid_map::value_type i, oids)
+    foreach(string name, curves)
     {
-        cout<<i.first<<"\n";
+        cout<<name<<"\n";
     }
 }
 
