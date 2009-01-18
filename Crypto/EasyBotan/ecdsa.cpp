@@ -8,17 +8,25 @@
 #include "globals.hpp"
 
 /**
+ * Case-insentive string comparison algorithm
+ * Range of accepted template parameters is defined by boost::to_lower_copy tolerance.
+ * Preferrably used with string
+ */
+template <class T> struct equal_to_case_insensitive : binary_function <T, T, bool>
+{
+    bool operator() (const T& x, const T & y) const
+    {
+        return to_lower_copy<T>(x) == to_lower_copy<T>(y);
+    }
+};
+
+/**
  * Name-OID-Associations
  * A hashmap is used here to make it a bit faster because of decreased lookup complexity
  */
-typedef unordered_map<string, string> oid_map;
+typedef unordered_map<string, string, boost::hash<string>, equal_to_case_insensitive<string> > oid_map;
 static oid_map oids;
 
-/**
- * Array containing the names for all supported curves.
- * Don't forget to update when new curves are added.
- */
-static const string curves[] = {"Prime256v1","Prime239v3","Prime239v2","Prime239v1","Prime192v3","Prime192v2","Prime192v1","brainpoolP512r1","brainpoolP384r1","brainpoolP320r1","brainpoolP256r1","brainpoolP224r1","brainpoolP192r1","brainpoolP160r1","NISTP521","secp521r1","secp384r1","secp256k1","secp224r1","secp224k1","secp192k1","secp160r2","secp160k1","secp128r2","secp128r1","secp112r2","secp112r1"};
 /**
  * Must be called before a main signing function call.
  * initizalizes the oid map.
@@ -26,24 +34,23 @@ static const string curves[] = {"Prime256v1","Prime239v3","Prime239v2","Prime239
 void initECDSA()
 {
     /**
-     * All keys must be lowercase to support lowercased user-input
+     * Note that the keys are compared case-insensitive so you don't have to write new curve names lowercase
      */
-    //Don't forget to update the name array when new curves are added.
-    oids["prime256v1"] = "1.2.840.10045.3.1.7";
-    oids["prime239v3"] = "1.2.840.10045.3.1.6";
-    oids["prime239v2"] = "1.2.840.10045.3.1.5";
-    oids["prime239v1"] = "1.2.840.10045.3.1.4";
-    oids["prime192v3"] = "1.2.840.10045.3.1.3";
-    oids["prime192v2"] = "1.2.840.10045.3.1.2";
-    oids["prime192v1"] = "1.2.840.10045.3.1.1";
-    oids["brainpoolp512r1"] = "1.3.36.3.3.2.8.1.1.13";
-    oids["brainpoolp384r1"] = "1.3.36.3.3.2.8.1.1.11";
-    oids["brainpoolp320r1"] = "1.3.36.3.3.2.8.1.1.9";
-    oids["brainpoolp256r1"] = "1.3.36.3.3.2.8.1.1.7";
-    oids["brainpoolp224r1"] = "1.3.36.3.3.2.8.1.1.5";
-    oids["brainpoolp192r1"] = "1.3.36.3.3.2.8.1.1.3";
-    oids["brainpoolp160r1"] = "1.3.36.3.3.2.8.1.1.1";
-    oids["nistp521"] = "1.3.6.1.4.1.8301.3.1.2.9.0.38";
+    oids["Prime256v1"] = "1.2.840.10045.3.1.7";
+    oids["Prime239v3"] = "1.2.840.10045.3.1.6";
+    oids["Prime239v2"] = "1.2.840.10045.3.1.5";
+    oids["Prime239v1"] = "1.2.840.10045.3.1.4";
+    oids["Prime192v3"] = "1.2.840.10045.3.1.3";
+    oids["Prime192v2"] = "1.2.840.10045.3.1.2";
+    oids["Prime192v1"] = "1.2.840.10045.3.1.1";
+    oids["brainpoolP512r1"] = "1.3.36.3.3.2.8.1.1.13";
+    oids["brainpoolP384r1"] = "1.3.36.3.3.2.8.1.1.11";
+    oids["brainpoolP320r1"] = "1.3.36.3.3.2.8.1.1.9";
+    oids["brainpoolP256r1"] = "1.3.36.3.3.2.8.1.1.7";
+    oids["brainpoolP224r1"] = "1.3.36.3.3.2.8.1.1.5";
+    oids["brainpoolP192r1"] = "1.3.36.3.3.2.8.1.1.3";
+    oids["brainpoolP160r1"] = "1.3.36.3.3.2.8.1.1.1";
+    oids["NISTP521"] = "1.3.6.1.4.1.8301.3.1.2.9.0.38";
     oids["secp521r1"] = "1.3.132.0.35";
     oids["secp384r1"] = "1.3.132.0.34";
     oids["secp256k1"] = "1.3.132.0.10";
@@ -60,13 +67,12 @@ void initECDSA()
 
 /**
  * Lists the supported curves
- * //TODO: Find a more effective and developer-friendly way to do this
  */
 inline void listSupportedCurves()
 {
-    foreach(string name, curves)
+    foreach(oid_map::value_type i, oids)
     {
-        cout<<name<<"\n";
+        cout<< i.first <<"\n";
     }
 }
 
@@ -132,7 +138,7 @@ generateECDSAKeyPair (ofstream& pubout, ofstream& privout, string& oid)
     pubout << X509::PEM_encode (privKey);
     privout << PKCS8::PEM_encode (privKey);
 
-    cout << "ECDSA key pair generation finished";
+    cout << "ECDSA key pair generation finished\n";
 }
 
 

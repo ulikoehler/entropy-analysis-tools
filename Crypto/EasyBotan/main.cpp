@@ -22,8 +22,13 @@ main (int argc, char** argv)
             initECDSA();
             ecdsaMain(argc, argv);
         }
+    else if(tlAction == "md")
+        {
+            mdMain(argc, argv);
+        }
     else //No toplevel action
         {
+            cout << "Please specify an action!" << endl;
             return (2);
         }
     

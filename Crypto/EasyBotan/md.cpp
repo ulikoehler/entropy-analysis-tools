@@ -9,6 +9,15 @@
 #include "globals.hpp"
 
 /**
+ * Message digest main function
+ * called by main
+ */
+void mdMain(int argc, char** argv)
+{
+    //TODO
+}
+
+/**
  * Returns the hexadecimal representation of the input hashed
  * using the specified algorithm
  */
