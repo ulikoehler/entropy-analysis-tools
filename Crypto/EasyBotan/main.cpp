@@ -26,6 +26,10 @@ main (int argc, char** argv)
         {
             mdMain(argc, argv); //TODO implement
         }
+    else if(tlAction == "rand")
+        {
+            randomMain(argc, argv);
+        }
     else //No toplevel action
         {
             cout << "Please specify an action!" << endl;

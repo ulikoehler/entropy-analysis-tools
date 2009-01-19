@@ -167,21 +167,20 @@ generateECDSAKeyPair (ofstream& pubout, ofstream& privout, string& oid)
 ///////Signing/////////
 ///////////////////////
 
-
-
 /**
  * Low-level ECDSA signing function
- * \param privKey The key to sign with
- * \param in The stream to read the data to sign from
- * \param out The stream to write the signature to (may also be cout)
+ * @param privKey The key to sign with
+ * @param in The stream to read the data to sign from
+ * @param out The stream to write the signature to (may also be cout)
  */
 string signECDSA(ECDSA_PrivateKey& privKey, istream& in, ostream& out)
 {
+    //TODO Implement
     auto_ptr<PK_Signer> signer(get_pk_signer(privKey, "EMSA1(SHA-256)"));
-    }
+}
 
 string verifyECDSA(ECDSA_PublicKey& pubKey, istream& in)
 {
-    
+    //TODO implement
 }
 

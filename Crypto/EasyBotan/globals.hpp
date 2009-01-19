@@ -10,10 +10,11 @@
 
 #include <fstream>
 #include <botan/botan.h>
-#include <botan/pipe.h>
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>
+#include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/case_conv.hpp> //Contains to_lowercase(string)
+#include <boost/algorithm/string/predicate.hpp>
 #include <boost/foreach.hpp>
 #include <botan/botan.h>
 #include <botan/ecdsa.h>
@@ -31,6 +32,7 @@ using namespace Botan;
 
 #include "md.hpp"
 #include "ecdsa.hpp"
+#include "random.hpp"
 
 #endif	/* _GLOBALS_HPP */
 

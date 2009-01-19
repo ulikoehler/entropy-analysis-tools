@@ -9,6 +9,7 @@
       <itemPath>globals.hpp</itemPath>
       <itemPath>highlevel.hpp</itemPath>
       <itemPath>md.hpp</itemPath>
+      <itemPath>random.hpp</itemPath>
       <itemPath>rsa.hpp</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
@@ -67,6 +68,9 @@
       <item path="md.hpp">
         <itemTool>3</itemTool>
       </item>
+      <item path="random.hpp">
+        <itemTool>3</itemTool>
+      </item>
       <item path="rsa.hpp">
         <itemTool>3</itemTool>
       </item>
@@ -115,6 +119,9 @@
         <itemTool>1</itemTool>
       </item>
       <item path="md.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="random.hpp">
         <itemTool>3</itemTool>
       </item>
       <item path="rsa.hpp">
