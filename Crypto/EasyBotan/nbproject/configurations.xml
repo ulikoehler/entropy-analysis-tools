@@ -18,6 +18,7 @@
       <itemPath>ecdsa.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
       <itemPath>md.cpp</itemPath>
+      <itemPath>random.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Ressourcendateien"
@@ -67,6 +68,9 @@
       </item>
       <item path="md.hpp">
         <itemTool>3</itemTool>
+      </item>
+      <item path="random.cpp">
+        <itemTool>1</itemTool>
       </item>
       <item path="random.hpp">
         <itemTool>3</itemTool>
@@ -120,6 +124,9 @@
       </item>
       <item path="md.hpp">
         <itemTool>3</itemTool>
+      </item>
+      <item path="random.cpp">
+        <itemTool>1</itemTool>
       </item>
       <item path="random.hpp">
         <itemTool>3</itemTool>

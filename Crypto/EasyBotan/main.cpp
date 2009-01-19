@@ -24,7 +24,7 @@ main (int argc, char** argv)
         }
     else if(tlAction == "md" || tlAction == "hash")
         {
-            mdMain(argc, argv); //TODO implement
+            mdMain(argc, argv);
         }
     else if(tlAction == "rand")
         {

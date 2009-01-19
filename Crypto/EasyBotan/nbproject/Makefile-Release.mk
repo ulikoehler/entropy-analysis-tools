@@ -30,6 +30,7 @@ OBJECTDIR=build/Release/${PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/md.o \
 	${OBJECTDIR}/ecdsa.o \
+	${OBJECTDIR}/random.o \
 	${OBJECTDIR}/main.o
 
 # C Compiler Flags
@@ -60,6 +61,10 @@ ${OBJECTDIR}/md.o: md.cpp
 ${OBJECTDIR}/ecdsa.o: ecdsa.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	$(COMPILE.cc) -O2 -o ${OBJECTDIR}/ecdsa.o ecdsa.cpp
+
+${OBJECTDIR}/random.o: random.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	$(COMPILE.cc) -O2 -o ${OBJECTDIR}/random.o random.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
