@@ -10,6 +10,7 @@
 
 #include <fstream>
 #include <botan/botan.h>
+#include <botan/pipe.h>
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/algorithm/string/case_conv.hpp> //Contains to_lowercase(string)

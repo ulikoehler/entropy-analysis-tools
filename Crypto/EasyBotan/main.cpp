@@ -22,9 +22,9 @@ main (int argc, char** argv)
             initECDSA();
             ecdsaMain(argc, argv);
         }
-    else if(tlAction == "md")
+    else if(tlAction == "md" || tlAction == "hash")
         {
-            mdMain(argc, argv);
+            mdMain(argc, argv); //TODO implement
         }
     else //No toplevel action
         {
