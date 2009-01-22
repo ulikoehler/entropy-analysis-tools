@@ -30,29 +30,44 @@ static string ldFormatString;
  * 
  */
 template<class T>
-static void combine(ifstream& fin, ofstream& fout, ulong blocksize)
+static void
+combine (ifstream& fin, ofstream& fout, ulong blocksize)
 {
     static ld sum;
     static ld avg;
+    /**
+     * Counts the lines in the current block.
+     * Should be blocksize in each block except of the last one
+     */
+    static uint32_t vcount;
     static string buffer;
+
+    cout << ldFormatString << endl;
     ///Main read loop
     while (fin.good ())
         {
+            vcount = 0;
+            sum = 0L;
             /**
-             * Read one block
+             * Read the next block
+             * Checks if the stream is still good after reading each line;
+             * This makes
              */
-            for (int i = 0; i < blocksize; i++)
+            for (uint32_t i = 0; i < blocksize; i++)
                 {
-                    //Read the buffer
+                    if (!fin.good ())
+                        {
+                            break;
+                        }
+                    //Read the next line (one value)
                     fin >> buffer;
-                    if(!fin.good())
-                        {break;}
-                    sum += lexical_cast<T>(buffer);
+                    sum += lexical_cast<T > (buffer);
+                    vcount++;
                 }
             //Calculate the average...
-            avg = sum / blocksize;
+            avg = sum / vcount;
             //...and print it out
-            fout << format(ldFormatString) % avg << endl;
+            fout << format (ldFormatString) % avg << endl;
         }
 }
 
@@ -65,41 +80,38 @@ main (int argc, char** argv)
     static variables_map vm;
     static string infile;
     static string outfile;
-    static unsigned short precision;
-    static uint32_t blocksize;
+    static string precision;
+    uint32_t blocksize;
     // Declare the supported options.
     options_description allowedOptions ("Allowed options");
     allowedOptions.add_options ()
             ("help,h", "Show this help message")
-            ("blocksize,b", value<uint32_t>(&blocksize)->default_value(100), "Size of one block (is combined into one value)")
-            ("int","Use integers")
-            ("uint","Use unsigned int")
-            ("long","Use long")
-            ("llong","Use long long")
-            ("ullong","Use unsigned long long")
-            ("float", "Use float")
-            ("double", "Use double")
-            ("decimals", value<unsigned short>(&precision)->default_value(6),"Decimals to display")
-            ("in,i", value<string>(&infile), "Input file")
-            ("out,o",value<string>(&outfile), "Output file")
+            ("blocksize,b", value<uint32_t > (&blocksize)->default_value (100), "Size of one block (is combined into one value)")
+            ("precision,p", value<string> (&precision)->default_value ("10"), "Decimals to display (for floating point numbers)")
+            ("int", "Use integers")
+            ("uint", "Use unsigned int")
+            ("long", "Use long")
+            ("llong", "Use long long")
+            ("ullong,u", "Use unsigned long long")
+            ("float,f", "Use float")
+            ("double,d", "Use double")
+            ("ldouble,l", "Use long double(default)")
+            ("in,i", value<string > (&infile), "Input file")
+            ("out,o", value<string > (&outfile), "Output file")
             ;
 
     //Build the long double format string
-    ldFormatString = "%." + lexical_cast<string > (precision) + "Lf";
+    cout << "prec " << precision << endl;
+    ldFormatString = "%." + precision + "Lf";
 
     positional_options_description p;
-    p.add("in", 1);
-    p.add("out", 1);
-    p.add("blocksize", 1);
+    p.add ("in", 1);
+    p.add ("out", 1);
+    p.add ("blocksize", 1);
 
     store (command_line_parser (argc, argv).
            options (allowedOptions).positional (p).run (), vm);
     notify (vm);
-
-    //Forward-declaration of the fstreams
-    ifstream fin;
-    ofstream fout;
-
 
     //Check if the user has requested help
     if (vm.count ("help"))
@@ -121,47 +133,49 @@ main (int argc, char** argv)
             cout << "No output file specified!\n" << allowedOptions << "\n";
             return 2;
         }
-
-    if(vm.count("numbers"))
+    //
+    ifstream fin (infile.c_str ());
+    ofstream fout (outfile.c_str ());
+    if (vm.count ("int"))
         {
-            fin.open(infile.c_str());
-            fout.open(outfile.c_str());
-            if(vm.count("int"))
-                {
-                    combine<int>(fin, fout, blocksize);
-                }
-            else if(vm.count("uint"))
-                {
-                    combine<unsigned int>(fin, fout, blocksize);
-                }
-            else if (vm.count ("long"))
-                {
-                    combine<long>(fin, fout, blocksize);
-                }
-            else if (vm.count ("ulong"))
-                {
-                    combine<unsigned long>(fin, fout, blocksize);
-                }
-            else if (vm.count ("llong"))
-                {
-                    combine<long long>(fin, fout, blocksize);
-                }
-            else if (vm.count ("ullong"))
-                {
-                    combine<unsigned long long>(fin, fout, blocksize);
-                }
-            else if (vm.count ("float"))
-                {
-                    combine<float>(fin, fout, blocksize);
-                }
-            else if (vm.count ("double"))
-                {
-                    combine<double>(fin, fout, blocksize);
-                }
+            combine<int>(fin, fout, blocksize);
+        }
+    else if (vm.count ("uint"))
+        {
+            combine<unsigned int>(fin, fout, blocksize);
+        }
+    else if (vm.count ("long"))
+        {
+            combine<long>(fin, fout, blocksize);
+        }
+    else if (vm.count ("ulong"))
+        {
+            combine<unsigned long>(fin, fout, blocksize);
+        }
+    else if (vm.count ("llong"))
+        {
+            combine<long long>(fin, fout, blocksize);
+        }
+    else if (vm.count ("ullong"))
+        {
+            combine<unsigned long long>(fin, fout, blocksize);
+        }
+    else if (vm.count ("float"))
+        {
+            combine<float>(fin, fout, blocksize);
+        }
+    else if (vm.count ("double"))
+        {
+            combine<double>(fin, fout, blocksize);
+        }
+    else //if (vm.count ("ldouble"))
+        {
+            combine<long double>(fin, fout, blocksize);
         }
     //Close the streams
-    fin.close();
-    fout.close();
+    fin.close ();
+    fout.close ();
+
     return (EXIT_SUCCESS);
 }
 
