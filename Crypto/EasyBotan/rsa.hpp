@@ -16,8 +16,9 @@ inline void generateKey(string pubname, string privname, uint bits)
 {
     ofstream pubout(pubname);
     ofstream privout(privname);
-    RSA_PrivateKey k = generateKey(bits);
-    pubout << X509::PEM_encode ()
+    RSA_PrivateKey key = generateKey(bits);
+    pubout << X509::PEM_encode (key)
+    privout << PKCS8::PEM_encode(key);
     pubout.close();
     privout.close();
 }
