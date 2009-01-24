@@ -12,6 +12,7 @@
 #include <boost/lexical_cast.hpp>
 #include <fstream>
 #include <iostream>
+#include <string>
 
 using namespace std;
 using namespace boost::program_options;
@@ -80,14 +81,14 @@ main (int argc, char** argv)
     static variables_map vm;
     static string infile;
     static string outfile;
-    static string precision;
-    uint32_t blocksize;
+    static int precision;
+    static int blocksize;
     // Declare the supported options.
     options_description allowedOptions ("Allowed options");
     allowedOptions.add_options ()
             ("help,h", "Show this help message")
-            ("blocksize,b", value<uint32_t > (&blocksize)->default_value (100), "Size of one block (is combined into one value)")
-            ("precision,p", value<string> (&precision)->default_value ("10"), "Decimals to display (for floating point numbers)")
+            ("blocksize,b", value<int> (&blocksize)->default_value (100), "Size of one block (is combined into one value)")
+            ("precision,p", value<int>(&precision)->default_value (15), "Precision (for floating point output)")
             ("int", "Use integers")
             ("uint", "Use unsigned int")
             ("long", "Use long")
@@ -101,8 +102,10 @@ main (int argc, char** argv)
             ;
 
     //Build the long double format string
+    cout << "b   "<< blocksize << endl;
     cout << "prec " << precision << endl;
-    ldFormatString = "%." + precision + "Lf";
+    ldFormatString = "%." + lexical_cast<string > (precision) + "Lf";
+    cout << "ldfs " << ldFormatString << endl;
 
     positional_options_description p;
     p.add ("in", 1);
