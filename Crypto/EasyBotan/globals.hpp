@@ -23,9 +23,14 @@
 #include <memory> //Needed by botan
 #include <iostream>
 #include <string>
+//GUI
+#ifndef NOGUI
+    #include <gtkmm-2.4/gtkmm.h>
+#endif //NOGUI
 
 #define foreach BOOST_FOREACH
 
+using namespace Glib;
 using namespace std;
 using namespace boost;
 using namespace Botan;
@@ -33,6 +38,7 @@ using namespace Botan;
 #include "md.hpp"
 #include "ecdsa.hpp"
 #include "random.hpp"
+#include "gui.hpp"
 
 #endif	/* _GLOBALS_HPP */
 

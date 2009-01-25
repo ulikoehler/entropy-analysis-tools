@@ -29,16 +29,19 @@ OBJECTDIR=build/Release/${PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/md.o \
+	${OBJECTDIR}/gui.o \
+	${OBJECTDIR}/rsa.o \
+	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/ecdsa.o \
-	${OBJECTDIR}/random.o \
-	${OBJECTDIR}/main.o
+	${OBJECTDIR}/gtkmain.o \
+	${OBJECTDIR}/random.o
 
 # C Compiler Flags
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=
-CXXFLAGS=
+CCFLAGS=`pkg-config gtkmm-2.4 --cflags` 
+CXXFLAGS=`pkg-config gtkmm-2.4 --cflags` 
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -52,23 +55,35 @@ LDLIBSOPTIONS=
 
 dist/Release/${PLATFORM}/easybotan: ${OBJECTFILES}
 	${MKDIR} -p dist/Release/${PLATFORM}
-	${LINK.cc} -lbotan -o dist/Release/${PLATFORM}/easybotan ${OBJECTFILES} ${LDLIBSOPTIONS} 
+	${LINK.cc} -lbotan `pkg-config gtkmm-2.4 --libs` -o dist/Release/${PLATFORM}/easybotan  ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
 ${OBJECTDIR}/md.o: md.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	$(COMPILE.cc) -O2 -o ${OBJECTDIR}/md.o md.cpp
 
-${OBJECTDIR}/ecdsa.o: ecdsa.cpp 
+${OBJECTDIR}/gui.o: gui.cpp 
 	${MKDIR} -p ${OBJECTDIR}
-	$(COMPILE.cc) -O2 -o ${OBJECTDIR}/ecdsa.o ecdsa.cpp
+	$(COMPILE.cc) -O2 -o ${OBJECTDIR}/gui.o gui.cpp
 
-${OBJECTDIR}/random.o: random.cpp 
+${OBJECTDIR}/rsa.o: rsa.cpp 
 	${MKDIR} -p ${OBJECTDIR}
-	$(COMPILE.cc) -O2 -o ${OBJECTDIR}/random.o random.cpp
+	$(COMPILE.cc) -O2 -o ${OBJECTDIR}/rsa.o rsa.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	$(COMPILE.cc) -O2 -o ${OBJECTDIR}/main.o main.cpp
+
+${OBJECTDIR}/ecdsa.o: ecdsa.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	$(COMPILE.cc) -O2 -o ${OBJECTDIR}/ecdsa.o ecdsa.cpp
+
+${OBJECTDIR}/gtkmain.o: gtkmain.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	$(COMPILE.cc) -O2 -o ${OBJECTDIR}/gtkmain.o gtkmain.cpp
+
+${OBJECTDIR}/random.o: random.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	$(COMPILE.cc) -O2 -o ${OBJECTDIR}/random.o random.cpp
 
 # Subprojects
 .build-subprojects:

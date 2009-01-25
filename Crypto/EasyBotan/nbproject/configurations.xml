@@ -7,6 +7,7 @@
       <itemPath>analysis.hpp</itemPath>
       <itemPath>ecdsa.hpp</itemPath>
       <itemPath>globals.hpp</itemPath>
+      <itemPath>gui.hpp</itemPath>
       <itemPath>highlevel.hpp</itemPath>
       <itemPath>md.hpp</itemPath>
       <itemPath>random.hpp</itemPath>
@@ -16,9 +17,12 @@
                    displayName="Quelldateien"
                    projectFiles="true">
       <itemPath>ecdsa.cpp</itemPath>
+      <itemPath>gtkmain.cpp</itemPath>
+      <itemPath>gui.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
       <itemPath>md.cpp</itemPath>
       <itemPath>random.cpp</itemPath>
+      <itemPath>rsa.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Ressourcendateien"
@@ -39,10 +43,13 @@
         <platform>2</platform>
       </toolsSet>
       <compileType>
+        <ccCompilerTool>
+          <commandLine>`pkg-config gtkmm-2.4 --cflags`</commandLine>
+        </ccCompilerTool>
         <linkerTool>
           <linkerLibItems>
           </linkerLibItems>
-          <commandLine>-lbotan</commandLine>
+          <commandLine>-lbotan `pkg-config gtkmm-2.4 --libs`</commandLine>
         </linkerTool>
       </compileType>
       <item path="analysis.hpp">
@@ -55,6 +62,18 @@
         <itemTool>3</itemTool>
       </item>
       <item path="globals.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="gtkmain.cpp">
+        <itemTool>1</itemTool>
+        <ccCompilerTool>
+          <commandLine>`pkg-config gtkmm-2.4 --cflags`</commandLine>
+        </ccCompilerTool>
+      </item>
+      <item path="gui.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="gui.hpp">
         <itemTool>3</itemTool>
       </item>
       <item path="highlevel.hpp">
@@ -74,6 +93,9 @@
       </item>
       <item path="random.hpp">
         <itemTool>3</itemTool>
+      </item>
+      <item path="rsa.cpp">
+        <itemTool>1</itemTool>
       </item>
       <item path="rsa.hpp">
         <itemTool>3</itemTool>
@@ -91,6 +113,7 @@
         </cCompilerTool>
         <ccCompilerTool>
           <developmentMode>5</developmentMode>
+          <commandLine>`pkg-config gtkmm-2.4 --cflags`</commandLine>
         </ccCompilerTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -98,7 +121,7 @@
         <linkerTool>
           <linkerLibItems>
           </linkerLibItems>
-          <commandLine>-lbotan</commandLine>
+          <commandLine>-lbotan `pkg-config gtkmm-2.4 --libs`</commandLine>
         </linkerTool>
       </compileType>
       <item path="analysis.hpp">
@@ -111,6 +134,15 @@
         <itemTool>3</itemTool>
       </item>
       <item path="globals.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="gtkmain.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="gui.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="gui.hpp">
         <itemTool>3</itemTool>
       </item>
       <item path="highlevel.hpp">
@@ -130,6 +162,9 @@
       </item>
       <item path="random.hpp">
         <itemTool>3</itemTool>
+      </item>
+      <item path="rsa.cpp">
+        <itemTool>1</itemTool>
       </item>
       <item path="rsa.hpp">
         <itemTool>3</itemTool>

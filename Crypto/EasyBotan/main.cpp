@@ -6,6 +6,11 @@
  */
 #include "globals.hpp"
 
+/**
+ * The command-line main is only used when GUI-building is disables
+ */
+#ifdef NOGUI
+
 /*
  * 
  */
@@ -38,4 +43,4 @@ main (int argc, char** argv)
     
     return(EXIT_SUCCESS);
 }
-
+#endif //NOGUI
