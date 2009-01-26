@@ -13,7 +13,7 @@ genRandFileTable ()
     set_title ("EasyBotan");
     //Add the notebook tabs
     mainNotebook.append_page (genKeysTable, "Generate keys");
-    mainNotebook.append_page (genRandFileTable, "Random file");
+    mainNotebook.append_page (genRandFileTable, "Generate random file");
     //Add the notebook to the window
     add (mainNotebook);
     //Show all widgets
@@ -50,14 +50,16 @@ okButton ("OK")
     /**
      * Init the GUI
      */
+    //Set some options for this table
+    set_spacings(5);
     //Algorithm
     algorithmComboBox.append_text("RSA");
     algorithmComboBox.append_text("DSA");
     algorithmComboBox.append_text("ECDSA");
     algorithmComboBox.append_text("ElGamal");
     algorithmComboBox.append_text("Diffie-Hellman");
-    attach(algorithmLabel, 0, 1, 0, 1);
-    attach(algorithmComboBox, 1, 2, 0, 1);
+    attach(algorithmLabel, 0, 1, 0, 1, FILL, EXPAND);
+    attach(algorithmComboBox, 1, 2, 0, 1, FILL, EXPAND);
     //Keysize
     sizeComboBox.append_text("256");
     sizeComboBox.append_text("512");
@@ -67,18 +69,18 @@ okButton ("OK")
     sizeComboBox.append_text("8192");
     sizeComboBox.append_text("16384");
     sizeComboBox.append_text("32768");
-    attach(sizeLabel, 0, 1, 1, 2);
-    attach(sizeComboBox, 1, 2, 1, 2);
+    attach(sizeLabel, 0, 1, 1, 2, FILL, EXPAND);
+    attach(sizeComboBox, 1, 2, 1, 2, FILL, EXPAND);
     //Public key output
-    attach(pubOutLabel, 0, 1, 2, 3);
-    attach(pubOutFileChooser, 1, 2, 2, 3);
+    attach(pubOutLabel, 0, 1, 2, 3, FILL, EXPAND);
+    attach(pubOutFileChooser, 1, 2, 2, 3, FILL, EXPAND);
     //Private key output
-    attach(privOutLabel, 0, 1, 3, 4);
-    attach(privOutFileChooser, 1, 2, 3, 4);
+    attach(privOutLabel, 0, 1, 3, 4, FILL, EXPAND);
+    attach(privOutFileChooser, 1, 2, 3, 4, FILL, EXPAND);
     //Password entry
-    attach(passwordLabel, 0, 1, 4, 5);
+    attach(passwordLabel, 0, 1, 4, 5, FILL, EXPAND);
     passwordEntry.set_visibility(false);
-    attach(passwordEntry, 1, 2, 4, 5);
+    attach(passwordEntry, 1, 2, 4, 5, FILL, EXPAND);
     //OK Button
     attach(okButton, 0, 2, 5, 6);
     //Connect the signals
@@ -88,7 +90,7 @@ okButton ("OK")
 }
 
 GenerateRandomFileTable::GenerateRandomFileTable ()
-: Gtk::Table (),
+: Gtk::Table (2,2,false),
 sizeHBox (false, 5),
 sizeLabel ("Size:"),
 sizeAdjustment (100, 0, 1000000000, 1, 100, 0),
@@ -98,17 +100,20 @@ fileLabel ("File:"),
 outputFileChooser (),
 okButton ("OK")
 {
+    //Set some options for this table
+    set_spacings(5);
     //Size suffix combo box
     sizeSuffixComboBox.append_text("Bytes");
     sizeSuffixComboBox.append_text("Kilobytes");
     sizeSuffixComboBox.append_text("Megabytes");
     sizeSuffixComboBox.append_text("Gigabytes");
+    sizeSuffixComboBox.set_active (1);
     sizeHBox.pack_end(sizeSpinButton);
     sizeHBox.pack_end(sizeSuffixComboBox);
-    attach(sizeLabel, 0, 1, 0, 1);
-    attach(sizeHBox, 1, 2, 0, 1);
+    attach(sizeLabel, 0, 1, 0, 1, FILL, EXPAND);
+    attach(sizeHBox, 1, 2, 0, 1 , FILL, EXPAND);
     //OK Button
-    attach(okButton, 0, 2, 2, 3);
+    attach(okButton, 0, 2, 2, 3, FILL, EXPAND);
     //Show all children
     show_all_children();
 }

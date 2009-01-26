@@ -31,6 +31,7 @@
 /**
  * Namespaces
  */
+using namespace Gtk;
 using namespace Glib;
 using namespace std;
 using namespace boost;
