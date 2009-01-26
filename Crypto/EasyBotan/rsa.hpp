@@ -6,33 +6,27 @@
  *
  * Created on 9. Januar 2009, 22:43
  */
-
-#include <globals.hpp>
+#include "globals.hpp"
 
 #ifndef _GENKEYPAIRS_HPP
 #define	_GENKEYPAIRS_HPP
-
-inline void generateKey(string pubname, string privname, string password, uint bits)
-{
-    wfstream pubout(pubname, wfstream::out);
-    wfstream privout(privname, wfstream::out);
-    RSA_PrivateKey key = generateKey(bits);
-    pubout << X509::PEM_encode (key, rng, password.c_str())
-    privout << PKCS8::PEM_encode(key);
-    pubout.close();
-    privout.close();
-}
 
 /**
  * Generates a new RSA private key.
  * @param bits Key bits
  */
-inline RSA_PrivateKey generateKey(uint bits)
-{
-    AutoSeeded_RNG rng;
-    RSA_PrivateKey key(rng, bits);
-    return key;
-}
+RSA_PrivateKey generateRSAKey(uint bits);
+
+/**
+ * Generates a new RSA private key.
+ * @param pubname The file to write the public key to
+ * @param privname The file to write the private key to
+ * @param password The password to use to encrypt the private key or NULL if no password should be used
+ * @param bits The key size in bits
+ */
+void generateRSAKey(string pubname, string privname, string password, uint bits);
+
+
 
 #endif	/* _GENKEYPAIRS_HPP */
 

@@ -55,7 +55,7 @@ LDLIBSOPTIONS=
 
 dist/Release/${PLATFORM}/easybotan: ${OBJECTFILES}
 	${MKDIR} -p dist/Release/${PLATFORM}
-	${LINK.cc} -lbotan `pkg-config gtkmm-2.4 --libs` -o dist/Release/${PLATFORM}/easybotan  ${OBJECTFILES} ${LDLIBSOPTIONS} 
+	${LINK.cc} -lbotan `pkg-config gtkmm-2.4 --libs` `pkg-config --libs gthread-2.0` -o dist/Release/${PLATFORM}/easybotan  ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
 ${OBJECTDIR}/md.o: md.cpp 
 	${MKDIR} -p ${OBJECTDIR}

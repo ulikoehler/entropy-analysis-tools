@@ -12,16 +12,38 @@
 
 struct GenerateKeysTable : Gtk::Table
 {
+    //Constructors
     GenerateKeysTable ();
-    //TODO comment
+    //GUI members
     Gtk::Label algorithmLabel;
     Gtk::ComboBoxText algorithmComboBox; //Which algorithm to use, e.g. RSA or DSA
     Gtk::Label sizeLabel; //in bits
     Gtk::ComboBoxText sizeComboBox;
-    Gtk::FileChooserButton pubOutFileChooser; //Already contains the label (title)
-    Gtk::FileChooserButton privOutFileChooser; //Already contains the label (title)
+    Gtk::Label pubOutLabel;
+    Gtk::FileChooserButton pubOutFileChooser;
+    Gtk::Label privOutLabel;
+    Gtk::FileChooserButton privOutFileChooser;
+    Gtk::Label passwordLabel;
+    Gtk::Entry passwordEntry;
     Gtk::Button okButton;
-    
+
+    void okButtonClicked();
+};
+
+struct GenerateRandomFileTable : Gtk::Table
+{
+    //Constructors
+    GenerateRandomFileTable ();
+    //GUI members
+    Gtk::HBox sizeHBox;
+    Gtk::Label sizeLabel;
+    Gtk::Adjustment sizeAdjustment;
+    Gtk::SpinButton sizeSpinButton;
+    Gtk::ComboBoxText sizeSuffixComboBox;
+    Gtk::Label fileLabel;
+    Gtk::FileChooserButton outputFileChooser;
+    Gtk::Button okButton;
+
     void okButtonClicked();
 };
 
@@ -30,6 +52,11 @@ struct EasyBotanWindow : Gtk::Window
     EasyBotanWindow();
     Gtk::Notebook mainNotebook;
     GenerateKeysTable genKeysTable;
+    GenerateRandomFileTable genRandFileTable;
+    //Crypto members
+    shared_ptr<AutoSeeded_RNG> rng;
+    
+    void initCrypto();
 };
 
 #endif	/* _GUI_HPP */

@@ -49,7 +49,7 @@
         <linkerTool>
           <linkerLibItems>
           </linkerLibItems>
-          <commandLine>-lbotan `pkg-config gtkmm-2.4 --libs`</commandLine>
+          <commandLine>-lbotan `pkg-config gtkmm-2.4 --libs` `pkg-config --libs gthread-2.0`</commandLine>
         </linkerTool>
       </compileType>
       <item path="analysis.hpp">
@@ -121,7 +121,7 @@
         <linkerTool>
           <linkerLibItems>
           </linkerLibItems>
-          <commandLine>-lbotan `pkg-config gtkmm-2.4 --libs`</commandLine>
+          <commandLine>-lbotan `pkg-config gtkmm-2.4 --libs` `pkg-config --libs gthread-2.0`</commandLine>
         </linkerTool>
       </compileType>
       <item path="analysis.hpp">

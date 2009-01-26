@@ -16,7 +16,7 @@
 #include <boost/algorithm/string/case_conv.hpp> //Contains to_lowercase(string)
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/foreach.hpp>
-#include <botan/botan.h>
+#include <botan/rsa.h>
 #include <botan/ecdsa.h>
 #include <botan/pubkey.h>
 #include <botan/look_pk.h>
@@ -28,17 +28,30 @@
     #include <gtkmm-2.4/gtkmm.h>
 #endif //NOGUI
 
-#define foreach BOOST_FOREACH
-
+/**
+ * Namespaces
+ */
 using namespace Glib;
 using namespace std;
 using namespace boost;
 using namespace Botan;
 
+/**
+ * Defines and typedefs
+ */
+#define foreach BOOST_FOREACH
+
 #include "md.hpp"
 #include "ecdsa.hpp"
 #include "random.hpp"
+#include "rsa.hpp"
 #include "gui.hpp"
+
+/**
+ * Global variables
+ */
+static EasyBotanWindow *rootWindow; //Provides an AutoSeeded_RNG
+
 
 #endif	/* _GLOBALS_HPP */
 
