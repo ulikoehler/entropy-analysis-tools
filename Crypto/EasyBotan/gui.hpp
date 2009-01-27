@@ -10,6 +10,22 @@
 
 #include "globals.hpp"
 
+/**
+ * Provides something like the FileChooserButton but with save support
+ */
+struct FileChooserHBox : Gtk::HBox
+{
+    //Constructors
+    FileChooserHBox (const ustring& title, FileChooserAction action);
+    //GUI members
+    Gtk::Entry fileEntry;
+    Gtk::Button findButton;
+    Gtk::FileChooserDialog dialog;
+
+    //Functions
+    ustring get_filename();
+};
+
 struct GenerateKeysTable : Gtk::Table
 {
     //Constructors
@@ -20,28 +36,11 @@ struct GenerateKeysTable : Gtk::Table
     Gtk::Label sizeLabel; //in bits
     Gtk::ComboBoxText sizeComboBox;
     Gtk::Label pubOutLabel;
-    Gtk::FileChooserButton pubOutFileChooser;
+       FileChooserHBox pubOutFileChooser;
     Gtk::Label privOutLabel;
-    Gtk::FileChooserButton privOutFileChooser;
+       FileChooserHBox privOutFileChooser;
     Gtk::Label passwordLabel;
     Gtk::Entry passwordEntry;
-    Gtk::Button okButton;
-
-    void okButtonClicked();
-};
-
-struct GenerateRandomFileTable : Gtk::Table
-{
-    //Constructors
-    GenerateRandomFileTable ();
-    //GUI members
-    Gtk::HBox sizeHBox;
-    Gtk::Label sizeLabel;
-    Gtk::Adjustment sizeAdjustment;
-    Gtk::SpinButton sizeSpinButton;
-    Gtk::ComboBoxText sizeSuffixComboBox;
-    Gtk::Label fileLabel;
-    Gtk::FileChooserButton outputFileChooser;
     Gtk::Button okButton;
 
     void okButtonClicked();
