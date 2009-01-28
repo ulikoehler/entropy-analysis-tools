@@ -1,22 +1,5 @@
 #include "globals.hpp"
 
-FileChooserHBox::FileChooserHBox (const ustring& title, FileChooserAction action)
-: Gtk::HBox (3, false),
-fileEntry (),
-findButton (),
-dialog (title, action)
-{
-    //Init the find button
-    if(action == FILE_CHOOSER_ACTION_OPEN) {findButton.set_label ("OPEN");}
-    else if(action == FILE_CHOOSER_ACTION_SAVE) {findButton.set_label("SAVE_AS");}
-    findButton.set_use_stock (true);
-}
-
-ustring FileChooserHBox::get_filename ()
-{
-    return dialog.get_filename ();
-}
-
 EasyBotanWindow::EasyBotanWindow ()
 : Gtk::Window (),
 genKeysTable (),
@@ -54,8 +37,8 @@ sizeLabel ("Keysize:"),
 sizeComboBox (),
 pubOutLabel ("Public key:"),
 privOutLabel ("Private key:"),
-pubOutFileChooser ("Public key file", FILE_CHOOSER_ACTION_SAVE),
-privOutFileChooser ("Private key file", FILE_CHOOSER_ACTION_SAVE),
+pubOutFileChooser ("Public key file"),
+privOutFileChooser ("Private key file"),
 passwordLabel ("Password:"),
 passwordEntry (),
 okButton ("OK")

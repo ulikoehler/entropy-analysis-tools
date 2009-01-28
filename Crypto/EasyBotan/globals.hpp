@@ -42,11 +42,12 @@ using namespace Botan;
  */
 #define foreach BOOST_FOREACH
 
-#include "gui.hpp"
+#include "gui-components.hpp"
 #include "md.hpp"
 #include "ecdsa.hpp"
 #include "random.hpp"
 #include "rsa.hpp"
+#include "gui.hpp"
 
 /**
  * Global variables

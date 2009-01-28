@@ -28,6 +28,7 @@ OBJECTDIR=build/Debug/${PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/gui-components.o \
 	${OBJECTDIR}/md.o \
 	${OBJECTDIR}/gui.o \
 	${OBJECTDIR}/rsa.o \
@@ -56,6 +57,10 @@ LDLIBSOPTIONS=
 dist/Debug/${PLATFORM}/easybotan: ${OBJECTFILES}
 	${MKDIR} -p dist/Debug/${PLATFORM}
 	${LINK.cc} -lbotan `pkg-config gtkmm-2.4 --libs` `pkg-config --libs gthread-2.0` -o dist/Debug/${PLATFORM}/easybotan  ${OBJECTFILES} ${LDLIBSOPTIONS} 
+
+${OBJECTDIR}/gui-components.o: gui-components.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	$(COMPILE.cc) -g -o ${OBJECTDIR}/gui-components.o gui-components.cpp
 
 ${OBJECTDIR}/md.o: md.cpp 
 	${MKDIR} -p ${OBJECTDIR}

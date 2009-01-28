@@ -17,7 +17,7 @@ sizeAdjustment (100, 0, 1000000000, 1, 100, 0),
 sizeSpinButton (sizeAdjustment),
 sizeSuffixComboBox (),
 fileLabel ("File:"),
-outputFileChooser ("File", FILE_CHOOSER_ACTION_SAVE),
+outputFileChooser ("File"),
 okButton ("OK")
 {
     //Set some options for this table

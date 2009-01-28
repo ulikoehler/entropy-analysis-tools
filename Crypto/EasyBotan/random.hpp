@@ -31,7 +31,7 @@ struct GenerateRandomFileTable : Gtk::Table
     Gtk::SpinButton sizeSpinButton;
     Gtk::ComboBoxText sizeSuffixComboBox;
     Gtk::Label fileLabel;
-         FileChooserHBox outputFileChooser;
+         FileChooserSaveHBox outputFileChooser;
     Gtk::Button okButton;
 
     void okButtonClicked();
