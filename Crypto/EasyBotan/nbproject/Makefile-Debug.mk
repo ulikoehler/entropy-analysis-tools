@@ -28,14 +28,14 @@ OBJECTDIR=build/Debug/${PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/crypto/random.o \
-	${OBJECTDIR}/gui/gui.o \
-	${OBJECTDIR}/crypto/rsa.o \
-	${OBJECTDIR}/gui/gui-components.o \
-	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/crypto/ecdsa.o \
-	${OBJECTDIR}/gtkmain.o \
-	${OBJECTDIR}/crypto/md.o
+	${OBJECTDIR}/src/gtkmain.o \
+	${OBJECTDIR}/src/main.o \
+	${OBJECTDIR}/src/crypto/rsa.o \
+	${OBJECTDIR}/src/gui/gui.o \
+	${OBJECTDIR}/src/crypto/ecdsa.o \
+	${OBJECTDIR}/src/crypto/random.o \
+	${OBJECTDIR}/src/crypto/md.o \
+	${OBJECTDIR}/src/gui/gui-components.o
 
 # C Compiler Flags
 CFLAGS=
@@ -58,37 +58,37 @@ dist/Debug/${PLATFORM}/easybotan: ${OBJECTFILES}
 	${MKDIR} -p dist/Debug/${PLATFORM}
 	${LINK.cc} -lbotan `pkg-config gtkmm-2.4 --libs` `pkg-config --libs gthread-2.0` -o dist/Debug/${PLATFORM}/easybotan  ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
-${OBJECTDIR}/crypto/random.o: crypto/random.cpp 
-	${MKDIR} -p ${OBJECTDIR}/crypto
-	$(COMPILE.cc) -g -o ${OBJECTDIR}/crypto/random.o crypto/random.cpp
+${OBJECTDIR}/src/gtkmain.o: src/gtkmain.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	$(COMPILE.cc) -g -o ${OBJECTDIR}/src/gtkmain.o src/gtkmain.cpp
 
-${OBJECTDIR}/gui/gui.o: gui/gui.cpp 
-	${MKDIR} -p ${OBJECTDIR}/gui
-	$(COMPILE.cc) -g -o ${OBJECTDIR}/gui/gui.o gui/gui.cpp
+${OBJECTDIR}/src/main.o: src/main.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	$(COMPILE.cc) -g -o ${OBJECTDIR}/src/main.o src/main.cpp
 
-${OBJECTDIR}/crypto/rsa.o: crypto/rsa.cpp 
-	${MKDIR} -p ${OBJECTDIR}/crypto
-	$(COMPILE.cc) -g -o ${OBJECTDIR}/crypto/rsa.o crypto/rsa.cpp
+${OBJECTDIR}/src/crypto/rsa.o: src/crypto/rsa.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src/crypto
+	$(COMPILE.cc) -g -o ${OBJECTDIR}/src/crypto/rsa.o src/crypto/rsa.cpp
 
-${OBJECTDIR}/gui/gui-components.o: gui/gui-components.cpp 
-	${MKDIR} -p ${OBJECTDIR}/gui
-	$(COMPILE.cc) -g -o ${OBJECTDIR}/gui/gui-components.o gui/gui-components.cpp
+${OBJECTDIR}/src/gui/gui.o: src/gui/gui.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src/gui
+	$(COMPILE.cc) -g -o ${OBJECTDIR}/src/gui/gui.o src/gui/gui.cpp
 
-${OBJECTDIR}/main.o: main.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	$(COMPILE.cc) -g -o ${OBJECTDIR}/main.o main.cpp
+${OBJECTDIR}/src/crypto/ecdsa.o: src/crypto/ecdsa.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src/crypto
+	$(COMPILE.cc) -g -o ${OBJECTDIR}/src/crypto/ecdsa.o src/crypto/ecdsa.cpp
 
-${OBJECTDIR}/crypto/ecdsa.o: crypto/ecdsa.cpp 
-	${MKDIR} -p ${OBJECTDIR}/crypto
-	$(COMPILE.cc) -g -o ${OBJECTDIR}/crypto/ecdsa.o crypto/ecdsa.cpp
+${OBJECTDIR}/src/crypto/random.o: src/crypto/random.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src/crypto
+	$(COMPILE.cc) -g -o ${OBJECTDIR}/src/crypto/random.o src/crypto/random.cpp
 
-${OBJECTDIR}/gtkmain.o: gtkmain.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	$(COMPILE.cc) -g `pkg-config gtkmm-2.4 --cflags`  -o ${OBJECTDIR}/gtkmain.o gtkmain.cpp
+${OBJECTDIR}/src/crypto/md.o: src/crypto/md.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src/crypto
+	$(COMPILE.cc) -g -o ${OBJECTDIR}/src/crypto/md.o src/crypto/md.cpp
 
-${OBJECTDIR}/crypto/md.o: crypto/md.cpp 
-	${MKDIR} -p ${OBJECTDIR}/crypto
-	$(COMPILE.cc) -g -o ${OBJECTDIR}/crypto/md.o crypto/md.cpp
+${OBJECTDIR}/src/gui/gui-components.o: src/gui/gui-components.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src/gui
+	$(COMPILE.cc) -g -o ${OBJECTDIR}/src/gui/gui-components.o src/gui/gui-components.cpp
 
 # Subprojects
 .build-subprojects:

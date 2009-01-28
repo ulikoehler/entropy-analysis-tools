@@ -1,16 +1,16 @@
-/* 
- * File:   highlevel.hpp
- * Author: uli
- *
- * This file contains some high level 'envelope' functions
- *
- * Created on 9. Januar 2009, 23:06
- */
+/*
+* File: highlevel.hpp
+* Author: uli
+*
+* This file contains some high level 'envelope' functions
+*
+* Created on 9. Januar 2009, 23:06
+*/
 
 #include <globals.hpp>
 
 #ifndef _HIGHLEVEL_HPP
-#define	_HIGHLEVEL_HPP
+#define  _HIGHLEVEL_HPP
 
 /////////////////////////////////////////
 /////////////////////////////////////////
@@ -18,16 +18,16 @@
 /////////////////////////////////////////
 /////////////////////////////////////////
 /**
- * A fully parametrized symmetric string encryption function
- * Encrypts using the specified algorithm and CBC+PKCS7.
- * Format as follows (//TODO ASN.1 Notation required):
- *  Base64
- *          {
- *              n bytes salt (parameter)
- *              32 bytes IV
- *              message
- *          }
- */
+* A fully parametrized symmetric string encryption function
+* Encrypts using the specified algorithm and CBC+PKCS7.
+* Format as follows (//TODO ASN.1 Notation required):
+* Base64
+* {
+* n bytes salt (parameter)
+* 32 bytes IV
+* message
+* }
+*/
 string cryptTextUnauthenticated(string& plaintext, string& password, bool decrypt = false, string& algorithm = "Twofish", uint saltSize = 24)
 {
     AutoSeeded_RNG rng;
@@ -59,5 +59,5 @@ string cryptTextUnauthenticated(string& plaintext, string& password, bool decryp
     return base64Pipe.read_all_as_string (0);
 }
 
-#endif	/* _HIGHLEVEL_HPP */
-
+#endif  /* _HIGHLEVEL_HPP */
+ 

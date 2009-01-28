@@ -1,38 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="51">
   <logicalFolder name="root" displayName="root" projectFiles="true">
-    <logicalFolder name="crypto" displayName="crypto" projectFiles="true">
-      <itemPath>crypto/ecdsa.cpp</itemPath>
-      <itemPath>crypto/ecdsa.hpp</itemPath>
-      <itemPath>crypto/md.cpp</itemPath>
-      <itemPath>crypto/md.hpp</itemPath>
-      <itemPath>crypto/random.cpp</itemPath>
-      <itemPath>crypto/random.hpp</itemPath>
-      <itemPath>crypto/rsa.cpp</itemPath>
-      <itemPath>crypto/rsa.hpp</itemPath>
-    </logicalFolder>
-    <logicalFolder name="gui" displayName="gui" projectFiles="true">
-      <itemPath>gui/gui-components.cpp</itemPath>
-      <itemPath>gui/gui-components.hpp</itemPath>
-      <itemPath>gui/gui.cpp</itemPath>
-      <itemPath>gui/gui.hpp</itemPath>
-    </logicalFolder>
-    <logicalFolder name="HeaderFiles"
-                   displayName="Header-Dateien"
-                   projectFiles="true">
-      <itemPath>analysis.hpp</itemPath>
-      <itemPath>globals.hpp</itemPath>
-      <itemPath>highlevel.hpp</itemPath>
-    </logicalFolder>
-    <logicalFolder name="SourceFiles"
-                   displayName="Quelldateien"
-                   projectFiles="true">
-      <itemPath>gtkmain.cpp</itemPath>
-      <itemPath>main.cpp</itemPath>
-    </logicalFolder>
-    <logicalFolder name="ResourceFiles"
-                   displayName="Ressourcendateien"
-                   projectFiles="true">
+    <logicalFolder name="src" displayName="src" projectFiles="true">
+      <logicalFolder name="crypto" displayName="crypto" projectFiles="true">
+        <itemPath>src/crypto/analysis.hpp</itemPath>
+        <itemPath>src/crypto/ecdsa.cpp</itemPath>
+        <itemPath>src/crypto/ecdsa.hpp</itemPath>
+        <itemPath>src/crypto/md.cpp</itemPath>
+        <itemPath>src/crypto/md.hpp</itemPath>
+        <itemPath>src/crypto/random.cpp</itemPath>
+        <itemPath>src/crypto/random.hpp</itemPath>
+        <itemPath>src/crypto/rsa.cpp</itemPath>
+        <itemPath>src/crypto/rsa.hpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="gui" displayName="gui" projectFiles="true">
+        <itemPath>src/gui/gui-components.cpp</itemPath>
+        <itemPath>src/gui/gui-components.hpp</itemPath>
+        <itemPath>src/gui/gui.cpp</itemPath>
+        <itemPath>src/gui/gui.hpp</itemPath>
+      </logicalFolder>
+      <itemPath>src/globals.hpp</itemPath>
+      <itemPath>src/gtkmain.cpp</itemPath>
+      <itemPath>src/main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Wichtige Dateien"
@@ -58,58 +47,52 @@
           <commandLine>-lbotan `pkg-config gtkmm-2.4 --libs` `pkg-config --libs gthread-2.0`</commandLine>
         </linkerTool>
       </compileType>
-      <item path="analysis.hpp">
+      <item path="src/crypto/analysis.hpp">
         <itemTool>3</itemTool>
       </item>
-      <item path="crypto/ecdsa.cpp">
+      <item path="src/crypto/ecdsa.cpp">
         <itemTool>1</itemTool>
       </item>
-      <item path="crypto/ecdsa.hpp">
+      <item path="src/crypto/ecdsa.hpp">
         <itemTool>3</itemTool>
       </item>
-      <item path="crypto/md.cpp">
+      <item path="src/crypto/md.cpp">
         <itemTool>1</itemTool>
       </item>
-      <item path="crypto/md.hpp">
+      <item path="src/crypto/md.hpp">
         <itemTool>3</itemTool>
       </item>
-      <item path="crypto/random.cpp">
+      <item path="src/crypto/random.cpp">
         <itemTool>1</itemTool>
       </item>
-      <item path="crypto/random.hpp">
+      <item path="src/crypto/random.hpp">
         <itemTool>3</itemTool>
       </item>
-      <item path="crypto/rsa.cpp">
+      <item path="src/crypto/rsa.cpp">
         <itemTool>1</itemTool>
       </item>
-      <item path="crypto/rsa.hpp">
+      <item path="src/crypto/rsa.hpp">
         <itemTool>3</itemTool>
       </item>
-      <item path="globals.hpp">
+      <item path="src/globals.hpp">
         <itemTool>3</itemTool>
       </item>
-      <item path="gtkmain.cpp">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <commandLine>`pkg-config gtkmm-2.4 --cflags`</commandLine>
-        </ccCompilerTool>
-      </item>
-      <item path="gui/gui-components.cpp">
+      <item path="src/gtkmain.cpp">
         <itemTool>1</itemTool>
       </item>
-      <item path="gui/gui-components.hpp">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="gui/gui.cpp">
+      <item path="src/gui/gui-components.cpp">
         <itemTool>1</itemTool>
       </item>
-      <item path="gui/gui.hpp">
+      <item path="src/gui/gui-components.hpp">
         <itemTool>3</itemTool>
       </item>
-      <item path="highlevel.hpp">
+      <item path="src/gui/gui.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="src/gui/gui.hpp">
         <itemTool>3</itemTool>
       </item>
-      <item path="main.cpp">
+      <item path="src/main.cpp">
         <itemTool>1</itemTool>
       </item>
     </conf>
@@ -136,55 +119,52 @@
           <commandLine>-lbotan `pkg-config gtkmm-2.4 --libs` `pkg-config --libs gthread-2.0`</commandLine>
         </linkerTool>
       </compileType>
-      <item path="analysis.hpp">
+      <item path="src/crypto/analysis.hpp">
         <itemTool>3</itemTool>
       </item>
-      <item path="crypto/ecdsa.cpp">
+      <item path="src/crypto/ecdsa.cpp">
         <itemTool>1</itemTool>
       </item>
-      <item path="crypto/ecdsa.hpp">
+      <item path="src/crypto/ecdsa.hpp">
         <itemTool>3</itemTool>
       </item>
-      <item path="crypto/md.cpp">
+      <item path="src/crypto/md.cpp">
         <itemTool>1</itemTool>
       </item>
-      <item path="crypto/md.hpp">
+      <item path="src/crypto/md.hpp">
         <itemTool>3</itemTool>
       </item>
-      <item path="crypto/random.cpp">
+      <item path="src/crypto/random.cpp">
         <itemTool>1</itemTool>
       </item>
-      <item path="crypto/random.hpp">
+      <item path="src/crypto/random.hpp">
         <itemTool>3</itemTool>
       </item>
-      <item path="crypto/rsa.cpp">
+      <item path="src/crypto/rsa.cpp">
         <itemTool>1</itemTool>
       </item>
-      <item path="crypto/rsa.hpp">
+      <item path="src/crypto/rsa.hpp">
         <itemTool>3</itemTool>
       </item>
-      <item path="globals.hpp">
+      <item path="src/globals.hpp">
         <itemTool>3</itemTool>
       </item>
-      <item path="gtkmain.cpp">
+      <item path="src/gtkmain.cpp">
         <itemTool>1</itemTool>
       </item>
-      <item path="gui/gui-components.cpp">
+      <item path="src/gui/gui-components.cpp">
         <itemTool>1</itemTool>
       </item>
-      <item path="gui/gui-components.hpp">
+      <item path="src/gui/gui-components.hpp">
         <itemTool>3</itemTool>
       </item>
-      <item path="gui/gui.cpp">
+      <item path="src/gui/gui.cpp">
         <itemTool>1</itemTool>
       </item>
-      <item path="gui/gui.hpp">
+      <item path="src/gui/gui.hpp">
         <itemTool>3</itemTool>
       </item>
-      <item path="highlevel.hpp">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="main.cpp">
+      <item path="src/main.cpp">
         <itemTool>1</itemTool>
       </item>
     </conf>
