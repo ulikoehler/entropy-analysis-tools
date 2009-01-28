@@ -6,7 +6,7 @@
  *
  * Created on 9. Januar 2009, 22:35
  */
-#include "globals.hpp"
+#include "../globals.hpp"
 
 /**
  * @brief Message digest main function

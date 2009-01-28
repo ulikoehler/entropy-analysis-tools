@@ -11,7 +11,7 @@
 #ifndef _GUI_COMPONENTS_HPP
 #define	_GUI_COMPONENTS_HPP
 
-#include "globals.hpp"
+#include "../globals.hpp"
 
 /**
  * Provides something like the FileChooserButton but with save support

@@ -1,4 +1,4 @@
-#include "globals.hpp"
+#include "../globals.hpp"
 
 FileChooserSaveHBox::FileChooserSaveHBox (const ustring& title)
 : Gtk::HBox (false, 3),

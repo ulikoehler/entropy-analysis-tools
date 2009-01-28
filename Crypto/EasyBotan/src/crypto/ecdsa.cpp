@@ -5,7 +5,7 @@
  * Created on 17. Januar 2009, 16:58
  */
 
-#include "globals.hpp"
+#include "../globals.hpp"
 
 ///////////////////////
 //////Algorithms///////

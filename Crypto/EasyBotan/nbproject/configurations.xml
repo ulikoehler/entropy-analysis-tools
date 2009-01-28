@@ -6,6 +6,7 @@
         <itemPath>src/crypto/analysis.hpp</itemPath>
         <itemPath>src/crypto/ecdsa.cpp</itemPath>
         <itemPath>src/crypto/ecdsa.hpp</itemPath>
+        <itemPath>src/crypto/highlevel.hpp</itemPath>
         <itemPath>src/crypto/md.cpp</itemPath>
         <itemPath>src/crypto/md.hpp</itemPath>
         <itemPath>src/crypto/random.cpp</itemPath>
@@ -54,6 +55,9 @@
         <itemTool>1</itemTool>
       </item>
       <item path="src/crypto/ecdsa.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="src/crypto/highlevel.hpp">
         <itemTool>3</itemTool>
       </item>
       <item path="src/crypto/md.cpp">
@@ -126,6 +130,9 @@
         <itemTool>1</itemTool>
       </item>
       <item path="src/crypto/ecdsa.hpp">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="src/crypto/highlevel.hpp">
         <itemTool>3</itemTool>
       </item>
       <item path="src/crypto/md.cpp">

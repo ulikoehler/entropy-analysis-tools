@@ -8,7 +8,7 @@
 #ifndef _GUI_HPP
 #define	_GUI_HPP
 
-#include "globals.hpp"
+#include "../globals.hpp"
 
 
 struct GenerateKeysTable : Gtk::Table

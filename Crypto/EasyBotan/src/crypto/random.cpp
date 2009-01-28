@@ -5,7 +5,7 @@
  * Created on 19. Januar 2009, 16:10
  */
 
-#include "globals.hpp"
+#include "../globals.hpp"
 
 #define BUF_SIZE 4096
 

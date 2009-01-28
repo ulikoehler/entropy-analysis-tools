@@ -6,7 +6,7 @@
  *
  * Created on 9. Januar 2009, 22:43
  */
-#include "globals.hpp"
+#include "../globals.hpp"
 
 #ifndef _GENKEYPAIRS_HPP
 #define	_GENKEYPAIRS_HPP

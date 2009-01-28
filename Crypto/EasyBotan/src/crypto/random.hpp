@@ -8,7 +8,7 @@
 #ifndef _RANDOM_HPP
 #define	_RANDOM_HPP
 
-#include "globals.hpp"
+#include "../globals.hpp"
 
 /**
  * Generates a file containing random data ("entropy")
