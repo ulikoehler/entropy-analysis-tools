@@ -81,6 +81,11 @@ okButton ("OK")
     attach(okButton, 0, 2, 5, 6);
     //Connect the signals
     okButton.signal_clicked().connect(sigc::mem_fun(*this,&GenerateKeysTable::okButtonClicked));
+    //Set the default selections/values
+    algorithmComboBox.set_active (0);
+    sizeComboBox.set_active (3); //1024
+    pubOutFileChooser.set_filename("pubkey.pem");
+    privOutFileChooser.set_filename("privkey.pem");
     //Show all children
     show_all_children();
 }

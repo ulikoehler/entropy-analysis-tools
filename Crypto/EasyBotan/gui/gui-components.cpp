@@ -12,13 +12,26 @@ dialog (title, FILE_CHOOSER_ACTION_SAVE)
     //Add the widgets to the box (= this)
     pack_end (selectFileButton);
     pack_end (fileEntry);
-    //Make the dialog open when the button is clicked
-    selectFileButton.signal_clicked().connect(sigc::mem_fun(*this,&FileChooserSaveHBox::selectFileButtonClicked));
+    //Connect the signals
+    selectFileButton.signal_clicked ().connect (sigc::mem_fun (*this, &FileChooserSaveHBox::selectFileButtonClicked));
+}
+
+ustring
+FileChooserSaveHBox::get_filename ()
+{
+    return fileEntry.get_text ();
+}
+
+void FileChooserSaveHBox::set_filename (const ustring& filename)
+{
+    fileEntry.set_text(filename);
+    dialog.set_filename (filename);
 }
 
 void
 FileChooserSaveHBox::selectFileButtonClicked ()
 {
+    dialog.set_filename(fileEntry.get_text());
     int result = dialog.run ();
     switch (result)
         {
@@ -29,11 +42,5 @@ FileChooserSaveHBox::selectFileButtonClicked ()
             }
         default: break;
         }
-    dialog.sh
-}
-
-ustring
-FileChooserSaveHBox::get_filename ()
-{
-    return fileEntry.get_text ();
+    dialog.hide ();
 }

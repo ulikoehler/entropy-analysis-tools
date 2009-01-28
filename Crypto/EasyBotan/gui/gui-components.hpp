@@ -28,8 +28,10 @@ struct FileChooserSaveHBox : Gtk::HBox
 
     //Functions
     ustring get_filename();
+    void set_filename(const ustring& filename);
     
 private:
+    //Signal handlers
     void selectFileButtonClicked();
 };
 
