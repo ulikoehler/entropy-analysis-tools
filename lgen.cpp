@@ -11,12 +11,12 @@ static unsigned long long c = 0;
 
 //Fwd dec
 void simpleCount(const ull& max);
-void runDie(const ull& count);
+void runDieMT(const ull& count);
 
 int main( int argc, char** argv)
 {
 	static unsigned long long max = lexical_cast<unsigned long long>(argv[1]);
-	runDie(max);
+	runDieMT(max);
 	return 0;
 }
 
@@ -31,7 +31,8 @@ void simpleCount(const ull& max)
 	}
 }
 
-void runDie(const ull& max)
+template<class gen>
+void runDieInternal(const ull& max)
 {
 	static ull results[6];
 	results[0] = 0;
@@ -41,9 +42,9 @@ void runDie(const ull& max)
 	results[4] = 0;
 	results[5] = 0;
 	static int x;
-	boost::mt19937 rng;
+	gen rng;
 	boost::uniform_int<> six(1,6);
-	boost::variate_generator<boost::mt19937&, boost::uniform_int<> > die(rng, six);
+	boost::variate_generator<gen&, boost::uniform_int<> > die(rng, six);
 	for (;c < max; c++)
 	{
 		x = die();
@@ -61,4 +62,9 @@ void runDie(const ull& max)
 	cout	<< "4: " << results[3] << endl;
 	cout	<< "5: " << results[4] << endl;
 	cout	<< "6: " << results[5] << endl;
+}
+
+void runDieMT(const ull& count)
+{
+	runDieInternal<mt19937>(count);
 }
