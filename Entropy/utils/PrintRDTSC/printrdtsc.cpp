@@ -2,10 +2,10 @@
 
 using namespace std;
 
-inline volatile unsigned long ReadTSC()
+inline volatile uint64_t ReadTSC()
 {
-unsigned long tsc;
-asm("rdtsc":"=A"(tsc));
+uint64_t tsc;
+asm("rdtsc":"=A"(tsc) );
 return tsc;
 }
 

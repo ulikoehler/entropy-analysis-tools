@@ -3,10 +3,11 @@
 typedef unsigned long ulong;
 typedef unsigned int uint;
 typedef unsigned long long ull;
-inline volatile unsigned long readtsc()
+
+inline volatile uint64_t readtsc()
 {
-unsigned long tsc;
-asm("rdtsc":"=A"(tsc));
+uint64_t tsc;
+asm("rdtsc":"=A"(tsc) );
 return tsc;
 }
 #endif
