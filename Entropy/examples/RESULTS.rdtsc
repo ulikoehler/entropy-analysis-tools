@@ -1,0 +1,14 @@
+rdtsc is an example to test whether sequential Time Stamp Counter reading in (nearly) equal intervals produces random results or a linear function graph (over a ring modulo 2^64)
+The workflow is as follows:
+
+make
+./rdtsc
+cp rdtsc.txt ../scripts/
+cd ../scripts
+./enumerate.py rdtsc.txt stats.dat
+cp stats.dat ../r-scripts/
+cd ../r-scripts
+./r.sh 2d-graph.png.R
+
+The graph is written to 2d-graph.png.
+The result is nearly an exact (stepped) linear graph (over a ring modulo 2^64)
