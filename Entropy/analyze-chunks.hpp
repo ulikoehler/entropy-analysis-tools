@@ -8,7 +8,7 @@
 #ifndef _ANALYZE_CHUNKS_HPP
 #define	_ANALYZE_CHUNKS_HPP
 
-#include "globals.hpp"
+#include "../globals.hpp"
 
 /**
  * Writes the data from the supplied map to the supplied output stream

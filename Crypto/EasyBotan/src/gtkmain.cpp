@@ -11,6 +11,9 @@ main (int argc, char *argv[])
     if (!Glib::thread_supported()) {Glib::thread_init();}
     Gtk::Main mainObj (argc, argv);
     EasyBotanWindow mainWindow;
+    //Call the crypto init functions
+    initECDSA ();
+    //Show the main window
     rootWindow = &mainWindow;
     mainObj.run (mainWindow);
     return 0;
