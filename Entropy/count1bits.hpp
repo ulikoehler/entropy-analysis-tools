@@ -8,7 +8,7 @@
 #ifndef _COUNT1BITS_HPP
 #define	_COUNT1BITS_HPP
 
-#include "globals.hpp"
+#include "../globals.hpp"
 
 /**
  * Defines functions and lookup tables for fast checking of the one bits

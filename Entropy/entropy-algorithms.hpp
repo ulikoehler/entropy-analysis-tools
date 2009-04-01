@@ -8,7 +8,7 @@
 #ifndef _ENTROPY_ALGORITHMS_HPP
 #define	_ENTROPY_ALGORITHMS_HPP
 
-#include "globals.hpp" //Declares ld = long double
+#include "../globals.hpp" //Declares ld = long double
 
 #include <sys/types.h>
 #include <sys/stat.h>

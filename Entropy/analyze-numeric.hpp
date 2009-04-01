@@ -8,7 +8,7 @@
 #ifndef _ANALYZE_NUMERIC_HPP
 #define	_ANALYZE_NUMERIC_HPP
 
-#include "globals.hpp"
+#include "../globals.hpp"
 #include "output.hpp"
 
 /**

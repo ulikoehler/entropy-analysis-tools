@@ -10,7 +10,7 @@
 #ifndef _FOCUS_HPP
 #define	_FOCUS_HPP
 
-#include "globals.hpp"
+#include "../globals.hpp"
 
 /**
  * Template analyzator function

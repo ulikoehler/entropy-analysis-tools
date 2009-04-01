@@ -35,6 +35,7 @@ algorithmLabel ("Algorithm:"),
 algorithmComboBox (),
 sizeLabel ("Keysize:"),
 sizeComboBox (),
+curveComboBox (),
 pubOutLabel ("Public key:"),
 privOutLabel ("Private key:"),
 pubOutFileChooser ("Public key file"),
@@ -67,6 +68,12 @@ okButton ("OK")
     sizeComboBox.append_text("32768");
     attach(sizeLabel, 0, 1, 1, 2, FILL, EXPAND);
     attach(sizeComboBox, 1, 2, 1, 2, FILL, EXPAND);
+    //CurveComboBox
+    foreach(string s, listECDSACurves ())
+    {
+        curveComboBox.append_text(s);
+    }
+    curveComboBox.set_sensitive (false); //Only sensitive if a elliptic curve algorithm is selected
     //Public key output
     attach(pubOutLabel, 0, 1, 2, 3, FILL, EXPAND);
     attach(pubOutFileChooser, 1, 2, 2, 3, FILL, EXPAND);
@@ -81,6 +88,7 @@ okButton ("OK")
     attach(okButton, 0, 2, 5, 6);
     //Connect the signals
     okButton.signal_clicked().connect(sigc::mem_fun(*this,&GenerateKeysTable::okButtonClicked));
+    algorithmComboBox.signal_changed ().connect(sigc::mem_fun(*this, &GenerateKeysTable::algorithmChanged));
     //Set the default selections/values
     algorithmComboBox.set_active (0);
     sizeComboBox.set_active (3); //1024
@@ -88,6 +96,22 @@ okButton ("OK")
     privOutFileChooser.set_filename("privkey.pem");
     //Show all children
     show_all_children();
+}
+
+/**
+ * Checks if a elliptic curve algorithm is selected; if yes it activates the curve combo box
+ */
+void GenerateKeysTable::algorithmChanged ()
+{
+    ustring active = algorithmComboBox.get_active_text ();
+    if (active == "ECDSA")
+        {
+            curveComboBox.set_sensitive (true);
+        }
+    else
+        {
+            curveComboBox.set_sensitive (false);
+        }
 }
 
 void GenerateKeysTable::okButtonClicked()

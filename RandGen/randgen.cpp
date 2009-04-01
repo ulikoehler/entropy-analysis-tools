@@ -5,7 +5,7 @@
  * Created on 18. November 2008, 16:39
  */
 
-#include "globals.hpp"
+#include "../globals.hpp"
 
 int
 main (int argc, char** argv)

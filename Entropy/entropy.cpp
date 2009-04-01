@@ -3,7 +3,7 @@
  * Should run significantly faster on 64 bit architectures
  * because 128-bit long long values can be calculated natively
  */
-#include "globals.hpp"
+#include "../globals.hpp"
 
 int analyzeBinaryFile (ifstream& f, ofstream& of);
 

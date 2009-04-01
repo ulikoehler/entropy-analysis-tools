@@ -9,7 +9,7 @@
 #ifndef _ANALYZE_BITS_HPP
 #define	_ANALYZE_BITS_HPP
 
-#include "globals.hpp"
+#include "../globals.hpp"
 
 static ull glob0 = 0;
 static ull glob1 = 0;

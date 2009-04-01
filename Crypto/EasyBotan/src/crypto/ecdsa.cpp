@@ -84,14 +84,14 @@ initECDSA ()
 /**
  * Lists the supported curves
  */
-inline void
-listSupportedCurves ()
+std::List<string> listECDSACurves()
 {
-
+    std::List<string> ret;
     foreach (oid_map::value_type i, oids)
     {
-        cout << i.first << "\n";
+        ret.push_front(i.first);
     }
+    return;
 }
 
 void
@@ -121,7 +121,7 @@ ecdsaMain (int argc, char** argv)
         }
     else if (subAction == "list")
         {
-            listSupportedCurves ();
+            listECDSACurves ();
         }
 }
 

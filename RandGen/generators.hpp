@@ -8,7 +8,7 @@
 #ifndef _GENERATORS_HPP
 #define	_GENERATORS_HPP
 
-#include "globals.hpp"
+#include "../globals.hpp"
 
 using namespace std;
 using namespace boost;

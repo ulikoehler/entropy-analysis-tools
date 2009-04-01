@@ -24,13 +24,22 @@ void initECDSA ();
 void ecdsaMain (int argc, char** argv);
 
 /**
+ * Returns a list of all supported curves
+ */
+std::List<string> listECDSACurves();
+
+/**
+ * Toplevel function to generate an ECDSA key
+ */
+void generateECDSAKeyPair (string& pubout, string& privout, string& oid);
+
+/**
  * Toplevel function to generate an ECDSA key
  */
 void generateECDSAKeyPair (string& out, string& oid);
 
 /**
  * Low-level signing function
- * default OID is for curve Prime256v1
  */
 void
 generateECDSAKeyPair (ofstream& pubout, ofstream& privout, string& oid);

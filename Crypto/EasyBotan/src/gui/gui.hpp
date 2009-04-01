@@ -20,6 +20,7 @@ struct GenerateKeysTable : Gtk::Table
     Gtk::ComboBoxText algorithmComboBox; //Which algorithm to use, e.g. RSA or DSA
     Gtk::Label sizeLabel; //in bits
     Gtk::ComboBoxText sizeComboBox;
+    Gtk::ComboBoxText curveComboBox;
     Gtk::Label pubOutLabel;
        FileChooserSaveHBox pubOutFileChooser;
     Gtk::Label privOutLabel;
@@ -28,7 +29,9 @@ struct GenerateKeysTable : Gtk::Table
     Gtk::Entry passwordEntry;
     Gtk::Button okButton;
 
+private:
     void okButtonClicked();
+    void algorithmChanged();
 };
 
 struct EasyBotanWindow : Gtk::Window
