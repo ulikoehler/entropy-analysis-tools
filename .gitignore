@@ -1,0 +1,9 @@
+*.dat
+*.bin
+*.log
+*.png
+*.dat
+*.svg
+.R*
+build
+dist
