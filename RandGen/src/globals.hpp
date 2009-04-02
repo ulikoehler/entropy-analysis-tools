@@ -52,11 +52,20 @@ typedef long double real_t;
 enum Generator
 {
     MT19937, //Mersenne Twister 19937
+    MT11213b, //Mersenne Twister 11213b
     LinearCongruential, //Linear Congruential
     Ecuyer1988, //Additive Combine
     Hellekalek1995, //Inverse Congruential
     Kreutzer1986, //Shuffle output
-    LaggedFibonacci607 //Lagged Fibonacci 607
+    LaggedFibonacci607,
+    LaggedFibonacci1279,
+    LaggedFibonacci2281,
+    LaggedFibonacci3217,
+    LaggedFibonacci4423,
+    LaggedFibonacci9689,
+    LaggedFibonacci19937,
+    LaggedFibonacci23209,
+    LaggedFibonacci44497
 };
 
 enum Distribution

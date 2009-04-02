@@ -23,10 +23,19 @@ main (int argc, char** argv)
     generatorChoices.add_options ()
             ("lc", "Linear congruential (minstd_rand)")
             ("mt19937", "Mersenne Twister 19937")
+            ("mt11213b", "Mersenne Twister 11213b")
             ("ecuyer1988", "Ecuyer 1988 (Additive Combine)")
             ("hellekalek1995", "Hellekalek 1995 (Inverse Congruential)")
             ("kreutzer1986", "Kreutzer 1986 (Inverse Congruential)")
             ("lf607", "Lagged fibonacci 607")
+            ("lf1279", "Lagged fibonacci 1279")
+            ("lf2281", "Lagged fibonacci 2281")
+            ("lf3217", "Lagged fibonacci 3217")
+            ("lf4423", "Lagged fibonacci 4423")
+            ("lf9689", "Lagged fibonacci 9689")
+            ("lf19937", "Lagged fibonacci 19937")
+            ("lf23209", "Lagged fibonacci 23209")
+            ("lf44497", "Lagged fibonacci 44497")
             ;
     options_description distributionChoices ("Distributions (Choose exactly one)");
     distributionChoices.add_options ()
@@ -46,7 +55,7 @@ main (int argc, char** argv)
     generatorOptions.add_options ()
             ("lower,l", value<string > (&lowerLimit)->default_value ("0"), "Lower generator limit")
             ("upper,u", value<string > (&upperLimit)->default_value ("1000000"), "Upper generator limit")
-            ("number,n", value<amount_t > (&amount)->default_value(10000), "Number of numbers to generator")
+            ("number,n", value<amount_t > (&amount)->default_value (10000), "Number of numbers to generator")
             ("p1", value<string > (&distParam1)->default_value ("1"), "First distribution parameter")
             ("p2", value<string > (&distParam2)->default_value ("1"), "Second distribution parameter")
             ("p3", value<string > (&distParam3)->default_value ("1"), "Third distribution parameter")
@@ -104,6 +113,10 @@ main (int argc, char** argv)
         {
             algorithmNum = MT19937;
         }
+    else if (vm.count ("mt11213b"))
+        {
+            algorithmNum = MT11213b;
+        }
     else if (vm.count ("lc"))
         {
             algorithmNum = LinearCongruential;
@@ -123,6 +136,38 @@ main (int argc, char** argv)
     else if (vm.count ("lf607"))
         {
             algorithmNum = LaggedFibonacci607;
+        }
+    else if (vm.count ("lf1279"))
+        {
+            algorithmNum = LaggedFibonacci1279;
+        }
+    else if (vm.count ("lf2281"))
+        {
+            algorithmNum = LaggedFibonacci2281;
+        }
+    else if (vm.count ("lf3217"))
+        {
+            algorithmNum = LaggedFibonacci3217;
+        }
+    else if (vm.count ("lf4423"))
+        {
+            algorithmNum = LaggedFibonacci4423;
+        }
+    else if (vm.count ("lf9689"))
+        {
+            algorithmNum = LaggedFibonacci9689;
+        }
+    else if (vm.count ("lf19937"))
+        {
+            algorithmNum = LaggedFibonacci19937;
+        }
+    else if (vm.count ("lf23209"))
+        {
+            algorithmNum = LaggedFibonacci23209;
+        }
+    else if (vm.count ("lf44497"))
+        {
+            algorithmNum = LaggedFibonacci44497;
         }
     else //No RNG algorithm selected
         {
