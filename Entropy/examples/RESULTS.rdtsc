@@ -11,4 +11,6 @@ cd ../r-scripts
 ./r.sh 2d-graph.png.R
 
 The graph is written to 2d-graph.png.
-The result is nearly an exact (stepped) linear graph (over a ring modulo 2^64)
+The result is nearly an exact (stepped) linear graph (over a ring modulo 2^64).
+As the same result is achieved when using only the lower 32 (,24) bits, we can say:
+	When you use the function only once the lower 16 (or better 8) bits can be used as HQ-Seed for non-cryptographical purposes.
