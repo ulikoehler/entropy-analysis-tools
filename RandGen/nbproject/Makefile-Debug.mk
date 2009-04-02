@@ -28,7 +28,7 @@ OBJECTDIR=build/Debug/${PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/randgen.o
+	${OBJECTDIR}/src/randgen.o
 
 # C Compiler Flags
 CFLAGS=
@@ -51,9 +51,9 @@ dist/Debug/${PLATFORM}/randgen: ${OBJECTFILES}
 	${MKDIR} -p dist/Debug/${PLATFORM}
 	${LINK.cc} -lboost_program_options-gcc43-mt -o dist/Debug/${PLATFORM}/randgen ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
-${OBJECTDIR}/randgen.o: randgen.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	$(COMPILE.cc) -g -s -o ${OBJECTDIR}/randgen.o randgen.cpp
+${OBJECTDIR}/src/randgen.o: src/randgen.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	$(COMPILE.cc) -g -s -o ${OBJECTDIR}/src/randgen.o src/randgen.cpp
 
 # Subprojects
 .build-subprojects:

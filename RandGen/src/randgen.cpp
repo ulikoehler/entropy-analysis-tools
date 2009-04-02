@@ -5,7 +5,9 @@
  * Created on 18. November 2008, 16:39
  */
 
-#include "../globals.hpp"
+#include <boost/test/detail/global_typedef.hpp>
+
+#include "globals.hpp"
 
 int
 main (int argc, char** argv)
@@ -100,31 +102,31 @@ main (int argc, char** argv)
      */
     if (vm.count ("mt19937"))
         {
-            algorithmNum = 0;
+            algorithmNum = MT19937;
         }
     else if (vm.count ("lc"))
         {
-            algorithmNum = 1;
+            algorithmNum = LinearCongruential;
         }
     else if (vm.count ("ecuyer1988"))
         {
-            algorithmNum = 2;
+            algorithmNum = Ecuyer1988;
         }
     else if (vm.count ("hellekalek1995"))
         {
-            algorithmNum = 3;
+            algorithmNum = Hellekalek1995;
         }
     else if (vm.count ("kreutzer1986"))
         {
-            algorithmNum = 4;
+            algorithmNum = Kreutzer1986;
         }
     else if (vm.count ("lf607"))
         {
-            algorithmNum = 5;
+            algorithmNum = LaggedFibonacci607;
         }
     else //No RNG algorithm selected
         {
-            cout << "Select a generator algorithm!\n" << allowedOptions << "\n";
+            cout << "You have to a generator algorithm!\n" << allowedOptions << "\n";
             return 1;
         }
 
@@ -134,47 +136,47 @@ main (int argc, char** argv)
 
     if (vm.count ("unismallint"))
         {
-            distributionNum = 0;
+            distributionNum = UniformSmallInteger;
         }
     else if (vm.count ("uniint"))
         {
-            distributionNum = 1;
+            distributionNum = UniformInteger;
         }
     else if (vm.count ("unireal"))
         {
-            distributionNum = 2;
+            distributionNum = UniformReal;
         }
     else if (vm.count ("triangle"))
         {
-            distributionNum = 3;
+            distributionNum = Triangle;
         }
     else if (vm.count ("bernoulli"))
         {
-            distributionNum = 4;
+            distributionNum = Bernoulli;
         }
     else if (vm.count ("cauchy"))
         {
-            distributionNum = 5;
+            distributionNum = Cauchy;
         }
     else if (vm.count ("exponential"))
         {
-            distributionNum = 6;
+            distributionNum = Exponential;
         }
     else if (vm.count ("geometric"))
         {
-            distributionNum = 7;
+            distributionNum = Geometric;
         }
     else if (vm.count ("normal"))
         {
-            distributionNum = 8;
+            distributionNum = Normal;
         }
     else if (vm.count ("lognormal"))
         {
-            distributionNum = 9;
+            distributionNum = LogNormal;
         }
     else if (vm.count ("unionsphere"))
         {
-            distributionNum = 10;
+            distributionNum = UniformOnSphere;
         }
     else //No distribution selected
         {
@@ -182,8 +184,7 @@ main (int argc, char** argv)
             return 1;
         }
 
-
-    //Call the RNG function (no arguments depends on global variable state
+    //Call the RNG function
     GenRandBoost ();
 
     if (!(outfile == "stdout"))

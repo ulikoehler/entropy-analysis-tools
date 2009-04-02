@@ -17,9 +17,11 @@
 #include <bitset>
 
 #include <boost/program_options.hpp>
-#include <boost/function.hpp>
-#include <boost/random.hpp>
 #include <boost/foreach.hpp>
+#include <boost/random.hpp>
+
+//TR1
+#include <tr1/functional>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -29,6 +31,10 @@
 using namespace std;
 using namespace boost;
 using namespace boost::program_options;
+using namespace boost::random;
+
+//This provides the pseudo-random number generators and distributions
+using namespace std::tr1;
 
 typedef unsigned long ulong;
 typedef unsigned long long ull;
@@ -39,6 +45,34 @@ typedef unsigned long smallint_t;
 typedef unsigned long long amount_t;
 typedef unsigned long seed_t;
 typedef long double real_t;
+
+/**
+ * Generate and distribution enumerations
+ */
+enum Generator
+{
+    MT19937, //Mersenne Twister 19937
+    LinearCongruential, //Linear Congruential
+    Ecuyer1988, //Additive Combine
+    Hellekalek1995, //Inverse Congruential
+    Kreutzer1986, //Shuffle output
+    LaggedFibonacci607 //Lagged Fibonacci 607
+};
+
+enum Distribution
+{
+    UniformSmallInteger,
+    UniformInteger,
+    UniformReal,
+    Triangle,
+    Bernoulli,
+    Cauchy,
+    Exponential,
+    Geometric,
+    Normal,
+    LogNormal,
+    UniformOnSphere
+};
 
 /**
  * Local includes

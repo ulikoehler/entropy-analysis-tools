@@ -8,11 +8,10 @@
 #ifndef _GENERATORS_HPP
 #define	_GENERATORS_HPP
 
-#include "../globals.hpp"
+#include "globals.hpp"
 
 using namespace std;
 using namespace boost;
-using namespace boost::random;
 
 /**
  * Function prototypes
@@ -32,11 +31,12 @@ static string distParam2 = "1";
 static string distParam3 = "1";
 static string lowerLimit = "0";
 static string upperLimit = "1000000";
-static ushort distributionNum = 0; //Uniform smallint
-static ushort algorithmNum = 0; //MT19937
+static Distribution distributionNum; //Uniform smallint
+static Generator algorithmNum; //MT19937
 
 /**
  * Generates a seeds
+ * Should be used with T = uint32_t or T = uint_64t on non-Linux systems only
  */
 template<class T>
 T genSeed()
@@ -64,36 +64,36 @@ void GenRandBoost()
     ///Switch distribution
     switch(algorithmNum)
         {
-            case 0: ///MT 19937
+            case MT19937: ///MT 19937
                 {
                     mt19937 mersenne(uint32Seed);
                     ProcessBoostAlgorithm<mt19937>(&mersenne);
                     break;
                 }
-            case 1: ///Linear congruential
+            case LinearCongruential: ///Linear congruential
                 {
                     minstd_rand minstdrand(uint32Seed);
                     ProcessBoostAlgorithm<minstd_rand>(&minstdrand);
                 }
-            case 2: ///Additive combine
+            case Ecuyer1988: ///Additive combine
                 {
                     ecuyer1988 addComb(uint32Seed, genSeed<int32_t>());
                     ProcessBoostAlgorithm<ecuyer1988>(&addComb);
                     break;
                 }
-            case 3: ///Inverse congruential
+            case Hellekalek1995: ///Inverse congruential
                 {
                     hellekalek1995 invCongr(uint32Seed);
                     ProcessBoostAlgorithm<hellekalek1995>(&invCongr);
                     break;
                 }
-            case 4: ///Shuffle output
+            case Kreutzer1986: ///Shuffle output
                 {
                     kreutzer1986 shOut(uint32Seed);
                     ProcessBoostAlgorithm<kreutzer1986>(&shOut);
                     break;
                 }
-            case 5: ///Lagged Fibonacci 607
+            case LaggedFibonacci607: ///Lagged Fibonacci 607
                 {
                     lagged_fibonacci607 lf607(uint32Seed);
                     ProcessBoostAlgorithm<lagged_fibonacci607>(&lf607);
@@ -108,7 +108,7 @@ void ProcessBoostAlgorithm(Algorithm * algorithm) ///Process type of boost algor
 {
     switch(distributionNum)
         {
-            case 0: ///Uniform small int
+            case UniformSmallInteger: ///Uniform small int
                 {
                     ///Boost Random stuff
                     uniform_smallint<smallint_t> smallInt(lexical_cast<smallint_t>(lowerLimit), lexical_cast<smallint_t>(upperLimit));
@@ -119,7 +119,7 @@ void ProcessBoostAlgorithm(Algorithm * algorithm) ///Process type of boost algor
                         }
                     break;
                 }
-            case 1: ///Uniform integer
+            case UniformInteger: ///Uniform integer
                 {
                     uniform_int<int_t> uniInt(lexical_cast<int_t>(lowerLimit), lexical_cast<int_t>(upperLimit));
                     variate_generator<Algorithm&, uniform_int<int_t> > generator(*algorithm, uniInt);
@@ -129,7 +129,7 @@ void ProcessBoostAlgorithm(Algorithm * algorithm) ///Process type of boost algor
                         }
                     break;
                 }
-            case 2: ///Uniform real
+            case UniformReal: ///Uniform real
                 {
                     uniform_real<real_t> uniReal(lexical_cast<real_t>(lowerLimit), lexical_cast<real_t>(upperLimit));
                     variate_generator<Algorithm&, uniform_real<real_t> > generator(*algorithm, uniReal);
@@ -139,7 +139,7 @@ void ProcessBoostAlgorithm(Algorithm * algorithm) ///Process type of boost algor
                         }
                     break;
                 }
-            case 3: ///Triangle
+            case Triangle: ///Triangle
                 {
                     triangle_distribution<real_t> triangle(lexical_cast<real_t>(distParam1),
                                                             lexical_cast<real_t>(distParam2),
@@ -151,7 +151,7 @@ void ProcessBoostAlgorithm(Algorithm * algorithm) ///Process type of boost algor
                         }
                     break;
                 }
-            case 4: ///Bernoulli
+            case Bernoulli: ///Bernoulli
                 {
                     /**
                      * Parameter: p
@@ -164,7 +164,7 @@ void ProcessBoostAlgorithm(Algorithm * algorithm) ///Process type of boost algor
                         }
                     break;
                 }
-            case 5: ///Cauchy
+            case Cauchy: ///Cauchy
                 {
                     /**
                      * Parameters: median, sigma
@@ -178,7 +178,7 @@ void ProcessBoostAlgorithm(Algorithm * algorithm) ///Process type of boost algor
                         }
                     break;
                 }
-            case 6: ///Exponential
+            case Exponential: ///Exponential
                 {
                     /**
                      * Parameter: lambda
@@ -191,7 +191,7 @@ void ProcessBoostAlgorithm(Algorithm * algorithm) ///Process type of boost algor
                         }
                     break;
                 }
-            case 7: ///Geometric
+            case Geometric: ///Geometric
                 {
                     /**
                      * Parameter: p
@@ -205,7 +205,7 @@ void ProcessBoostAlgorithm(Algorithm * algorithm) ///Process type of boost algor
                         }
                     break;
                 }
-            case 8: ///Normal
+            case Normal: ///Normal
                 {
                     /**
                      * Parameters: mu, sigma
@@ -218,7 +218,7 @@ void ProcessBoostAlgorithm(Algorithm * algorithm) ///Process type of boost algor
                         }
                     break;
                 }
-            case 9: ///Lognormal
+            case LogNormal: ///Lognormal
                 {
                     /**
                      * Parameters: mean, sigma
@@ -232,7 +232,7 @@ void ProcessBoostAlgorithm(Algorithm * algorithm) ///Process type of boost algor
                         }
                     break;
                 }
-            case 10: ///Uniform on Sphere
+            case UniformOnSphere: ///Uniform on Sphere
                 {
                     uniform_on_sphere<real_t> uniOnSphere(lexical_cast<real_t>(distParam1)); ///dim
                     variate_generator<Algorithm&, uniform_on_sphere<real_t> > generator(*algorithm, uniOnSphere);
