@@ -24,7 +24,7 @@ PLATFORM=GNU-Linux-x86
 include Makefile
 
 # Object Directory
-OBJECTDIR=build/Release/${PLATFORM}
+OBJECTDIR=build/Core2/${PLATFORM}
 
 # Object Files
 OBJECTFILES= \
@@ -34,8 +34,8 @@ OBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=-O3 -fexpensive-optimizations -fomit-frame-pointer -march= -ftree-vectorize -march=pentium3 -msse2 -msse3 -msse4 -ffunction-sections -ffast-math -fno-strict-aliasing
-CXXFLAGS=-O3 -fexpensive-optimizations -fomit-frame-pointer -march= -ftree-vectorize -march=pentium3 -msse2 -msse3 -msse4 -ffunction-sections -ffast-math -fno-strict-aliasing
+CCFLAGS=-m64 -O3 -fexpensive-optimizations -fomit-frame-pointer -march=core2 -ftree-vectorize -msse2 -msse3 -msse4 -ffunction-sections -ffast-math -fno-strict-aliasing
+CXXFLAGS=-m64 -O3 -fexpensive-optimizations -fomit-frame-pointer -march=core2 -ftree-vectorize -msse2 -msse3 -msse4 -ffunction-sections -ffast-math -fno-strict-aliasing
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -45,7 +45,7 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	${MAKE}  -f nbproject/Makefile-Release.mk dist/Release/${PLATFORM}/randgen
+	${MAKE}  -f nbproject/Makefile-Core2.mk dist/Release/${PLATFORM}/randgen
 
 dist/Release/${PLATFORM}/randgen: ${OBJECTFILES}
 	${MKDIR} -p dist/Release/${PLATFORM}
@@ -60,7 +60,7 @@ ${OBJECTDIR}/src/randgen.o: src/randgen.cpp
 
 # Clean Targets
 .clean-conf:
-	${RM} -r build/Release
+	${RM} -r build/Core2
 	${RM} dist/Release/${PLATFORM}/randgen
 
 # Subprojects
